@@ -34,7 +34,9 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - ./back/public/uploads:/app/public/uploads
+      # Используем named volume для избежания проблем с правами
+      # Альтернатива: ./back/public/uploads:/app/public/uploads
+      - uploads_data:/app/public/uploads
     environment:
       - NODE_ENV=production
       - PORT=5001
@@ -109,4 +111,6 @@ volumes:
   postgres_data:
     driver: local
   portainer_data:
+    driver: local
+  uploads_data:
     driver: local
