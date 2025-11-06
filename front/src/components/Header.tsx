@@ -102,6 +102,7 @@ const Header = () => {
     );
 
     return (
+        <>
         <header className={`
             fixed top-0 left-0 right-0 z-50 transition-all duration-300
             ${isScrolled 
@@ -231,33 +232,34 @@ const Header = () => {
                         </button>
                     </div>
                 </div>
+            </div>
+        </header>
 
-                {/* Mobile Menu */}
-                <div className={`
-                    fixed inset-0 top-20 bg-[#0a0a0a]/95 backdrop-blur-md z-40
-                    transform transition-transform duration-300 ease-in-out
-                    ${menuOpen ? "translate-x-0" : "translate-x-full"}
-                    lg:hidden
-                `}>
-                    <div className="container mx-auto px-4 py-8">
-                        <nav>
-                            <ul className="flex flex-col gap-6 text-xl font-medium text-white">
-                                <NavLinks/>
-                            </ul>
-                        </nav>
-                        
-                        {/* Дополнительная информация в мобильном меню */}
-                        <div className="mt-12 pt-8 border-t border-white/10">
-                            <div className="text-[#ADADAD] space-y-2">
-                                <p className="font-semibold text-[#e8262b]">+7 (900) 00-00-00</p>
-                                <p className="text-sm">ул. Ногорная д. 7</p>
-                                <p className="text-sm">Ежедневно: 10:00 - 23:00</p>
-                            </div>
-                        </div>
+        {/* Mobile Menu - полностью вынесено за пределы header, всегда черный фон */}
+        <div className={`
+            fixed inset-0 top-20 bg-[#0a0a0a] backdrop-blur-md z-[60]
+            transform transition-transform duration-300 ease-in-out
+            ${menuOpen ? "translate-x-0" : "translate-x-full"}
+            lg:hidden
+        `}>
+            <div className="container mx-auto px-4 py-8">
+                <nav>
+                    <ul className="flex flex-col gap-6 text-xl font-medium text-white">
+                        <NavLinks/>
+                    </ul>
+                </nav>
+                
+                {/* Дополнительная информация в мобильном меню */}
+                <div className="mt-12 pt-8 border-t border-white/10">
+                    <div className="text-[#ADADAD] space-y-2">
+                        <p className="font-semibold text-[#e8262b]">+7 (900) 00-00-00</p>
+                        <p className="text-sm">ул. Ногорная д. 7</p>
+                        <p className="text-sm">Ежедневно: 10:00 - 23:00</p>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+        </>
     );
 };
 

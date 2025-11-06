@@ -6,7 +6,7 @@ const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const socialLinks = [
     {
@@ -30,7 +30,6 @@ const About = () => {
   ];
 
   const handlePlayVideo = () => {
-    const videoRef = useRef<HTMLVideoElement | null>(null);
     setIsVideoPlaying(true);
     if (videoRef.current) {
       videoRef.current.play();
@@ -38,7 +37,6 @@ const About = () => {
   };
 
   const handlePauseVideo = () => {
-    const videoRef = useRef<HTMLVideoElement | null>(null);
     setIsVideoPlaying(false);
     if (videoRef.current) {
       videoRef.current.pause();
@@ -151,11 +149,27 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative group">
-              {/* Видео или превью */}
-              {!isVideoPlaying ? (
-                // Превью с кнопкой воспроизведения
+              {/* Видео плеер (всегда рендерим) */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <video
+                  ref={videoRef}
+                  controls={isVideoPlaying}
+                  className="w-full h-auto block"
+                  preload="metadata"
+                  playsInline
+                  poster="/video.jpeg"
+                  onEnded={handlePauseVideo}
+                  onPause={handlePauseVideo}
+                >
+                  <source src="/video.mp4" type="video/mp4" />
+                  Ваш браузер не поддерживает видео тег.
+                </video>
+              </div>
+
+              {/* Превью с кнопкой воспроизведения */}
+              {!isVideoPlaying && (
                 <div 
-                  className="relative rounded-2xl overflow-hidden shadow-2xl cursor-pointer"
+                  className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl cursor-pointer"
                   onClick={handlePlayVideo}
                 >
                   <img 
@@ -193,20 +207,6 @@ const About = () => {
                       />
                     </div>
                   </motion.div>
-                </div>
-              ) : (
-                // Видео плеер
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <video
-                    ref={videoRef}
-                    controls
-                    className="w-full h-auto"
-                    onEnded={handlePauseVideo}
-                    onPause={handlePauseVideo}
-                  >
-                    <source src="/video.mp4" type="video/mp4" />
-                    Ваш браузер не поддерживает видео тег.
-                  </video>
                 </div>
               )}
 

@@ -8,7 +8,7 @@ interface Props {
 
 const MoreAbout = ({ product, onAddToCart }: Props) => {
   return (
-      <div className="max-w-5xl w-full bg-[#0C0C0C] rounded-2xl overflow-hidden shadow-2xl p-6 sm:p-10 lg:p-14">
+      <div className="w-full bg-[#0C0C0C] rounded-2xl overflow-hidden shadow-2xl p-6 sm:p-10 lg:p-14">
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="flex-shrink-0 w-full lg:w-1/2">
             {product.image_url ? (

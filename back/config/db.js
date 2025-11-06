@@ -4,14 +4,14 @@ const { createClient } = require('@supabase/supabase-js');
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("❌ Ошибка: отсутствуют ключи Supabase");
-    process.exit(1);
+let supabase = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+    // Создаём клиент Supabase только если есть ключи
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+    console.log("🔗 Подключение к Supabase успешно");
+} else {
+    console.warn("⚠️ Supabase ключи не настроены, используется PostgreSQL");
 }
-
-// Создаём клиент Supabase
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-console.log("🔗 Подключение к Supabase успешно");
 
 module.exports = { supabase };

@@ -142,7 +142,7 @@ const Delivery = () => {
               <div className="relative lg:w-96 w-80 h-80 mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-r bg-[#e8262b] to-[#883434] rounded-full blur-xl opacity-30"></div>
                 <img 
-                  src="../../public/pizza.png" 
+                  src="/pizza.png" 
                   alt="Pizza" 
                   className="relative w-full h-full object-contain drop-shadow-2xl"
                 />

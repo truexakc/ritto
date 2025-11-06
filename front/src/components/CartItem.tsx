@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import MoreAbout from "./MoreAbout";
 import { Product } from "../types/Product";
 import { useAppDispatch } from "../store/hooks";
@@ -15,8 +16,14 @@ const CartItem = ({ product }: Props) => {
     const [isClosing, setIsClosing] = useState(false);
     const [showAddedPopup, setShowAddedPopup] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -110,17 +117,18 @@ const CartItem = ({ product }: Props) => {
                 </div>
             </div>
 
-            {/* Модалка */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            {/* Модалка через Portal - рендерится в body, вне всех контейнеров */}
+            {mounted && isModalOpen && createPortal(
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-[100] p-2 sm:p-4 overflow-y-auto">
                     <div
-                        className={`relative bg-[#0C0C0C] p-6 rounded-lg max-w-5xl w-full transform transition-all duration-300 ${
+                        className={`relative bg-[#0C0C0C] rounded-lg w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto my-2 sm:my-4 transform transition-all duration-300 ${
                             isClosing ? "opacity-0 scale-95" : "opacity-100 scale-100"
                         }`}
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             onClick={handleCloseModal}
-                            className="absolute top-2 right-2 text-white text-xl font-bold"
+                            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white text-xl font-bold z-10 bg-[#0C0C0C] rounded-full w-8 h-8 flex items-center justify-center hover:bg-[#1a1a1a] transition-colors"
                         >
                             ✕
                         </button>
@@ -129,7 +137,8 @@ const CartItem = ({ product }: Props) => {
                             handleCloseModal();
                         }} />
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
 
