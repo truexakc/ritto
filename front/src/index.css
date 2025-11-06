@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #151515;
+  }
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll reveal base animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  will-change: opacity, transform;
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optional variants */
+.reveal-up { transform: translateY(16px); }
+.reveal-down { transform: translateY(-16px); }
+.reveal-left { transform: translateX(16px); }
+.reveal-right { transform: translateX(-16px); }
+.reveal-visible.reveal-up,
+.reveal-visible.reveal-down,
+.reveal-visible.reveal-left,
+.reveal-visible.reveal-right { transform: translate(0,0); }
+
