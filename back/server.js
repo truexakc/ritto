@@ -28,9 +28,11 @@ const sessionConfig = {
         httpOnly: true,
         secure: false, // Отключаем для работы через nginx без HTTPS
         sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        domain: process.env.NODE_ENV === 'production' ? '83.166.246.163' : undefined
     },
-    name: 'sessionId' // Явное имя для cookie
+    name: 'sessionId', // Явное имя для cookie
+    proxy: true // Доверяем прокси (nginx)
 };
 
 app.use(session(sessionConfig));
@@ -44,17 +46,28 @@ app.use(hpp());
 const allowedOrigins = [
     'http://localhost',
     'http://localhost:3000',
-    process.env.FRONTEND_URL
+    'http://83.166.246.163',
+    process.env.FRONTEND_URL,
+    process.env.CLIENT_URL
 ].filter(Boolean);
+
+console.log('🌐 Allowed CORS origins:', allowedOrigins);
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Разрешаем запросы без origin (например, curl, Postman)
-        if (!origin) return callback(null, true);
+        console.log('🔍 CORS check for origin:', origin);
+        
+        // Разрешаем запросы без origin (например, curl, Postman, same-origin)
+        if (!origin) {
+            console.log('✅ No origin - allowing');
+            return callback(null, true);
+        }
         
         if (allowedOrigins.indexOf(origin) !== -1) {
+            console.log('✅ Origin allowed:', origin);
             callback(null, true);
         } else {
+            console.log('❌ Origin blocked:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
