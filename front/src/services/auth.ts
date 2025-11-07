@@ -16,6 +16,9 @@ export interface User {
     name: string;
     email: string;
     isAdmin: boolean;
+    createdAt?: string;
+    totalOrders?: number;
+    totalSpent?: number;
 }
 
 export const login = async (credentials: LoginDto): Promise<{ token: string; user: User }> => {

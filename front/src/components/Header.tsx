@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { useAppSelector } from "../store/hooks";
-import { selectIsAuth, selectIsInitialized } from "../store/slices/authSlice";
+import { selectIsAuth, selectIsInitialized, selectCurrentUser } from "../store/slices/authSlice";
 import { selectCartItems } from "../store/slices/cartSlice";
 import LogoutButton from "./LogoutButton";
-import { ShoppingCart, Menu, X, LogOut, LogIn, User } from "lucide-react";
+import { ShoppingCart, Menu, X, LogOut, LogIn } from "lucide-react";
+import { getUserEmoji } from "../utils/emoji";
 
 const Header = () => {
     const location = useLocation();
     const isHomePage = location.pathname === "/";
     const isAuth = useAppSelector(selectIsAuth);
     const isInitialized = useAppSelector(selectIsInitialized);
+    const currentUser = useAppSelector(selectCurrentUser);
     const cartItems = useAppSelector(selectCartItems);
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -149,14 +151,14 @@ const Header = () => {
                         </RouterLink>
 
                         {/* Аккаунт */}
-                        {isAuth ? (
+                        {isAuth && currentUser ? (
                             <div className="flex items-center gap-2">
                                 <RouterLink 
                                     to="/profile" 
-                                    className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 group"
+                                    className="w-10 h-10 bg-gradient-to-br from-[#e8262b] to-[#d12025] rounded-full flex items-center justify-center text-xl hover:scale-110 transition-transform shadow-lg"
                                     title="Профиль"
                                 >
-                                    <User className="w-6 h-6 text-[#e8262b] group-hover:scale-110 transition-transform"/>
+                                    {getUserEmoji(currentUser.id)}
                                 </RouterLink>
                                 <LogoutButton 
                                     icon={
@@ -167,7 +169,7 @@ const Header = () => {
                                     onLogout={() => {}}
                                 />
                             </div>
-                        ) : (
+                        ) : !isAuth ? (
                             <RouterLink 
                                 to="/login" 
                                 className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 group"
@@ -175,7 +177,7 @@ const Header = () => {
                             >
                                 <LogIn className="w-6 h-6 text-[#e8262b] group-hover:scale-110 transition-transform"/>
                             </RouterLink>
-                        )}
+                        ) : null}
                     </div>
 
                     {/* Mobile icons */}
@@ -195,14 +197,14 @@ const Header = () => {
                         </RouterLink>
 
                         {/* Аккаунт */}
-                        {isAuth ? (
+                        {isAuth && currentUser ? (
                             <>
                                 <RouterLink 
                                     to="/profile" 
-                                    className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
+                                    className="w-10 h-10 bg-gradient-to-br from-[#e8262b] to-[#d12025] rounded-full flex items-center justify-center text-xl shadow-lg"
                                     onClick={() => setMenuOpen(false)}
                                 >
-                                    <User className="w-6 h-6 text-[#e8262b]"/>
+                                    {getUserEmoji(currentUser.id)}
                                 </RouterLink>
                                 <LogoutButton 
                                     icon={
@@ -213,7 +215,7 @@ const Header = () => {
                                     onLogout={() => setMenuOpen(false)}
                                 />
                             </>
-                        ) : (
+                        ) : !isAuth ? (
                             <RouterLink 
                                 to="/login" 
                                 className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
@@ -221,7 +223,7 @@ const Header = () => {
                             >
                                 <LogIn className="w-6 h-6 text-[#e8262b]"/>
                             </RouterLink>
-                        )}
+                        ) : null}
 
                         {/* Бургер меню */}
                         <button 

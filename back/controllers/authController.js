@@ -149,7 +149,7 @@ const logout = (req, res) => {
 // Получение профиля пользователя
 const getProfile = async (req, res) => {
     try {
-        const result = await query('SELECT id, email, full_name, role FROM users WHERE id = $1', [req.user.id]);
+        const result = await query('SELECT id, email, full_name, role, created_at FROM users WHERE id = $1', [req.user.id]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'User not found' });
@@ -157,12 +157,23 @@ const getProfile = async (req, res) => {
 
         const user = result.rows[0];
 
+        // Получаем статистику заказов
+        const ordersResult = await query(
+            'SELECT COUNT(*) as total_orders, COALESCE(SUM(total_amount), 0) as total_spent FROM orders WHERE user_id = $1',
+            [req.user.id]
+        );
+
+        const stats = ordersResult.rows[0];
+
         res.json({
             user: {
                 id: user.id,
                 email: user.email,
                 name: user.full_name,
-                isAdmin: user.role === 'admin'
+                isAdmin: user.role === 'admin',
+                createdAt: user.created_at,
+                totalOrders: parseInt(stats.total_orders),
+                totalSpent: parseFloat(stats.total_spent)
             }
         });
     } catch (error) {

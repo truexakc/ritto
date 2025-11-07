@@ -11,7 +11,8 @@ import Catalog from './pages/Catalog';
 import BasketList from './pages/BasketList';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
-import NotFound from './pages/NotFound'; // 🆕
+import NotFound from './pages/NotFound';
+import Profile from './pages/Profile';
 import PrivateRoute from './routes/PrivateRoute';
 import 'leaflet/dist/leaflet.css';
 import {PersistGate} from "redux-persist/integration/react";
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
             {
                 element: <PrivateRoute/>,
                 children: [
-                    // Приватные страницы можно будет добавить сюда
+                    {path: 'profile', element: <Profile/>},
                 ],
             },
 
