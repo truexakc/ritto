@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест корзины</title>
+</head>
+<body>
+    <h1>Тест корзины</h1>
+    <button onclick="addToCart()">Добавить товар</button>
+    <button onclick="getCart()">Получить корзину</button>
+    <pre id="result"></pre>
+
+    <script>
+        const API_URL = 'http://localhost/api';
+        const PRODUCT_ID = '36490d4a-ff6f-4c04-a6ec-cd83216c1013';
+
+        async function addToCart() {
+            try {
+                const response = await fetch(`${API_URL}/cart/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include', // Важно для cookies
+                    body: JSON.stringify({
+                        product_id: PRODUCT_ID,
+                        quantity: 1
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').textContent = 
+                    `Добавлено: ${JSON.stringify(data, null, 2)}`;
+                
+                // Проверяем cookies
+                console.log('Cookies:', document.cookie);
+            } catch (error) {
+                document.getElementById('result').textContent = 
+                    `Ошибка: ${error.message}`;
+            }
+        }
+
+        async function getCart() {
+            try {
+                const response = await fetch(`${API_URL}/cart`, {
+                    credentials: 'include' // Важно для cookies
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').textContent = 
+                    `Корзина: ${JSON.stringify(data, null, 2)}`;
+                
+                // Проверяем cookies
+                console.log('Cookies:', document.cookie);
+            } catch (error) {
+                document.getElementById('result').textContent = 
+                    `Ошибка: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

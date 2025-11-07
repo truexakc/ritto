@@ -9,33 +9,16 @@ export const axiosInstance = axios.create({
     },
 });
 
-// 🔓 ВРЕМЕННО ОТКЛЮЧЕНО: интерцептор для авто-обновления access_token
-// axiosInstance.interceptors.response.use(
-//     (response) => response,
-//     async (error) => {
-//         const originalRequest = error.config;
-
-//         if (
-//             error.response?.status === 401 &&
-//             !originalRequest._retry &&
-//             !originalRequest.url.includes('/auth/refresh')
-//         ) {
-//             originalRequest._retry = true;
-
-//             try {
-//                 // пробуем обновить токен
-//                 await axiosInstance.post('/auth/refresh');
-
-//                 // повторяем оригинальный запрос
-//                 return axiosInstance(originalRequest);
-//             } catch (refreshError) {
-//                 const status = refreshError?.response?.status;
-//                 const data = refreshError?.response?.data;
-//                 console.error('🔁 Ошибка обновления токена:', { status, data });
-//                 return Promise.reject(refreshError);
-//             }
-//         }
-
-//         return Promise.reject(error);
-//     }
-// );
+// Добавляем токен к каждому запросу
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);

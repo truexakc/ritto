@@ -1,142 +1,204 @@
-const { supabase } = require('../config/db');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { query } = require('../config/postgres');
 
-// 🔹 Регистрация пользователя
-const registerUser = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Все поля обязательны' });
-        }
+// Генерация JWT токенов
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    });
+};
 
-        const normalizedEmail = email.toLowerCase();
+// Объединение корзины из сессии в БД
+const mergeSessionCart = async (userId, sessionCart) => {
+    if (!sessionCart || sessionCart.length === 0) {
+        return 0;
+    }
 
-        const { data, error } = await supabase.auth.signUp({
-            email: normalizedEmail,
-            password,
-            options: {
-                data: {
-                    role: 'user'
-                }
+    let mergedCount = 0;
+
+    for (const item of sessionCart) {
+        try {
+            // Проверяем, есть ли товар уже в корзине пользователя
+            const existingItem = await query(
+                'SELECT id, quantity FROM cart WHERE user_id = $1 AND product_id = $2',
+                [userId, item.productId]
+            );
+
+            if (existingItem.rows.length > 0) {
+                // Обновляем количество
+                await query(
+                    'UPDATE cart SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+                    [item.quantity, existingItem.rows[0].id]
+                );
+            } else {
+                // Добавляем новый товар
+                await query(
+                    'INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3)',
+                    [userId, item.productId, item.quantity]
+                );
             }
-        });
+            mergedCount++;
+        } catch (error) {
+            console.error('Error merging cart item:', error);
+        }
+    }
 
+    return mergedCount;
+};
 
-        if (error || !data?.user) {
-            return res.status(400).json({ message: 'Ошибка регистрации', error: error?.message });
+// Регистрация пользователя
+const register = async (req, res) => {
+    try {
+        const { email, password, name } = req.body;
+
+        // Проверка существования пользователя
+        const userExists = await query('SELECT * FROM users WHERE email = $1', [email]);
+
+        if (userExists.rows.length > 0) {
+            return res.status(400).json({ message: 'User already exists' });
         }
 
-        res.status(200).json({
-            message: 'Письмо с подтверждением отправлено. Проверьте почту.'
+        // Хеширование пароля
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Создание пользователя
+        const result = await query(
+            'INSERT INTO users (email, password_hash, full_name, role) VALUES ($1, $2, $3, $4) RETURNING id, email, full_name, role',
+            [email, hashedPassword, name || '', 'user']
+        );
+
+        const user = result.rows[0];
+
+        // Объединяем корзину из сессии
+        const sessionCart = req.session.cart || [];
+        await mergeSessionCart(user.id, sessionCart);
+
+        // Очищаем сессию после объединения
+        req.session.cart = [];
+        req.session.destroy((err) => {
+            if (err) console.error('Error destroying session:', err);
         });
 
+        res.status(201).json({
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.full_name,
+                isAdmin: user.role === 'admin'
+            },
+            token: generateToken(user.id),
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
+        console.error('Registration error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 
-
-
-// 🔹 Вход пользователя
-const loginUser = async (req, res) => {
+// Вход пользователя
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-        if (error || !data?.session) {
-            return res.status(401).json({ message: 'Неверные email или пароль' });
+        const result = await query('SELECT * FROM users WHERE email = $1', [email]);
+
+        if (result.rows.length === 0) {
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        // ✅ Устанавливаем токены в cookie
-        res.cookie('access_token', data.session.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Lax',
-            maxAge: 60 * 60 * 1000 // 1 час
-        });
+        const user = result.rows[0];
 
-        res.cookie('refresh_token', data.session.refresh_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Lax',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 дней
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        // Объединяем корзину из сессии
+        const sessionCart = req.session.cart || [];
+        const mergedCount = await mergeSessionCart(user.id, sessionCart);
+        
+        console.log(`✅ Merged ${mergedCount} items from session to user cart`);
+
+        // Очищаем сессию после объединения
+        req.session.cart = [];
+        req.session.destroy((err) => {
+            if (err) console.error('Error destroying session:', err);
         });
 
         res.json({
-            message: 'Вход успешен',
-            user: { id: data.user.id, email: data.user.email },
-            token: data.session.access_token
-        });
-
-
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
-};
-
-// 🔹 Обновление access-токена
-const refreshToken = async (req, res) => {
-    try {
-        const refresh_token = req.cookies.refresh_token;
-        if (!refresh_token) return res.status(401).json({ message: 'Требуется refresh_token' });
-
-        const { data, error } = await supabase.auth.refreshSession({ refresh_token });
-
-        if (error || !data?.session) {
-            return res.status(401).json({ message: 'Недействительный refresh_token' });
-        }
-
-        // ✅ Обновляем токены в куках
-        res.cookie('access_token', data.session.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Lax',
-            maxAge: 60 * 60 * 1000 // 1 час
-        });
-
-        // В некоторых провайдерах refresh токен может ротироваться
-        if (data.session.refresh_token) {
-            res.cookie('refresh_token', data.session.refresh_token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-        }
-
-        res.json({ message: 'Токен обновлён' });
-
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
-};
-
-// 🔹 Выход пользователя
-const logoutUser = async (req, res) => {
-    try {
-        await supabase.auth.signOut();
-        res.clearCookie('access_token');
-        res.clearCookie('refresh_token');
-        res.json({ message: 'Выход выполнен' });
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
-};
-
-const getMe = async (req, res) => {
-    try {
-        res.status(200).json({
             user: {
-                id: req.user.id,
-                email: req.user.email,
-                isAdmin: req.user.isAdmin,
-                name: req.user.name || "" // можно пустую строку, если name не используется
+                id: user.id,
+                email: user.email,
+                name: user.full_name,
+                isAdmin: user.role === 'admin'
+            },
+            token: generateToken(user.id),
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// Выход пользователя
+const logout = (req, res) => {
+    res.json({ message: 'Logged out successfully' });
+};
+
+// Получение профиля пользователя
+const getProfile = async (req, res) => {
+    try {
+        const result = await query('SELECT id, email, full_name, role FROM users WHERE id = $1', [req.user.id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const user = result.rows[0];
+
+        res.json({
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.full_name,
+                isAdmin: user.role === 'admin'
             }
         });
     } catch (error) {
-        res.status(500).json({ message: 'Ошибка при получении профиля', error: error.message });
+        console.error('Get profile error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
+// Получение текущего пользователя (опциональная авторизация)
+const getMe = async (req, res) => {
+    try {
+        if (!req.user) {
+            // Пользователь не авторизован - возвращаем null
+            return res.json({ user: null });
+        }
 
+        const result = await query('SELECT id, email, full_name, role FROM users WHERE id = $1', [req.user.id]);
 
-module.exports = { registerUser, loginUser, refreshToken, logoutUser, getMe };
+        if (result.rows.length === 0) {
+            return res.json({ user: null });
+        }
+
+        const user = result.rows[0];
+
+        res.json({
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.full_name,
+                isAdmin: user.role === 'admin'
+            }
+        });
+    } catch (error) {
+        console.error('Get me error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+module.exports = { register, login, logout, getProfile, getMe };

@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { loginUser } from "../store/slices/authSlice";
+import { mergeSessionCart } from "../store/slices/cartSlice";
 import { useNavigate, Link } from 'react-router-dom';
 
 const LoginForm = () => {
@@ -19,6 +20,14 @@ const LoginForm = () => {
         const result = await dispatch(loginUser({ email, password }));
 
         if (loginUser.fulfilled.match(result)) {
+            // Токен уже сохранен в localStorage в loginUser thunk
+            // 🛒 Автоматически переносим корзину из сессии в БД
+            try {
+                await dispatch(mergeSessionCart());
+            } catch (error) {
+                console.error('Ошибка переноса корзины:', error);
+                // Не блокируем вход при ошибке переноса корзины
+            }
             navigate('/');
         } else {
             setFormError("Неверный email или пароль"); // скрываем техническую ошибку от пользователя

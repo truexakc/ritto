@@ -32,7 +32,7 @@ const Popular = () => {
     const totalSlides = products ? Math.ceil(products.length / itemsPerSlide) : 0;
 
     const getSlideItems = () => {
-        if (!products) return [];
+        if (!products || !Array.isArray(products)) return [];
         const start = slide * itemsPerSlide;
         return products.slice(start, start + itemsPerSlide);
     };

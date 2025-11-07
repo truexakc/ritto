@@ -85,6 +85,23 @@ export const clearCartThunk = createAsyncThunk<void>(
     }
 );
 
+// 🔹 Перенос корзины из сессии в БД при авторизации
+export const mergeSessionCart = createAsyncThunk<void>(
+    "cart/mergeSessionCart",
+    async (_, thunkAPI) => {
+        try {
+            await axiosInstance.post("/cart/merge");
+            // После переноса обновляем корзину
+            thunkAPI.dispatch(fetchCart());
+        } catch (err: unknown) {
+            if (err instanceof AxiosError) {
+                return thunkAPI.rejectWithValue(err.response?.data?.message || "Ошибка переноса корзины");
+            }
+            return thunkAPI.rejectWithValue("Неизвестная ошибка");
+        }
+    }
+);
+
 
 // 🔹 Слайс
 const cartSlice = createSlice({

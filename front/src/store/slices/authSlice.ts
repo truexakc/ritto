@@ -22,7 +22,12 @@ export const loginUser = createAsyncThunk(
     'auth/login',
     async (data: LoginDto, thunkAPI) => {
         try {
-            return await login(data);
+            const result = await login(data);
+            // Сохраняем токен в localStorage
+            if (result.token) {
+                localStorage.setItem('token', result.token);
+            }
+            return result;
         } catch (error: unknown) {
             if (error instanceof Error) {
                 return thunkAPI.rejectWithValue(error.message);
@@ -37,7 +42,12 @@ export const registerUser = createAsyncThunk(
     'auth/register',
     async (data: RegisterDto, thunkAPI) => {
         try {
-            return await register(data);
+            const result = await register(data);
+            // Сохраняем токен в localStorage
+            if (result.token) {
+                localStorage.setItem('token', result.token);
+            }
+            return result;
         } catch (error: unknown) {
             if (error instanceof Error) {
                 return thunkAPI.rejectWithValue(error.message);
@@ -52,6 +62,11 @@ export const fetchMe = createAsyncThunk(
     'auth/me',
     async (_, thunkAPI) => {
         try {
+            // Проверяем наличие токена перед запросом
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return thunkAPI.rejectWithValue('Нет токена');
+            }
             return await getMe();
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -122,6 +137,8 @@ const authSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.user = null;
                 state.isInitialized = true;
+                // Удаляем токен из localStorage
+                localStorage.removeItem('token');
             })
     },
 });

@@ -1,12 +1,16 @@
 const express = require('express');
-const { getCart, addToCart, removeFromCart, clearCart} = require('../controllers/cartController');
-const { protect } = require('../middleware/authMiddleware');
+const { getCart, addToCart, removeFromCart, clearCart, mergeSessionCartToDb } = require('../controllers/cartController');
+const { protect, optionalAuth } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.get('/', protect, getCart);
-router.post('/add', protect, addToCart);
-router.post('/remove', protect, removeFromCart);
-router.post('/clear', protect, clearCart);
+// Роуты доступны как для авторизованных, так и для неавторизованных пользователей
+router.get('/', optionalAuth, getCart);
+router.post('/add', optionalAuth, addToCart);
+router.post('/remove', optionalAuth, removeFromCart);
+router.post('/clear', optionalAuth, clearCart);
+
+// Роут для переноса корзины из сессии в БД (только для авторизованных)
+router.post('/merge', protect, mergeSessionCartToDb);
 
 module.exports = router;

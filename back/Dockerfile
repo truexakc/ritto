@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Копируем package.json отдельно для кэширования
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --only=production
 
 # Копируем исходный код
 COPY . .

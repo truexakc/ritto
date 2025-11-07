@@ -3,121 +3,121 @@ const { query } = require('../config/postgres');
 
 const getCategories = async (req, res) => {
     try {
-        const result = await query('SELECT * FROM categories');
+        const result = await query('SELECT * FROM categories ORDER BY name');
         res.json(result.rows);
     } catch (error) {
-        console.error('Ошибка при получении категорий:', error);
-        res.status(500).json({ 
-            message: 'Ошибка сервера', 
-            error: error.message 
-        });
+        console.error('Get categories error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
-// Получение всех продуктов
 const getProducts = async (req, res) => {
     try {
-        const { category, hierarchical_parent } = req.query;
+        const { category, hierarchical_parent, search, page, limit } = req.query;
 
-        let sqlQuery = 'SELECT * FROM products';
+        let queryText = `
+            SELECT p.*, c.name as category_name 
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            WHERE 1=1
+        `;
         const queryParams = [];
+        let paramCount = 1;
 
-        // Приоритетный фильтр по hierarchical_parent, если он передан
-        if (hierarchical_parent) {
-            sqlQuery += ' WHERE hierarchical_parent = $1';
-            queryParams.push(hierarchical_parent);
-        } else if (category && category !== 'Все') {
-            sqlQuery += ' WHERE category = $1';
+        // Поддержка фильтрации по category_id или hierarchical_parent
+        if (category) {
+            queryText += ` AND p.category_id = $${paramCount}`;
             queryParams.push(category);
+            paramCount++;
         }
 
-        // Используем вашу утилитарную функцию query
-        const result = await query(sqlQuery, queryParams);
-        
-        res.json(result.rows);
+        if (hierarchical_parent) {
+            queryText += ` AND p.hierarchical_parent = $${paramCount}`;
+            queryParams.push(hierarchical_parent);
+            paramCount++;
+        }
+
+        if (search) {
+            queryText += ` AND (p.name ILIKE $${paramCount} OR p.description ILIKE $${paramCount})`;
+            queryParams.push(`%${search}%`);
+            paramCount++;
+        }
+
+        queryText += ` ORDER BY p.sort ASC, p.created_at DESC`;
+
+        // Если указаны page и limit, добавляем пагинацию
+        if (page && limit) {
+            const offset = (parseInt(page) - 1) * parseInt(limit);
+            queryText += ` LIMIT $${paramCount} OFFSET $${paramCount + 1}`;
+            queryParams.push(parseInt(limit), offset);
+        }
+
+        const result = await query(queryText, queryParams);
+
+        // Если запрошена пагинация, возвращаем объект с метаданными
+        if (page && limit) {
+            let countQuery = 'SELECT COUNT(*) FROM products WHERE 1=1';
+            const countParams = [];
+            let countParamNum = 1;
+
+            if (category) {
+                countQuery += ` AND category_id = $${countParamNum}`;
+                countParams.push(category);
+                countParamNum++;
+            }
+
+            if (hierarchical_parent) {
+                countQuery += ` AND hierarchical_parent = $${countParamNum}`;
+                countParams.push(hierarchical_parent);
+                countParamNum++;
+            }
+
+            if (search) {
+                countQuery += ` AND (name ILIKE $${countParamNum} OR description ILIKE $${countParamNum})`;
+                countParams.push(`%${search}%`);
+            }
+
+            const countResult = await query(countQuery, countParams);
+            const total = parseInt(countResult.rows[0].count);
+
+            res.json({
+                products: result.rows,
+                total,
+                page: parseInt(page),
+                pages: Math.ceil(total / parseInt(limit))
+            });
+        } else {
+            // Без пагинации возвращаем просто массив
+            res.json(result.rows);
+        }
     } catch (error) {
-        console.error('Ошибка при получении продуктов:', error);
-        res.status(500).json({ 
-            message: 'Ошибка сервера', 
-            error: error.message 
-        });
-    }
-};
-
-
-// Добавление продукта (только админ)
-const createProduct = async (req, res) => {
-    try {
-        const { name, description, price, category, image } = req.body;
-
-        if (!image) {
-            return res.status(400).json({ message: 'Изображение обязательно' });
-        }
-
-        const { data, error } = await supabase
-            .from('products')
-            .insert([{ name, description, price, category, image }])
-            .select();
-
-        if (error) {
-            throw error;
-        }
-
-        res.status(201).json(data);
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
-};
-
-// Обновление продукта (только админ)
-const updateProduct = async (req, res) => {
-    try {
-        const { name, description, price, category, image } = req.body;
-        const { id } = req.params;
-
-        const { data, error } = await supabase
-            .from('products')
-            .update({ name, description, price, category, image })
-            .eq('id', id)
-            .select();
-
-        if (error) {
-            throw error;
-        }
-
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
-};
-
-// Удаление продукта (только админ)
-const deleteProduct = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const { error } = await supabase.from('products').delete().eq('id', id);
-
-        if (error) {
-            throw error;
-        }
-
-        res.json({ message: 'Продукт удалён' });
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
+        console.error('Get products error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
 const getPopularProducts = async (req, res) => {
     try {
-        const result = await query(
-            'SELECT * FROM products WHERE is_popular = true ORDER BY sort DESC'
-        );
+        const { limit = 8 } = req.query;
 
+        // Получаем популярные продукты на основе флага is_popular или количества заказов
+        const queryText = `
+            SELECT p.*, c.name as category_name, COUNT(oi.id) as order_count
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            LEFT JOIN order_items oi ON p.id = oi.product_id
+            WHERE p.is_popular = true OR p.is_featured = true
+            GROUP BY p.id, c.name
+            ORDER BY order_count DESC, p.created_at DESC
+            LIMIT $1
+        `;
+
+        const result = await query(queryText, [limit]);
         res.json(result.rows);
     } catch (error) {
-        res.status(500).json({ message: 'Ошибка получения популярных товаров', error: error.message });
+        console.error('Get popular products error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
-module.exports = { getProducts, createProduct, updateProduct, deleteProduct, getPopularProducts, getCategories };
+module.exports = { getProducts, getCategories, getPopularProducts };

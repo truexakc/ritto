@@ -1,15 +1,11 @@
 const express = require('express');
-const { createProduct, getProducts, updateProduct, deleteProduct, getPopularProducts, getCategories} = require('../controllers/productController');
-const { protect, admin } = require('../middleware/authMiddleware');
+const { getProducts, getCategories, getPopularProducts } = require('../controllers/productController');
 
 const router = express.Router();
 
-router.post('/', protect, admin, createProduct);
 router.get('/', getProducts);
-router.get('/category', getCategories);
-router.put('/:id', protect, admin, updateProduct);
-router.delete('/:id', protect, admin, deleteProduct);
+router.get('/categories', getCategories);
+router.get('/category', getCategories); // Алиас для совместимости с фронтом
 router.get('/popular', getPopularProducts);
-
 
 module.exports = router;
