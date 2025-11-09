@@ -16,10 +16,11 @@ const Checkout = () => {
     const cartItems = useAppSelector(selectCartItems);
     const isLoading = useAppSelector(selectCartLoading);
 
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
-    const [paymentMethod, setPaymentMethod] = useState("card");
-    const [deliveryMethod, setDeliveryMethod] = useState("delivery");
+    const [name, setName] = useState(() => localStorage.getItem("checkout_name") || "");
+    const [address, setAddress] = useState(() => localStorage.getItem("checkout_address") || "");
+    const [phone, setPhone] = useState(() => localStorage.getItem("checkout_phone") || "");
+    const [paymentMethod, setPaymentMethod] = useState(() => localStorage.getItem("checkout_payment") || "card");
+    const [deliveryMethod, setDeliveryMethod] = useState(() => localStorage.getItem("checkout_delivery") || "delivery");
     const [comment, setComment] = useState("");
 
     const [extraGinger, setExtraGinger] = useState(0);
@@ -31,6 +32,27 @@ const Checkout = () => {
     const [success, setSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Сохранение данных в localStorage при изменении
+    useEffect(() => {
+        localStorage.setItem("checkout_name", name);
+    }, [name]);
+
+    useEffect(() => {
+        localStorage.setItem("checkout_address", address);
+    }, [address]);
+
+    useEffect(() => {
+        localStorage.setItem("checkout_phone", phone);
+    }, [phone]);
+
+    useEffect(() => {
+        localStorage.setItem("checkout_payment", paymentMethod);
+    }, [paymentMethod]);
+
+    useEffect(() => {
+        localStorage.setItem("checkout_delivery", deliveryMethod);
+    }, [deliveryMethod]);
+
     const totalPrice = cartItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
@@ -41,9 +63,11 @@ const Checkout = () => {
     }, [dispatch]);
 
     const validatePhone = (value: string) => {
-        const phoneRegex = /^(\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+        const phoneRegex = /^(\+?7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
         return phoneRegex.test(value.trim());
     };
+
+    const validateName = (value: string) => value.trim().length >= 2;
 
     const validateAddress = (value: string) => value.trim().length >= 5;
 
@@ -59,6 +83,10 @@ const Checkout = () => {
 
         if (cartItems.length === 0 || totalPrice === 0) {
             return setError("Корзина пуста.");
+        }
+
+        if (!validateName(name)) {
+            return setError("Введите ваше имя (минимум 2 символа).");
         }
 
         if (!validatePhone(phone)) {
@@ -84,6 +112,7 @@ const Checkout = () => {
 
         try {
             const orderData = {
+                customer_name: name.trim(),
                 products: cartItems.map((item) => ({
                     id: item.productId,
                     name: item.name,
@@ -161,6 +190,21 @@ const Checkout = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-5 bg-[#f6eaea]/5 backdrop-blur-sm border border-[#f6eaea]/10 rounded-2xl p-6 lg:p-8">
+                    {/* Name */}
+                    <div>
+                        <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Ваше имя *</label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
+                            placeholder="Иван"
+                            required
+                            autoComplete="name"
+                            disabled={isSubmitting}
+                        />
+                    </div>
+
                     {/* Phone */}
                     <div>
                         <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Номер телефона *</label>

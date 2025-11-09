@@ -21,6 +21,9 @@ const formatOrderMessage = (orderData) => {
     let message = `🛒 *НОВЫЙ ЗАКАЗ*\n\n`;
     
     message += `👤 *Клиент:*\n`;
+    if (orderData.customer_name) {
+        message += `👨 Имя: ${orderData.customer_name}\n`;
+    }
     message += `📞 Телефон: ${orderData.phone_number}\n`;
     
     if (orderData.delivery_method === 'delivery') {
