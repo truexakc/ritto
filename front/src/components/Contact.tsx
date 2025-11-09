@@ -116,7 +116,7 @@ const Contact = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#f6eaea]/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                 <div className="flex items-center justify-center gap-3 relative z-10">
-                  Перейти в каталог
+                  <a href="/catalog">Перейти в каталог</a>
                   <SlArrowRight className="text-xl group-hover:translate-x-1 transition-transform duration-200" />
                 </div>
               </motion.button>

@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { JSX } from 'react';
 
 const MapComponent = (): JSX.Element => {
-    const position: [number, number] = [55.751244, 37.618423]; // Москва
+    const position: [number, number] = [57.977720, 56.106959];
 
     const markerIcon = L.icon({
         iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',

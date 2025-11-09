@@ -7,35 +7,29 @@ const Footer = () => {
   const socialLinks = [
     {
       icon: <SlSocialVkontakte className="text-xl lg:text-2xl" />,
-      href: "#",
+      href: "https://vk.com/sushiritto_59",
       name: "VKontakte",
       color: "hover:text-[#0077FF]"
     },
     {
       icon: <SlEnvolope className="text-xl lg:text-2xl" />,
-      href: "#",
+      href: "https://t.me/+79630121469",
       name: "Telegram",
       color: "hover:text-[#0088CC]"
     },
     {
-      icon: <SlEnvolope className="text-xl lg:text-2xl" />,
-      href: "#",
-      name: "Email",
-      color: "hover:text-[#EA4335]"
-    },
-    {
       icon: <SlPhone className="text-xl lg:text-2xl" />,
-      href: "#",
+      href: "tel:+79630121469",
       name: "Phone",
       color: "hover:text-[#b12e2e]"
     }
   ];
 
   const footerLinks = [
-    { name: "Меню", href: "#" },
-    { name: "О нас", href: "#" },
-    { name: "Контакты", href: "#" },
-    { name: "Доставка", href: "#" }
+    { name: "Каталог", href: "/catalog" },
+    { name: "О нас", href: "#about" },
+    { name: "Контакты", href: "#contacts" },
+    { name: "Доставка", href: "#delivery" }
   ];
 
   return (
@@ -67,14 +61,14 @@ const Footer = () => {
               />
             </motion.a>
             <p className="text-[#ADADAD] text-sm lg:text-base leading-relaxed max-w-md mb-6">
-              Мы создаем самую вкусную пиццу с любовью и заботой. 
-              Свежие ингредиенты, быстрая доставка и уютная атмосфера.
+              Мы создали SUSHIRITTO с любовью и заботой. 
+              Свежие ингредиенты, быстрая доставка и вкусные блюда - это наша основная ценность.
             </p>
             
             {/* Контактная информация */}
             <div className="space-y-2">
-              <p className="text-[#E9E9E9] font-semibold text-sm">+7 (900) 00-00-00</p>
-              <p className="text-[#ADADAD] text-sm">ул. Ногорная д. 7</p>
+              <p className="text-[#E9E9E9] font-semibold text-sm">+7 (963) 012-14-69</p>
+              <p className="text-[#ADADAD] text-sm">д. Кондратово, ул. Камская 1Б</p>
               <p className="text-[#ADADAD] text-sm">Ежедневно: 10:00 - 23:00</p>
             </div>
           </motion.div>
@@ -182,7 +176,10 @@ const Footer = () => {
         >
           <div className="text-center lg:text-left">
             <p className="text-[#ADADAD] text-xs lg:text-sm">
-              © {currentYear} Название Пиццерии. Все права защищены.
+              © {currentYear} SUSHIRITTO. Все права защищены.
+            </p>
+            <p className="text-[#ADADAD] text-xs lg:text-sm">
+              made by <span className="text-[#d7d7d7]"><a href="https://t.me/thegeneticopera">geneticopera &#129516;</a></span>
             </p>
           </div>
           

@@ -11,22 +11,16 @@ const About = () => {
   const socialLinks = [
     {
       icon: <SlSocialVkontakte className="text-2xl" />,
-      href: "#",
+      href: "https://vk.com/sushiritto_59",
       color: "hover:text-[#0077FF]",
       name: "VKontakte"
     },
     {
       icon: <SlEnvolope className="text-2xl" />,
-      href: "#",
+      href: "https://t.me/+79630121469",
       color: "hover:text-[#0088CC]",
       name: "Telegram"
     },
-    {
-      icon: <SlEnvolope className="text-2xl" />,
-      href: "#",
-      color: "hover:text-[#EA4335]",
-      name: "Email"
-    }
   ];
 
   const handlePlayVideo = () => {
@@ -205,21 +199,6 @@ const About = () => {
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#b12e2e]/20 rounded-full blur-xl -z-10"></div>
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#b12e2e]/10 rounded-full blur-xl -z-10"></div>
             </div>
-
-            {/* Подпись под видео */}
-            <motion.div
-              className="text-center mt-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              <p className="text-[#ADADAD] text-sm lg:text-base">
-                Посмотрите нашу историю
-              </p>
-              <p className="text-[#E9E9E9] font-semibold text-lg lg:text-xl mt-1">
-                Всего 2 минуты
-              </p>
-            </motion.div>
           </motion.div>
         </div>
 
@@ -231,9 +210,9 @@ const About = () => {
           transition={{ duration: 0.8, delay: 1 }}
         >
           {[
-            { number: "5+", label: "Лет опыта" },
+            { number: "6+", label: "Лет опыта" },
             { number: "1000+", label: "Довольных клиентов" },
-            { number: "50+", label: "Видов пиццы" },
+            { number: "20+", label: "Видов пиццы" },
             { number: "24/7", label: "Поддержка" }
           ].map((stat, index) => (
             <motion.div

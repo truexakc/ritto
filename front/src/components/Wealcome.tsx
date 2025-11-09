@@ -159,7 +159,7 @@ const FullscreenParallaxSlider = () => {
 
                     {/* Кнопка заказа */}
                     <motion.a
-                        href="#order"
+                        href="/basket"
                         className="inline-block bg-[#b12e2e] text-[#f6eaea] px-12 py-4 rounded-full text-xl font-semibold hover:bg-[#9a2525] transition-all duration-300 transform hover:scale-105 shadow-2xl"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

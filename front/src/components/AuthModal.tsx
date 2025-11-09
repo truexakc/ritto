@@ -16,9 +16,6 @@ const AuthModal = ({ onClose }: AuthModalProps) => {
                     ✕
                 </button>
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Войдите в аккаунт</h2>
-                <p className="text-gray-600 text-sm mb-6">
-                    Чтобы добавлять товары в корзину, пожалуйста, авторизуйтесь.
-                </p>
                 <Link
                     to="/login"
                     className="bg-[#b12e2e] text-[#f6eaea] px-6 py-2 rounded-full font-medium hover:bg-[#9a2525]"

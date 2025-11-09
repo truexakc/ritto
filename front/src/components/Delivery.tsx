@@ -104,7 +104,7 @@ const Delivery = () => {
                   <div className="space-y-2 ml-6">
                     <div className="bg-[#f6eaea]/5 border border-[#f6eaea]/10 rounded-xl p-3">
                       <p className="text-[#ADADAD] font-semibold">
-                        По Кондратово бесплатно доставляем от 500 руб.
+                        По Кондратово бесплатно доставляем от 500 руб. На самовывоз скидка 5%
                       </p>
                     </div>
                     <div className="bg-[#f6eaea]/5 border border-[#f6eaea]/10 rounded-xl p-3">
@@ -122,8 +122,8 @@ const Delivery = () => {
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center justify-center gap-2">
-                    <SlPhone className="text-[#f6eaea]" />
-                    Сделать заказ
+                    <SlPhone className="text-[#f6eaea]"/>
+                    <a href="tel:+79630121469">Сделать заказ</a>
                   </div>
                 </motion.button>
               </div>
