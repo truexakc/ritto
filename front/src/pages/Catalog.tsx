@@ -61,6 +61,11 @@ const Catalog = () => {
   }, [currentProducts.length, isLoading, selectedHierarchicalId, currentPage]);
 
   const handleCategoryChange = (hierarchicalId?: string) => {
+    // Не делаем ничего, если категория уже выбрана
+    if (hierarchicalId === selectedHierarchicalId) {
+      return;
+    }
+    
     setShowProducts(false);
     setSelectedHierarchicalId(hierarchicalId);
     setCurrentPage(1);

@@ -3,7 +3,7 @@ const { query } = require('../config/postgres');
 
 const getCategories = async (req, res) => {
     try {
-        const result = await query('SELECT * FROM categories ORDER BY name');
+        const result = await query('SELECT * FROM categories ORDER BY sort DESC, name ASC');
         res.json(result.rows);
     } catch (error) {
         console.error('Get categories error:', error);
@@ -43,7 +43,7 @@ const getProducts = async (req, res) => {
             paramCount++;
         }
 
-        queryText += ` ORDER BY p.sort ASC, p.created_at DESC`;
+        queryText += ` ORDER BY p.sort DESC, p.created_at DESC`;
 
         // Если указаны page и limit, добавляем пагинацию
         if (page && limit) {
