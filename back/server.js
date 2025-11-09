@@ -95,6 +95,7 @@ app.use('/api/payment', require('./routes/paymentRoutes'));
 app.use('/api/order_items', require('./routes/orderItemRoutes'));
 app.use('/api/discounts', require('./routes/discountRoutes'));
 app.use('/api/manual', require('./routes/manualRoutes'));
+app.use('/api/telegram', require('./routes/telegramRoutes'));
 
 // Error handling
 app.use((req, res, next) => {

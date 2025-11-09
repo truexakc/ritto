@@ -86,6 +86,7 @@ const Checkout = () => {
             const orderData = {
                 products: cartItems.map((item) => ({
                     id: item.productId,
+                    name: item.name,
                     quantity: item.quantity,
                 })),
                 shipping_address: address.trim(),
@@ -94,16 +95,16 @@ const Checkout = () => {
                 payment_method: paymentMethod,
                 delivery_method: deliveryMethod,
                 comment: comment.trim(),
-                extra_ginger: !!extraGinger,
-                extra_wasabi: !!extraWasabi,
-                extra_soy_sauce: !!extraSoy,
+                extra_ginger_count: extraGinger,
+                extra_wasabi_count: extraWasabi,
+                extra_soy_sauce_count: extraSoy,
                 chopsticks_count: chopsticksCount,
             };
 
 
-            const response = await axiosInstance.post("/orders", orderData);
+            const response = await axiosInstance.post("/telegram/order", orderData);
 
-            if (response.status === 201) {
+            if (response.status === 200 || response.status === 201) {
                 setSuccess("✅ Заказ успешно оформлен!");
                 setTimeout(() => {
                     dispatch(clearCartThunk());
