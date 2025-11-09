@@ -3,6 +3,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import Loader from "./components/Loader";
+import CookieConsent from "./components/CookieConsent";
 import { useAuthInit } from "./hooks/useAuthInit";
 import { useAppSelector } from "./store/hooks";
 import { selectIsInitialized } from "./store/slices/authSlice";
@@ -35,6 +36,7 @@ const App = () => {
                 <Outlet />
             </main>
             <Footer />
+            <CookieConsent />
         </div>
     );
 };

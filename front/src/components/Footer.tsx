@@ -185,13 +185,13 @@ const Footer = () => {
           
           <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6">
             <a
-              href="#"
+              href="/privacy-policy"
               className="text-[#ADADAD] hover:text-[#b12e2e] text-xs lg:text-sm transition-colors duration-200"
             >
               Политика конфиденциальности
             </a>
             <a
-              href="#"
+              href="/terms-of-service"
               className="text-[#ADADAD] hover:text-[#b12e2e] text-xs lg:text-sm transition-colors duration-200"
             >
               Условия использования

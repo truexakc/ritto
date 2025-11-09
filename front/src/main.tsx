@@ -13,6 +13,8 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 import PrivateRoute from './routes/PrivateRoute';
 import 'leaflet/dist/leaflet.css';
 import {PersistGate} from "redux-persist/integration/react";
@@ -41,6 +43,9 @@ const router = createBrowserRouter([
                     {path: 'profile', element: <Profile/>},
                 ],
             },
+
+            {path: 'privacy-policy', element: <PrivacyPolicy/>},
+            {path: 'terms-of-service', element: <TermsOfService/>},
 
             {path: '*', element: <NotFound/>},
         ],
