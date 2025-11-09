@@ -122,36 +122,52 @@ const Checkout = () => {
 
     if (isLoading) {
         return (
-            <section className="min-h-screen flex items-center justify-center bg-[#0C0C0C] text-[#f6eaea]">
-                Загрузка корзины...
+            <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c] text-[#f6eaea] overflow-hidden">
+                <div className="absolute top-10 right-10 w-72 h-72 bg-[#b12e2e]/10 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#b12e2e]/5 rounded-full blur-3xl"></div>
+                <div className="relative z-10">Загрузка корзины...</div>
             </section>
         );
     }
 
     if (cartItems.length === 0) {
         return (
-            <section className="min-h-screen flex items-center justify-center bg-[#0C0C0C] text-[#f6eaea]">
-                Корзина пуста. Добавьте товары для оформления заказа.
+            <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c] text-[#f6eaea] overflow-hidden">
+                <div className="absolute top-10 right-10 w-72 h-72 bg-[#b12e2e]/10 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#b12e2e]/5 rounded-full blur-3xl"></div>
+                <div className="relative z-10">Корзина пуста. Добавьте товары для оформления заказа.</div>
             </section>
         );
     }
     return (
-        <section className="py-12 px-4 bg-[#0C0C0C] min-h-screen text-[#f6eaea]">
-            <div className="max-w-xl mx-auto">
-                <h2 className="text-3xl font-bold mb-6 text-center">Оформление заказа</h2>
+        <section className="relative pt-28 lg:pt-32 pb-12 px-4 bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c] min-h-screen text-[#f6eaea] overflow-hidden">
+            {/* Декоративные элементы */}
+            <div className="absolute top-10 right-10 w-72 h-72 bg-[#b12e2e]/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#b12e2e]/5 rounded-full blur-3xl"></div>
+            
+            <div className="max-w-xl mx-auto relative z-10">
+                <h2 className="text-[#b12e2e] font-bold text-4xl lg:text-5xl mb-8">ОФОРМЛЕНИЕ ЗАКАЗА</h2>
 
-                {error && <div className="mb-4 text-red-500">{error}</div>}
-                {success && <div className="mb-4 text-green-500">{success}</div>}
+                {error && (
+                    <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400">
+                        {error}
+                    </div>
+                )}
+                {success && (
+                    <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400">
+                        {success}
+                    </div>
+                )}
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5 bg-[#f6eaea]/5 backdrop-blur-sm border border-[#f6eaea]/10 rounded-2xl p-6 lg:p-8">
                     {/* Phone */}
                     <div>
-                        <label className="block mb-1 text-sm">Номер телефона *</label>
+                        <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Номер телефона *</label>
                         <input
                             type="tel"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="w-full px-4 py-2 bg-[#1C1C1C] border border-gray-700 rounded focus:outline-none"
+                            className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                             placeholder="+7 999 123-45-67"
                             required
                             autoComplete="tel"
@@ -161,26 +177,26 @@ const Checkout = () => {
 
                     {/* Delivery */}
                     <div>
-                        <label className="block mb-1 text-sm">Способ получения</label>
+                        <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Способ получения</label>
                         <select
                             value={deliveryMethod}
                             onChange={(e) => setDeliveryMethod(e.target.value)}
-                            className="w-full px-4 py-2 bg-[#1C1C1C] border border-gray-700 rounded"
+                            className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                             disabled={isSubmitting}
                         >
-                            <option value="delivery">Доставка</option>
-                            <option value="pickup">Самовывоз</option>
+                            <option value="delivery" className="bg-[#1a1a1a]">Доставка</option>
+                            <option value="pickup" className="bg-[#1a1a1a]">Самовывоз</option>
                         </select>
                     </div>
 
                     {deliveryMethod === "delivery" && (
                         <div>
-                            <label className="block mb-1 text-sm">Адрес доставки *</label>
+                            <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Адрес доставки *</label>
                             <input
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                className="w-full px-4 py-2 bg-[#1C1C1C] border border-gray-700 rounded"
+                                className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                                 placeholder="Улица, дом, квартира"
                                 required
                                 autoComplete="street-address"
@@ -191,67 +207,67 @@ const Checkout = () => {
 
                     {/* Payment */}
                     <div>
-                        <label className="block mb-1 text-sm">Способ оплаты</label>
+                        <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Способ оплаты</label>
                         <select
                             value={paymentMethod}
                             onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="w-full px-4 py-2 bg-[#1C1C1C] border border-gray-700 rounded"
+                            className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                             disabled={isSubmitting}
                         >
-                            <option value="card">Картой</option>
-                            <option value="cash">Наличными</option>
+                            <option value="card" className="bg-[#1a1a1a]">Картой</option>
+                            <option value="cash" className="bg-[#1a1a1a]">Наличными</option>
                         </select>
                     </div>
 
                     {/* Extras */}
                     <div>
-                        <label className="block mb-2 text-sm">Дополнительно:</label>
+                        <label className="block mb-3 text-sm text-[#E9E9E9] font-semibold">Дополнительно:</label>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm block">Имбирь (шт.)</label>
+                                <label className="text-sm block text-[#ADADAD] mb-1">Имбирь (шт.)</label>
                                 <input
                                     type="number"
                                     min={0}
                                     max={10}
                                     value={extraGinger}
                                     onChange={(e) => setExtraGinger(Number(e.target.value))}
-                                    className="w-full px-3 py-1 bg-[#1C1C1C] border border-gray-700 rounded"
+                                    className="w-full px-3 py-2 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                                     disabled={isSubmitting}
                                 />
                             </div>
                             <div>
-                                <label className="text-sm block">Васаби (шт.)</label>
+                                <label className="text-sm block text-[#ADADAD] mb-1">Васаби (шт.)</label>
                                 <input
                                     type="number"
                                     min={0}
                                     max={10}
                                     value={extraWasabi}
                                     onChange={(e) => setExtraWasabi(Number(e.target.value))}
-                                    className="w-full px-3 py-1 bg-[#1C1C1C] border border-gray-700 rounded"
+                                    className="w-full px-3 py-2 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                                     disabled={isSubmitting}
                                 />
                             </div>
                             <div>
-                                <label className="text-sm block">Соевый соус (шт.)</label>
+                                <label className="text-sm block text-[#ADADAD] mb-1">Соевый соус (шт.)</label>
                                 <input
                                     type="number"
                                     min={0}
                                     max={10}
                                     value={extraSoy}
                                     onChange={(e) => setExtraSoy(Number(e.target.value))}
-                                    className="w-full px-3 py-1 bg-[#1C1C1C] border border-gray-700 rounded"
+                                    className="w-full px-3 py-2 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                                     disabled={isSubmitting}
                                 />
                             </div>
                             <div>
-                                <label className="text-sm block">Палочки (пар)</label>
+                                <label className="text-sm block text-[#ADADAD] mb-1">Палочки (пар)</label>
                                 <input
                                     type="number"
                                     min={0}
                                     max={10}
                                     value={chopsticksCount}
                                     onChange={(e) => setChopsticksCount(Number(e.target.value))}
-                                    className="w-full px-3 py-1 bg-[#1C1C1C] border border-gray-700 rounded"
+                                    className="w-full px-3 py-2 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
                                     disabled={isSubmitting}
                                 />
                             </div>
@@ -260,19 +276,19 @@ const Checkout = () => {
 
                     {/* Comment */}
                     <div>
-                        <label className="block mb-1 text-sm">Комментарий</label>
+                        <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">Комментарий</label>
                         <textarea
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             rows={3}
-                            className="w-full px-4 py-2 bg-[#1C1C1C] border border-gray-700 rounded"
+                            className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea] resize-none"
                             placeholder="Например: без лука, звоните заранее..."
                             disabled={isSubmitting}
                         />
                     </div>
 
                     {/* Total */}
-                    <div className="flex justify-between items-center font-bold text-lg text-[#b12e2e]">
+                    <div className="flex justify-between items-center font-bold text-xl text-[#b12e2e] pt-4 border-t border-[#f6eaea]/10">
                         <span>Сумма заказа:</span>
                         <span>{totalPrice} ₽</span>
                     </div>
@@ -280,10 +296,10 @@ const Checkout = () => {
                     {/* Submit */}
                     <button
                         type="submit"
-                        className={`w-full py-3 rounded-full font-bold text-lg transition ${
+                        className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg ${
                             isSubmitting
                                 ? "bg-gray-500 cursor-not-allowed"
-                                : "bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea]"
+                                : "bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea] hover:shadow-xl hover:scale-[1.02]"
                         }`}
                         disabled={isSubmitting}
                     >
