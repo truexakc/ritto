@@ -196,35 +196,6 @@ const Header = () => {
                             )}
                         </RouterLink>
 
-                        {/* Аккаунт */}
-                        {isAuth && currentUser ? (
-                            <>
-                                <RouterLink 
-                                    to="/profile" 
-                                    className="w-10 h-10 bg-gradient-to-br from-[#b12e2e] to-[#9a2525] rounded-full flex items-center justify-center text-xl shadow-lg"
-                                    onClick={() => setMenuOpen(false)}
-                                >
-                                    {getUserEmoji(currentUser.id)}
-                                </RouterLink>
-                                <LogoutButton 
-                                    icon={
-                                        <div className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200">
-                                            <LogOut className="w-6 h-6 text-[#b12e2e]"/>
-                                        </div>
-                                    }
-                                    onLogout={() => setMenuOpen(false)}
-                                />
-                            </>
-                        ) : !isAuth ? (
-                            <RouterLink 
-                                to="/login" 
-                                className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200"
-                                onClick={() => setMenuOpen(false)}
-                            >
-                                <LogIn className="w-6 h-6 text-[#b12e2e]"/>
-                            </RouterLink>
-                        ) : null}
-
                         {/* Бургер меню */}
                         <button 
                             onClick={toggleMenu} 
@@ -245,6 +216,50 @@ const Header = () => {
             lg:hidden
         `}>
             <div className="container mx-auto px-4 py-8">
+                {/* Профиль пользователя */}
+                {isAuth && currentUser ? (
+                    <div className="mb-8 pb-6 border-b border-[#f6eaea]/10">
+                        <div className="flex items-center gap-4">
+                            <RouterLink 
+                                to="/profile" 
+                                className="w-14 h-14 bg-gradient-to-br from-[#b12e2e] to-[#9a2525] rounded-full flex items-center justify-center text-2xl shadow-lg"
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                {getUserEmoji(currentUser.id)}
+                            </RouterLink>
+                            <div className="flex-1">
+                                <RouterLink 
+                                    to="/profile" 
+                                    className="text-[#E9E9E9] font-semibold text-lg hover:text-[#b12e2e] transition-colors"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    {currentUser.name || 'Мой профиль'}
+                                </RouterLink>
+                                <p className="text-[#ADADAD] text-sm">{currentUser.email}</p>
+                            </div>
+                            <LogoutButton 
+                                icon={
+                                    <div className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200">
+                                        <LogOut className="w-6 h-6 text-[#b12e2e]"/>
+                                    </div>
+                                }
+                                onLogout={() => setMenuOpen(false)}
+                            />
+                        </div>
+                    </div>
+                ) : !isAuth ? (
+                    <div className="mb-8 pb-6 border-b border-[#f6eaea]/10">
+                        <RouterLink 
+                            to="/login" 
+                            className="flex items-center gap-3 p-4 bg-[#f6eaea]/5 hover:bg-[#f6eaea]/10 rounded-xl transition-all duration-200"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            <LogIn className="w-6 h-6 text-[#b12e2e]"/>
+                            <span className="text-[#E9E9E9] font-semibold">Войти в аккаунт</span>
+                        </RouterLink>
+                    </div>
+                ) : null}
+
                 <nav>
                     <ul className="flex flex-col gap-6 text-xl font-medium text-[#f6eaea]">
                         <NavLinks/>
@@ -254,8 +269,8 @@ const Header = () => {
                 {/* Дополнительная информация в мобильном меню */}
                 <div className="mt-12 pt-8 border-t border-[#f6eaea]/10">
                     <div className="text-[#ADADAD] space-y-2">
-                        <p className="font-semibold text-[#b12e2e]">+7 (900) 00-00-00</p>
-                        <p className="text-sm">ул. Ногорная д. 7</p>
+                        <p className="font-semibold text-[#b12e2e]">+7 (963) 012-14-69</p>
+                        <p className="text-sm">д. Кондратово, ул. Камская 1Б</p>
                         <p className="text-sm">Ежедневно: 10:00 - 23:00</p>
                     </div>
                 </div>

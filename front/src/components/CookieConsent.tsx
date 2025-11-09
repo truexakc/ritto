@@ -43,7 +43,7 @@ const CookieConsent = () => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         transition={{ type: "spring", duration: 0.5 }}
-                        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[101] w-[95%] max-w-lg"
+                        className="fixed bottom-4 left-4 right-4 md:bottom-6 md:left-1/2 md:right-auto md:-translate-x-1/2 z-[101] md:w-[95%] md:max-w-lg"
                     >
                         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#242424] rounded-3xl border border-[#f6eaea]/20 shadow-2xl p-6 relative overflow-hidden">
                             {/* Декоративные элементы */}
