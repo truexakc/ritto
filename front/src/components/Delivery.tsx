@@ -25,7 +25,7 @@ const Delivery = () => {
   ];
 
   return (
-    <section className="relative lg:pt-32 pt-16 pb-20 overflow-hidden text-white" ref={ref}>
+    <section className="relative lg:pt-32 pt-16 pb-20 overflow-hidden text-[#f6eaea]" ref={ref}>
       {/* Фон с градиентами */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#242424] to-[#171717] -z-10"></div>
       
@@ -52,15 +52,15 @@ const Delivery = () => {
             </motion.h2>
 
             <motion.div
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+              className="bg-[#f6eaea]/5 backdrop-blur-sm border border-[#f6eaea]/10 rounded-2xl p-8 shadow-2xl hover:bg-[#f6eaea]/10 hover:border-[#f6eaea]/20 transition-all duration-300"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               {/* Заголовок с иконкой */}
-              <div className="flex items-center gap-4 mb-6 text-white">
+              <div className="flex items-center gap-4 mb-6 text-[#f6eaea]">
                 <div className="bg-[#b12e2e] p-3 rounded-xl shadow-lg">
-                  <SlClock className="text-white text-xl" />
+                  <SlClock className="text-[#f6eaea] text-xl" />
                 </div>
                 <div>
                   <h3 className="text-[#E9E9E9] font-extrabold text-2xl">
@@ -72,7 +72,7 @@ const Delivery = () => {
 
               <div className="space-y-6">
                 {/* Время работы */}
-                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="bg-[#f6eaea]/5 border border-[#f6eaea]/10 rounded-xl p-4">
                   <p className="text-lg font-semibold text-[#E9E9E9]">
                     с 10:00 до 23:00
                   </p>
@@ -86,7 +86,7 @@ const Delivery = () => {
                       Самовывоз
                     </span>
                   </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4 ml-6">
+                  <div className="bg-[#f6eaea]/5 border border-[#f6eaea]/10 rounded-xl p-4 ml-6">
                     <p className="text-[#ADADAD] font-semibold">
                       д. Кондратово, ул. Камская 1Б
                     </p>
@@ -102,12 +102,12 @@ const Delivery = () => {
                     </span>
                   </div>
                   <div className="space-y-2 ml-6">
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+                    <div className="bg-[#f6eaea]/5 border border-[#f6eaea]/10 rounded-xl p-3">
                       <p className="text-[#ADADAD] font-semibold">
                         По Кондратово бесплатно доставляем от 500 руб.
                       </p>
                     </div>
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+                    <div className="bg-[#f6eaea]/5 border border-[#f6eaea]/10 rounded-xl p-3">
                       <p className="text-[#ADADAD] font-semibold">
                         В город и иные отдаленные пункты, уточняйте у оператора
                       </p>
@@ -117,12 +117,12 @@ const Delivery = () => {
 
                 {/* Кнопка заказа */}
                 <motion.button
-                  className="w-full bg-[#b12e2e] text-white py-4 rounded-xl font-bold text-lg mt-4 hover:bg-[#9a2525] transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full bg-[#b12e2e] text-[#f6eaea] py-4 rounded-xl font-bold text-lg mt-4 hover:bg-[#9a2525] transition-all duration-300 shadow-lg hover:shadow-xl"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center justify-center gap-2">
-                    <SlPhone className="text-white" />
+                    <SlPhone className="text-[#f6eaea]" />
                     Сделать заказ
                   </div>
                 </motion.button>
@@ -164,7 +164,7 @@ const Delivery = () => {
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.6, delay: 1 + index * 0.2 }}
                 >
-                  <div className="flex items-start gap-4 p-4 rounded-xl transition-all duration-300 group-hover:bg-white/5 group-hover:scale-105">
+                  <div className="flex items-start gap-4 p-4 rounded-xl transition-all duration-300 group-hover:bg-[#f6eaea]/5 group-hover:scale-105">
                     <div className="text-4xl flex-shrink-0 bg-gradient-to-br from-[#b12e2e] to-[#9a2525] p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
                       {step.icon}
                     </div>

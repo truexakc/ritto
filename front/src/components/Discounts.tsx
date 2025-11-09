@@ -20,7 +20,7 @@ const Discounts = () => {
     }
   }, [discount]);
 
-  if (isLoading) return <p className="text-center py-8 text-white">Загрузка...</p>;
+  if (isLoading) return <p className="text-center py-8 text-[#f6eaea]">Загрузка...</p>;
   if (isError || !discount) return null;
 
   return (

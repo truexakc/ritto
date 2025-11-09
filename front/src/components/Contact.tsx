@@ -72,7 +72,7 @@ const Contact = () => {
               {contactInfo.map((item, index) => (
                 <motion.div
                 key={index}
-                className="flex items-start gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+                className="flex items-start gap-4 p-4 bg-[#f6eaea]/5 rounded-2xl border border-[#f6eaea]/10 backdrop-blur-sm"
                 whileHover={{ 
                   scale: 1.02, 
                   backgroundColor: "rgba(232, 38, 43, 0.1)",
@@ -84,7 +84,7 @@ const Contact = () => {
                 transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
               >
                   <div className="flex-shrink-0 w-12 h-12 bg-[#b12e2e] rounded-xl flex items-center justify-center">
-                    <div className="text-white">
+                    <div className="text-[#f6eaea]">
                       {item.icon}
                     </div>
                   </div>
@@ -110,11 +110,11 @@ const Contact = () => {
               transition={{ duration: 0.8, delay: 1 }}
             >
               <motion.button
-                className="group relative w-full lg:w-auto bg-[#b12e2e] text-white font-bold text-lg lg:text-xl py-5 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden"
+                className="group relative w-full lg:w-auto bg-[#b12e2e] text-[#f6eaea] font-bold text-lg lg:text-xl py-5 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#f6eaea]/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                 <div className="flex items-center justify-center gap-3 relative z-10">
                   Перейти в каталог
                   <SlArrowRight className="text-xl group-hover:translate-x-1 transition-transform duration-200" />
@@ -148,7 +148,7 @@ const Contact = () => {
 
               {/* Информация на карте */}
               <motion.div
-                className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg"
+                className="absolute bottom-4 left-4 right-4 bg-[#f6eaea]/90 backdrop-blur-sm rounded-xl p-4 shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 1 }}

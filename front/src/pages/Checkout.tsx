@@ -122,7 +122,7 @@ const Checkout = () => {
 
     if (isLoading) {
         return (
-            <section className="min-h-screen flex items-center justify-center bg-[#0C0C0C] text-white">
+            <section className="min-h-screen flex items-center justify-center bg-[#0C0C0C] text-[#f6eaea]">
                 Загрузка корзины...
             </section>
         );
@@ -130,13 +130,13 @@ const Checkout = () => {
 
     if (cartItems.length === 0) {
         return (
-            <section className="min-h-screen flex items-center justify-center bg-[#0C0C0C] text-white">
+            <section className="min-h-screen flex items-center justify-center bg-[#0C0C0C] text-[#f6eaea]">
                 Корзина пуста. Добавьте товары для оформления заказа.
             </section>
         );
     }
     return (
-        <section className="py-12 px-4 bg-[#0C0C0C] min-h-screen text-white">
+        <section className="py-12 px-4 bg-[#0C0C0C] min-h-screen text-[#f6eaea]">
             <div className="max-w-xl mx-auto">
                 <h2 className="text-3xl font-bold mb-6 text-center">Оформление заказа</h2>
 
@@ -283,7 +283,7 @@ const Checkout = () => {
                         className={`w-full py-3 rounded-full font-bold text-lg transition ${
                             isSubmitting
                                 ? "bg-gray-500 cursor-not-allowed"
-                                : "bg-[#b12e2e] hover:bg-[#9a2525] text-white"
+                                : "bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea]"
                         }`}
                         disabled={isSubmitting}
                     >

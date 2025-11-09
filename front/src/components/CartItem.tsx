@@ -58,10 +58,10 @@ const CartItem = ({ product }: Props) => {
     }
 
     return (
-        <div className="flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 h-[500px] overflow-hidden relative rounded-2xl group">
+        <div className="flex flex-col bg-[#f6eaea]/5 backdrop-blur-sm border border-[#f6eaea]/10 h-[500px] overflow-hidden relative rounded-2xl group">
             {/* Анимированный фон при ховере */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#b12e2e]/0 to-[#b12e2e]/0 group-hover:from-[#b12e2e]/10 group-hover:to-[#b12e2e]/5 transition-all duration-700 ease-out rounded-2xl"></div>
-            <div className="absolute inset-0 border border-white/10 group-hover:border-[#b12e2e]/30 transition-all duration-700 ease-out rounded-2xl"></div>
+            <div className="absolute inset-0 border border-[#f6eaea]/10 group-hover:border-[#b12e2e]/30 transition-all duration-700 ease-out rounded-2xl"></div>
             
             {/* Контент */}
             <div className="relative z-10 flex flex-col h-full">
@@ -74,7 +74,7 @@ const CartItem = ({ product }: Props) => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <div className="w-full h-full bg-white/5 flex items-center justify-center text-[#ADADAD]">
+                    <div className="w-full h-full bg-[#f6eaea]/5 flex items-center justify-center text-[#ADADAD]">
                         Нет изображения
                     </div>
                 )}
@@ -98,7 +98,7 @@ const CartItem = ({ product }: Props) => {
                         {/* Кнопка подробнее */}
                         <button
                             onClick={handleOpenModal}
-                            className="flex-1 text-white py-2 px-4 bg-black hover:-translate-y-1 transition-transform rounded-full"
+                            className="flex-1 text-[#f6eaea] py-2 px-4 bg-black hover:-translate-y-1 transition-transform rounded-full"
                         >
                             Подробнее
                         </button>
@@ -114,7 +114,7 @@ const CartItem = ({ product }: Props) => {
 
                         {/* Popup-уведомление */}
                         {showAddedPopup && (
-                            <div className="absolute -top-10 right-0 bg-green-600 text-white text-sm px-4 py-1 rounded-full shadow-lg animate-fade-in-out flex items-center gap-1">
+                            <div className="absolute -top-10 right-0 bg-green-600 text-[#f6eaea] text-sm px-4 py-1 rounded-full shadow-lg animate-fade-in-out flex items-center gap-1">
                                 <CheckCircle2 className="w-4 h-4" />
                                 Добавлено!
                             </div>
@@ -135,7 +135,7 @@ const CartItem = ({ product }: Props) => {
                     >
                         <button
                             onClick={handleCloseModal}
-                            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white text-xl font-bold z-10 bg-[#0C0C0C] rounded-full w-8 h-8 flex items-center justify-center hover:bg-[#1a1a1a] transition-colors"
+                            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[#f6eaea] text-xl font-bold z-10 bg-[#0C0C0C] rounded-full w-8 h-8 flex items-center justify-center hover:bg-[#1a1a1a] transition-colors"
                         >
                             ✕
                         </button>

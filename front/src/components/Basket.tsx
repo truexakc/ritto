@@ -86,7 +86,7 @@ const Basket = () => {
                 >
                     <Link to="/catalog">
                         <motion.button
-                            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 text-[#E9E9E9] font-medium rounded-2xl px-6 py-3 border border-white/10 transition-all duration-300 group"
+                            className="flex items-center gap-3 bg-[#f6eaea]/5 hover:bg-[#f6eaea]/10 text-[#E9E9E9] font-medium rounded-2xl px-6 py-3 border border-[#f6eaea]/10 transition-all duration-300 group"
                             whileHover={{ scale: 1.05, x: -5 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -98,7 +98,7 @@ const Basket = () => {
                     {cartItems.length > 0 && (
                         <motion.button
                             onClick={handleClearCart}
-                            className="flex items-center gap-3 text-[#ADADAD] hover:text-red-500 bg-white/5 hover:bg-red-500/10 px-4 py-2 rounded-xl border border-white/10 transition-all duration-300"
+                            className="flex items-center gap-3 text-[#ADADAD] hover:text-red-500 bg-[#f6eaea]/5 hover:bg-red-500/10 px-4 py-2 rounded-xl border border-[#f6eaea]/10 transition-all duration-300"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -127,7 +127,7 @@ const Basket = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div className="w-24 h-24 bg-[#f6eaea]/5 rounded-full flex items-center justify-center mx-auto mb-6">
                             <ShoppingBag className="w-12 h-12 text-[#b12e2e]" />
                         </div>
                         <h3 className="text-2xl text-[#E9E9E9] font-bold mb-4">Корзина пуста</h3>
@@ -136,7 +136,7 @@ const Basket = () => {
                         </p>
                         <Link to="/catalog">
                             <motion.button
-                                className="bg-[#b12e2e] hover:bg-[#9a2525] text-white font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
+                                className="bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea] font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -155,7 +155,7 @@ const Basket = () => {
                                     animate="visible"
                                     exit="exit"
                                     transition={{ duration: 0.4, delay: index * 0.1 }}
-                                    className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
+                                    className="group bg-[#f6eaea]/5 backdrop-blur-sm rounded-2xl p-6 border border-[#f6eaea]/10 hover:border-[#f6eaea]/20 transition-all duration-300"
                                 >
                                     <div className="flex flex-col lg:flex-row items-center gap-6">
                                         {/* Изображение */}
@@ -175,7 +175,7 @@ const Basket = () => {
                                                 {item.description}
                                             </p>
                                             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                                                <span className="bg-white/5 px-3 py-1 rounded-full text-[#ADADAD] text-sm border border-white/10">
+                                                <span className="bg-[#f6eaea]/5 px-3 py-1 rounded-full text-[#ADADAD] text-sm border border-[#f6eaea]/10">
                                                     {item.category}
                                                 </span>
                                                 <span className="text-[#b12e2e] font-bold text-lg">
@@ -186,10 +186,10 @@ const Basket = () => {
 
                                         {/* Управление количеством */}
                                         <div className="flex flex-col items-center gap-4">
-                                            <div className="flex items-center gap-3 bg-white/5 rounded-2xl p-2 border border-white/10">
+                                            <div className="flex items-center gap-3 bg-[#f6eaea]/5 rounded-2xl p-2 border border-[#f6eaea]/10">
                                                 <motion.button
                                                     onClick={() => handleDecrease(item.productId)}
-                                                    className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#b12e2e] text-[#E9E9E9] hover:text-white transition-all duration-200 flex items-center justify-center"
+                                                    className="w-10 h-10 rounded-xl bg-[#f6eaea]/5 hover:bg-[#b12e2e] text-[#E9E9E9] hover:text-[#f6eaea] transition-all duration-200 flex items-center justify-center"
                                                     whileHover={{ scale: 1.1 }}
                                                     whileTap={{ scale: 0.9 }}
                                                 >
@@ -200,7 +200,7 @@ const Basket = () => {
                                                 </span>
                                                 <motion.button
                                                     onClick={() => handleIncrease(item.productId)}
-                                                    className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#b12e2e] text-[#E9E9E9] hover:text-white transition-all duration-200 flex items-center justify-center"
+                                                    className="w-10 h-10 rounded-xl bg-[#f6eaea]/5 hover:bg-[#b12e2e] text-[#E9E9E9] hover:text-[#f6eaea] transition-all duration-200 flex items-center justify-center"
                                                     whileHover={{ scale: 1.1 }}
                                                     whileTap={{ scale: 0.9 }}
                                                 >
@@ -239,15 +239,15 @@ const Basket = () => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
                         {/* Итоговая сумма */}
-                        <div className="bg-gradient-to-r from-[#b12e2e] to-[#9a2525] rounded-2xl p-8 text-white shadow-2xl mb-8">
+                        <div className="bg-gradient-to-r from-[#b12e2e] to-[#9a2525] rounded-2xl p-8 text-[#f6eaea] shadow-2xl mb-8">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <h3 className="text-2xl font-bold mb-2">Итоговая сумма</h3>
-                                    <p className="text-white/80">Доставка рассчитывается при оформлении</p>
+                                    <p className="text-[#f6eaea]/80">Доставка рассчитывается при оформлении</p>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-3xl lg:text-4xl font-bold">{totalPrice} ₽</p>
-                                    <p className="text-white/80 text-sm mt-1">
+                                    <p className="text-[#f6eaea]/80 text-sm mt-1">
                                         {cartItems.reduce((sum, item) => sum + item.quantity, 0)} товара
                                     </p>
                                 </div>
@@ -258,11 +258,11 @@ const Basket = () => {
                         <div className="flex justify-center">
                             <motion.button
                                 onClick={handleCheckout}
-                                className="group bg-[#b12e2e] hover:bg-[#9a2525] text-white text-xl font-bold rounded-2xl px-12 py-5 shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden"
+                                className="group bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea] text-xl font-bold rounded-2xl px-12 py-5 shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#f6eaea]/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                                 <span className="relative z-10 flex items-center gap-3">
                                     Оформить заказ
                                     <ArrowLeft className="w-5 h-5 rotate-180 group-hover:translate-x-1 transition-transform" />

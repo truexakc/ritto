@@ -86,8 +86,8 @@ const Catalog = () => {
                   onClick={() => handleCategoryChange(undefined)}
                   className={`text-sm md:text-base border px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
                       !selectedHierarchicalId
-                          ? "bg-white text-black font-bold border-white"
-                          : "text-white border-white/30 hover:bg-white hover:text-black hover:border-white"
+                          ? "bg-[#f6eaea] text-black font-bold border-[#f6eaea]"
+                          : "text-[#f6eaea] border-[#f6eaea]/30 hover:bg-[#f6eaea] hover:text-black hover:border-[#f6eaea]"
                   }`}
               >
                 Все
@@ -99,8 +99,8 @@ const Catalog = () => {
                       onClick={() => handleCategoryChange(cat.hierarchical_id)}
                       className={`text-sm md:text-base border px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
                           selectedHierarchicalId === cat.hierarchical_id
-                              ? "bg-white text-black font-bold border-white"
-                              : "text-white border-white/30 hover:bg-white hover:text-black hover:border-white"
+                              ? "bg-[#f6eaea] text-black font-bold border-[#f6eaea]"
+                              : "text-[#f6eaea] border-[#f6eaea]/30 hover:bg-[#f6eaea] hover:text-black hover:border-[#f6eaea]"
                       }`}
                   >
                     {cat.name}
@@ -110,7 +110,7 @@ const Catalog = () => {
           </ul>
 
           <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 py-8">
-            {isLoading && <p className="text-center col-span-full text-white">Загрузка...</p>}
+            {isLoading && <p className="text-center col-span-full text-[#f6eaea]">Загрузка...</p>}
             {isError && (
                 <p className="text-center col-span-full text-red-500">
                   Ошибка при загрузке товаров
@@ -143,7 +143,7 @@ const Catalog = () => {
                 Назад
               </button>
               
-              <span className="text-white px-4 text-1l">
+              <span className="text-[#f6eaea] px-4 text-1l">
                 {currentPage} из {totalPages}
               </span>
               

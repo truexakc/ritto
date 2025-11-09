@@ -37,7 +37,7 @@ const Header = () => {
             <li>
                 <RouterLink 
                     to="/" 
-                    className="nav-link hover:text-[#b12e2e] text-white transition-colors duration-200"
+                    className="nav-link hover:text-[#b12e2e] text-[#f6eaea] transition-colors duration-200"
                     onClick={() => setMenuOpen(false)}
                 >
                     Главная
@@ -46,7 +46,7 @@ const Header = () => {
             <li>
                 <RouterLink 
                     to="/catalog" 
-                    className="nav-link hover:text-[#b12e2e] text-white transition-colors duration-200"
+                    className="nav-link hover:text-[#b12e2e] text-[#f6eaea] transition-colors duration-200"
                     onClick={() => setMenuOpen(false)}
                 >
                     Каталог
@@ -59,7 +59,7 @@ const Header = () => {
                             to="delivery" 
                             smooth 
                             offset={-80}
-                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-[#f6eaea] hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             Доставка
@@ -70,7 +70,7 @@ const Header = () => {
                             to="discounts" 
                             smooth 
                             offset={-80}
-                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-[#f6eaea] hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             Акции
@@ -81,7 +81,7 @@ const Header = () => {
                             to="about" 
                             smooth 
                             offset={-80} 
-                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-[#f6eaea] hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             О нас
@@ -92,7 +92,7 @@ const Header = () => {
                             to="contact" 
                             smooth 
                             offset={-80}
-                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-[#f6eaea] hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             Контакты
@@ -108,7 +108,7 @@ const Header = () => {
         <header className={`
             fixed top-0 left-0 right-0 z-50 transition-all duration-300
             ${isScrolled 
-                ? "bg-[#0a0a0a]/95 backdrop-blur-md shadow-lg border-b border-white/10" 
+                ? "bg-[#0a0a0a]/95 backdrop-blur-md shadow-lg border-b border-[#f6eaea]/10" 
                 : "bg-transparent"
             }
         `}>
@@ -139,12 +139,12 @@ const Header = () => {
                         {/* Корзина */}
                         <RouterLink 
                             to="/basket" 
-                            className="relative group p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
+                            className="relative group p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200"
                             title="Корзина"
                         >
                             <ShoppingCart className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
                             {totalItems > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#b12e2e] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-lg">
+                                <span className="absolute -top-1 -right-1 bg-[#b12e2e] text-[#f6eaea] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-lg">
                                     {totalItems}
                                 </span>
                             )}
@@ -162,7 +162,7 @@ const Header = () => {
                                 </RouterLink>
                                 <LogoutButton 
                                     icon={
-                                        <div className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 group">
+                                        <div className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200 group">
                                             <LogOut className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
                                         </div>
                                     }
@@ -172,7 +172,7 @@ const Header = () => {
                         ) : !isAuth ? (
                             <RouterLink 
                                 to="/login" 
-                                className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 group"
+                                className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200 group"
                                 title="Войти"
                             >
                                 <LogIn className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
@@ -185,12 +185,12 @@ const Header = () => {
                         {/* Корзина */}
                         <RouterLink 
                             to="/basket" 
-                            className="relative p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
+                            className="relative p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             <ShoppingCart className="w-6 h-6 text-[#b12e2e]"/>
                             {totalItems > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#b12e2e] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                                <span className="absolute -top-1 -right-1 bg-[#b12e2e] text-[#f6eaea] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                                     {totalItems}
                                 </span>
                             )}
@@ -208,7 +208,7 @@ const Header = () => {
                                 </RouterLink>
                                 <LogoutButton 
                                     icon={
-                                        <div className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200">
+                                        <div className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200">
                                             <LogOut className="w-6 h-6 text-[#b12e2e]"/>
                                         </div>
                                     }
@@ -218,7 +218,7 @@ const Header = () => {
                         ) : !isAuth ? (
                             <RouterLink 
                                 to="/login" 
-                                className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
+                                className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200"
                                 onClick={() => setMenuOpen(false)}
                             >
                                 <LogIn className="w-6 h-6 text-[#b12e2e]"/>
@@ -228,7 +228,7 @@ const Header = () => {
                         {/* Бургер меню */}
                         <button 
                             onClick={toggleMenu} 
-                            className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 text-[#b12e2e]"
+                            className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200 text-[#b12e2e]"
                         >
                             {menuOpen ? <X className="w-6 h-6"/> : <Menu className="w-6 h-6"/>}
                         </button>
@@ -246,13 +246,13 @@ const Header = () => {
         `}>
             <div className="container mx-auto px-4 py-8">
                 <nav>
-                    <ul className="flex flex-col gap-6 text-xl font-medium text-white">
+                    <ul className="flex flex-col gap-6 text-xl font-medium text-[#f6eaea]">
                         <NavLinks/>
                     </ul>
                 </nav>
                 
                 {/* Дополнительная информация в мобильном меню */}
-                <div className="mt-12 pt-8 border-t border-white/10">
+                <div className="mt-12 pt-8 border-t border-[#f6eaea]/10">
                     <div className="text-[#ADADAD] space-y-2">
                         <p className="font-semibold text-[#b12e2e]">+7 (900) 00-00-00</p>
                         <p className="text-sm">ул. Ногорная д. 7</p>

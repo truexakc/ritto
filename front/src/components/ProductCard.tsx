@@ -11,7 +11,7 @@ const currencyFormat = (value: number) =>
 export default function ProductCard({ product, onClick }: Props) {
     return (
         <div
-            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-sm overflow-hidden cursor-pointer hover:bg-white/10 hover:border-white/20 hover:shadow-lg transition-all duration-300"
+            className="rounded-2xl border border-[#f6eaea]/10 bg-[#f6eaea]/5 backdrop-blur-sm shadow-sm overflow-hidden cursor-pointer hover:bg-[#f6eaea]/10 hover:border-[#f6eaea]/20 hover:shadow-lg transition-all duration-300"
             onClick={() => onClick?.(product)}
         >
             {product.image_url ? (
@@ -22,7 +22,7 @@ export default function ProductCard({ product, onClick }: Props) {
                     loading="lazy"
                 />
             ) : (
-                <div className="w-full h-40 bg-white/5 flex items-center justify-center text-[#ADADAD]">
+                <div className="w-full h-40 bg-[#f6eaea]/5 flex items-center justify-center text-[#ADADAD]">
                     Нет изображения
                 </div>
             )}

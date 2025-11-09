@@ -39,7 +39,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-[#1a1a1a] to-[#242424] border-t border-white/10">
+    <footer className="relative bg-gradient-to-br from-[#1a1a1a] to-[#242424] border-t border-[#f6eaea]/10">
       {/* Декоративные элементы */}
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#b12e2e]/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#b12e2e]/3 rounded-full blur-3xl -z-10"></div>
@@ -134,10 +134,10 @@ const Footer = () => {
                       className={`
                         flex items-center justify-center
                         w-10 h-10 lg:w-12 lg:h-12
-                        bg-white/5 rounded-xl
-                        text-[#ADADAD] border border-white/10
+                        bg-[#f6eaea]/5 rounded-xl
+                        text-[#ADADAD] border border-[#f6eaea]/10
                         transition-all duration-300
-                        hover:bg-white/10 hover:border-white/20
+                        hover:bg-[#f6eaea]/10 hover:border-[#f6eaea]/20
                         ${social.color}
                       `}
                       aria-label={social.name}
@@ -150,7 +150,7 @@ const Footer = () => {
             </div>
 
             {/* Форма подписки */}
-            <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+            <div className="bg-[#f6eaea]/5 rounded-xl p-4 border border-[#f6eaea]/10">
               <p className="text-[#E9E9E9] font-semibold text-sm mb-2">
                 Будьте в курсе акций
               </p>
@@ -158,10 +158,10 @@ const Footer = () => {
                 <input
                   type="email"
                   placeholder="Ваш email"
-                  className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-[#ADADAD] focus:outline-none focus:border-[#b12e2e] transition-colors"
+                  className="flex-1 bg-[#f6eaea]/10 border border-[#f6eaea]/20 rounded-lg px-3 py-2 text-sm text-[#f6eaea] placeholder-[#ADADAD] focus:outline-none focus:border-[#b12e2e] transition-colors"
                 />
                 <motion.button
-                  className="bg-[#b12e2e] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#9a2525] transition-colors"
+                  className="bg-[#b12e2e] text-[#f6eaea] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#9a2525] transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -174,7 +174,7 @@ const Footer = () => {
 
         {/* Нижняя часть футера */}
         <motion.div
-          className="border-t border-white/10 mt-8 lg:mt-12 pt-6 lg:pt-8 flex flex-col lg:flex-row justify-between items-center gap-4"
+          className="border-t border-[#f6eaea]/10 mt-8 lg:mt-12 pt-6 lg:pt-8 flex flex-col lg:flex-row justify-between items-center gap-4"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}

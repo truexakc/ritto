@@ -116,10 +116,10 @@ const About = () => {
                       className={`
                         flex items-center justify-center
                         w-12 h-12 lg:w-14 lg:h-14
-                        bg-white/5 rounded-xl
-                        text-[#ADADAD] border border-white/10
+                        bg-[#f6eaea]/5 rounded-xl
+                        text-[#ADADAD] border border-[#f6eaea]/10
                         transition-all duration-300
-                        hover:bg-white/10 hover:border-white/20
+                        hover:bg-[#f6eaea]/10 hover:border-[#f6eaea]/20
                         ${social.color}
                       `}
                       aria-label={social.name}
@@ -180,7 +180,7 @@ const About = () => {
                   >
                     <div className="relative">
                       <div className="w-20 h-20 lg:w-24 lg:h-24 bg-[#b12e2e] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-3xl transition-all duration-300">
-                        <SlControlPlay className="text-white text-2xl lg:text-3xl ml-1" />
+                        <SlControlPlay className="text-[#f6eaea] text-2xl lg:text-3xl ml-1" />
                       </div>
                       
                       {/* Анимированная волна */}
@@ -238,7 +238,7 @@ const About = () => {
           ].map((stat, index) => (
             <motion.div
               key={index}
-              className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+              className="text-center p-6 bg-[#f6eaea]/5 rounded-2xl border border-[#f6eaea]/10 backdrop-blur-sm"
               whileHover={{ 
                 scale: 1.05, 
                 backgroundColor: "rgba(232, 38, 43, 0.1)",

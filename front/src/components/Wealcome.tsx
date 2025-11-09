@@ -126,7 +126,7 @@ const FullscreenParallaxSlider = () => {
 
             {/* Контент поверх слайдов */}
             <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-6">
-                <div className="text-center text-white">
+                <div className="text-center text-[#f6eaea]">
                     {/* Логотип/Название */}
                     <motion.div
                         style={{ y: textY, opacity }}
@@ -160,7 +160,7 @@ const FullscreenParallaxSlider = () => {
                     {/* Кнопка заказа */}
                     <motion.a
                         href="#order"
-                        className="inline-block bg-[#b12e2e] text-white px-12 py-4 rounded-full text-xl font-semibold hover:bg-[#9a2525] transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                        className="inline-block bg-[#b12e2e] text-[#f6eaea] px-12 py-4 rounded-full text-xl font-semibold hover:bg-[#9a2525] transition-all duration-300 transform hover:scale-105 shadow-2xl"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         style={{ opacity }}
@@ -178,7 +178,7 @@ const FullscreenParallaxSlider = () => {
                         className={`relative w-16 h-1 rounded-full transition-all duration-500 ${
                             index === currentSlide 
                                 ? 'bg-[#b12e2e]' 
-                                : 'bg-white/30 hover:bg-white/50'
+                                : 'bg-[#f6eaea]/30 hover:bg-[#f6eaea]/50'
                         }`}
                         onClick={() => setCurrentSlide(index)}
                     >
@@ -200,16 +200,16 @@ const FullscreenParallaxSlider = () => {
             </div>
             {/* Скролл-индикатор */}
             <motion.div 
-                className="absolute bottom-4 left-1/2 z-10 transform -translate-x-1/2 flex flex-col items-center text-white/60"
+                className="absolute bottom-4 left-1/2 z-10 transform -translate-x-1/2 flex flex-col items-center text-[#f6eaea]/60"
                 style={{ opacity }}
             >
                 <span className="text-sm mb-2">Листайте вниз</span>
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center"
+                    className="w-5 h-8 border-2 border-[#f6eaea]/30 rounded-full flex justify-center"
                 >
-                    <div className="w-1 h-2 bg-white/60 rounded-full mt-2" />
+                    <div className="w-1 h-2 bg-[#f6eaea]/60 rounded-full mt-2" />
                 </motion.div>
             </motion.div>
 

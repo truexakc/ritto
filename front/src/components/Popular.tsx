@@ -106,13 +106,13 @@ const Popular = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -100 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="grid grid-cols-1 lg:grid-cols-4 gap-4 py-4 text-white"
+                    className="grid grid-cols-1 lg:grid-cols-4 gap-4 py-4 text-[#f6eaea]"
                     onTouchStart={onTouchStart}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}
                 >
-                    {isLoading && <p className="text-white">Загрузка...</p>}
-                    {isError && <p className="text-white">Ошибка загрузки продуктов</p>}
+                    {isLoading && <p className="text-[#f6eaea]">Загрузка...</p>}
+                    {isError && <p className="text-[#f6eaea]">Ошибка загрузки продуктов</p>}
                     {getSlideItems().map((product, index) => (
                         <motion.div
                             key={product.id}

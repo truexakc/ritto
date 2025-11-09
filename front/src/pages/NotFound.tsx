@@ -57,7 +57,7 @@ const NotFound = () => {
                         transition={{ duration: 0.6, delay: 0.6 }}
                         className="mb-8"
                     >
-                        <div className="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-white/10">
+                        <div className="w-20 h-20 bg-[#f6eaea]/5 rounded-2xl flex items-center justify-center mx-auto border border-[#f6eaea]/10">
                             <Search className="w-10 h-10 text-[#b12e2e]" />
                         </div>
                     </motion.div>
@@ -71,7 +71,7 @@ const NotFound = () => {
                     >
                         <Link to="/">
                             <motion.button
-                                className="group bg-[#b12e2e] hover:bg-[#9a2525] text-white font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center gap-3"
+                                className="group bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea] font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center gap-3"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -82,7 +82,7 @@ const NotFound = () => {
 
                         <button
                             onClick={() => window.history.back()}
-                            className="group bg-white/5 hover:bg-white/10 text-[#E9E9E9] font-medium rounded-2xl px-8 py-4 border border-white/10 hover:border-white/20 transition-all duration-300 flex items-center gap-3"
+                            className="group bg-[#f6eaea]/5 hover:bg-[#f6eaea]/10 text-[#E9E9E9] font-medium rounded-2xl px-8 py-4 border border-[#f6eaea]/10 hover:border-[#f6eaea]/20 transition-all duration-300 flex items-center gap-3"
                         >
                             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                             Вернуться назад
@@ -94,7 +94,7 @@ const NotFound = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 1 }}
-                        className="mt-12 p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm max-w-md mx-auto"
+                        className="mt-12 p-6 bg-[#f6eaea]/5 rounded-2xl border border-[#f6eaea]/10 backdrop-blur-sm max-w-md mx-auto"
                     >
                         <h3 className="text-[#E9E9E9] font-semibold mb-2">Нужна помощь?</h3>
                         <p className="text-[#ADADAD] text-sm mb-4">

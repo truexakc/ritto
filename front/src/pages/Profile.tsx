@@ -51,7 +51,7 @@ const Profile = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c] flex items-center justify-center">
-                <div className="text-white text-xl">Загрузка...</div>
+                <div className="text-[#f6eaea] text-xl">Загрузка...</div>
             </div>
         );
     }
@@ -59,7 +59,7 @@ const Profile = () => {
     if (!profile) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c] flex items-center justify-center">
-                <div className="text-white text-xl">Профиль не найден</div>
+                <div className="text-[#f6eaea] text-xl">Профиль не найден</div>
             </div>
         );
     }
@@ -99,7 +99,7 @@ const Profile = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-6"
+                        className="bg-[#f6eaea]/5 backdrop-blur-sm rounded-3xl border border-[#f6eaea]/10 p-8 mb-6"
                     >
                         {/* Аватар и основная информация */}
                         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
@@ -135,7 +135,7 @@ const Profile = () => {
 
                             <button
                                 onClick={handleLogout}
-                                className="group bg-white/5 hover:bg-[#b12e2e]/20 text-[#E9E9E9] hover:text-[#b12e2e] font-medium rounded-2xl px-6 py-3 border border-white/10 hover:border-[#b12e2e]/50 transition-all duration-300 flex items-center gap-2"
+                                className="group bg-[#f6eaea]/5 hover:bg-[#b12e2e]/20 text-[#E9E9E9] hover:text-[#b12e2e] font-medium rounded-2xl px-6 py-3 border border-[#f6eaea]/10 hover:border-[#b12e2e]/50 transition-all duration-300 flex items-center gap-2"
                             >
                                 <LogOut className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 Выйти
@@ -146,7 +146,7 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <motion.div
                                 whileHover={{ scale: 1.02 }}
-                                className="bg-white/5 rounded-2xl p-6 border border-white/10"
+                                className="bg-[#f6eaea]/5 rounded-2xl p-6 border border-[#f6eaea]/10"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-14 h-14 bg-[#b12e2e]/20 rounded-xl flex items-center justify-center">
@@ -163,7 +163,7 @@ const Profile = () => {
 
                             <motion.div
                                 whileHover={{ scale: 1.02 }}
-                                className="bg-white/5 rounded-2xl p-6 border border-white/10"
+                                className="bg-[#f6eaea]/5 rounded-2xl p-6 border border-[#f6eaea]/10"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-14 h-14 bg-[#b12e2e]/20 rounded-xl flex items-center justify-center">
@@ -189,14 +189,14 @@ const Profile = () => {
                     >
                         <button
                             onClick={() => navigate('/catalog')}
-                            className="bg-[#b12e2e] hover:bg-[#9a2525] text-white font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
+                            className="bg-[#b12e2e] hover:bg-[#9a2525] text-[#f6eaea] font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
                         >
                             Перейти в каталог
                         </button>
                         
                         <button
                             onClick={() => navigate('/basket')}
-                            className="bg-white/5 hover:bg-white/10 text-[#E9E9E9] font-medium rounded-2xl px-8 py-4 border border-white/10 hover:border-white/20 transition-all duration-300"
+                            className="bg-[#f6eaea]/5 hover:bg-[#f6eaea]/10 text-[#E9E9E9] font-medium rounded-2xl px-8 py-4 border border-[#f6eaea]/10 hover:border-[#f6eaea]/20 transition-all duration-300"
                         >
                             Моя корзина
                         </button>
