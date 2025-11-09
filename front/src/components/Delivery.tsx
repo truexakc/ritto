@@ -52,28 +52,28 @@ const Delivery = () => {
             </motion.h2>
 
             <motion.div
-              className="bg-gradient-to-br from-[#e8262b] to-[#d32f2f] rounded-2xl p-8 shadow-2xl"
+              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               {/* Заголовок с иконкой */}
               <div className="flex items-center gap-4 mb-6 text-white">
-                <div className="bg-[#ffffff] p-3 rounded-xl">
-                  <SlClock className="text-[#e8262b] text-xl" />
+                <div className="bg-[#e8262b] p-3 rounded-xl shadow-lg">
+                  <SlClock className="text-white text-xl" />
                 </div>
                 <div>
-                  <h3 className="text-white font-extrabold text-2xl">
+                  <h3 className="text-[#E9E9E9] font-extrabold text-2xl">
                     График работы
                   </h3>
-                  <p className="text-white font-medium">ежедневно</p>
+                  <p className="text-[#ADADAD] font-medium">ежедневно</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 {/* Время работы */}
-                <div className="bg-[#171717]/20 rounded-xl p-4">
-                  <p className="text-lg font-semibold text-white">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <p className="text-lg font-semibold text-[#E9E9E9]">
                     с 10:00 до 23:00
                   </p>
                 </div>
@@ -81,13 +81,13 @@ const Delivery = () => {
                 {/* Самовывоз */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <SlLocationPin className="text-white font-bold" />
-                    <span className="font-bold text-white text-lg">
+                    <SlLocationPin className="text-[#e8262b] font-bold" />
+                    <span className="font-bold text-[#E9E9E9] text-lg">
                       Самовывоз
                     </span>
                   </div>
-                  <div className="bg-[#171717]/20 rounded-xl p-4 ml-6">
-                    <p className="text-white font-semibold">
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-4 ml-6">
+                    <p className="text-[#ADADAD] font-semibold">
                       д. Кондратово, ул. Камская 1Б
                     </p>
                   </div>
@@ -96,19 +96,19 @@ const Delivery = () => {
                 {/* Доставка */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <SlArrowDown className="text-white font-bold" />
-                    <span className="font-bold text-white text-lg">
+                    <SlArrowDown className="text-[#e8262b] font-bold" />
+                    <span className="font-bold text-[#E9E9E9] text-lg">
                       Доставка
                     </span>
                   </div>
                   <div className="space-y-2 ml-6">
-                    <div className="bg-[#171717]/20 rounded-xl p-3">
-                      <p className="text-white font-semibold">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+                      <p className="text-[#ADADAD] font-semibold">
                         По Кондратово бесплатно доставляем от 500 руб.
                       </p>
                     </div>
-                    <div className="bg-[#171717]/20 rounded-xl p-3">
-                      <p className="text-white font-semibold">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+                      <p className="text-[#ADADAD] font-semibold">
                         В город и иные отдаленные пункты, уточняйте у оператора
                       </p>
                     </div>
@@ -117,12 +117,12 @@ const Delivery = () => {
 
                 {/* Кнопка заказа */}
                 <motion.button
-                  className="w-full bg-[#171717] text-white py-4 rounded-xl font-bold text-lg mt-4 hover:bg-[#242424] transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full bg-[#e8262b] text-white py-4 rounded-xl font-bold text-lg mt-4 hover:bg-[#d12026] transition-all duration-300 shadow-lg hover:shadow-xl"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center justify-center gap-2">
-                    <SlPhone className="text-[#e8262b]" />
+                    <SlPhone className="text-white" />
                     Сделать заказ
                   </div>
                 </motion.button>
@@ -165,7 +165,9 @@ const Delivery = () => {
                   transition={{ duration: 0.6, delay: 1 + index * 0.2 }}
                 >
                   <div className="flex items-start gap-4 p-4 rounded-xl transition-all duration-300 group-hover:bg-white/5 group-hover:scale-105">
-                    <div className="text-2xl flex-shrink-0">{step.icon}</div>
+                    <div className="text-4xl flex-shrink-0 bg-gradient-to-br from-[#e8262b] to-[#d12026] p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      {step.icon}
+                    </div>
                     <div>
                       <h3 className="text-[#e8262b] font-bold text-lg mb-2">
                         {step.title}
@@ -178,7 +180,7 @@ const Delivery = () => {
                   
                   {/* Линия между шагами */}
                   {index < steps.length - 1 && (
-                    <div className="h-6 border-l-2 border-dashed border-[#E17D18]/30 ml-6"></div>
+                    <div className="h-6 border-l-2 border-dashed border-[#e8262b]/30 ml-9"></div>
                   )}
                 </motion.div>
               ))}

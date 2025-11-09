@@ -11,20 +11,20 @@ const Contact = () => {
     {
       icon: <SlPhone className="text-2xl" />,
       title: "ТЕЛЕФОН",
-      content: "+7 (900) 00-00-00",
+      content: "+7 (963) 012-14-69",
       description: "Звоните для заказа"
     },
     {
       icon: <SlLocationPin className="text-2xl" />,
       title: "АДРЕС",
-      content: "ул. Ногорная д. 7",
+      content: "ул. Камская д. 1Б",
       description: "Приезжайте в гости"
     },
     {
       icon: <SlClock className="text-2xl" />,
       title: "ВРЕМЯ РАБОТЫ",
       content: "Ежедневно: 10:00 - 23:00",
-      description: "Без выходных"
+      description: "Без выходных, заказы принимаем до 22:45"
     }
   ];
 
@@ -157,10 +157,10 @@ const Contact = () => {
                   <div className="w-3 h-3 bg-[#e8262b] rounded-full"></div>
                   <div>
                     <p className="text-[#171717] font-bold text-sm">
-                      Пиццерия "Название"
+                      Shushiritto
                     </p>
                     <p className="text-[#666] text-xs">
-                      ул. Ногорная д. 7
+                      Камская улица, 1Б
                     </p>
                   </div>
                 </div>

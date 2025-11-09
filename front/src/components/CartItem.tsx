@@ -58,7 +58,13 @@ const CartItem = ({ product }: Props) => {
     }
 
     return (
-        <div className="flex flex-col bg-[#e8262b] h-[500px] overflow-hidden relative rounded-2xl">
+        <div className="flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 h-[500px] overflow-hidden relative rounded-2xl group">
+            {/* Анимированный фон при ховере */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#e8262b]/0 to-[#e8262b]/0 group-hover:from-[#e8262b]/10 group-hover:to-[#e8262b]/5 transition-all duration-700 ease-out rounded-2xl"></div>
+            <div className="absolute inset-0 border border-white/10 group-hover:border-[#e8262b]/30 transition-all duration-700 ease-out rounded-2xl"></div>
+            
+            {/* Контент */}
+            <div className="relative z-10 flex flex-col h-full">
             {/* Картинка */}
             <div className="h-56 w-full overflow-hidden">
                 {product.image_url ? (
@@ -68,7 +74,7 @@ const CartItem = ({ product }: Props) => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                    <div className="w-full h-full bg-white/5 flex items-center justify-center text-[#ADADAD]">
                         Нет изображения
                     </div>
                 )}
@@ -77,15 +83,15 @@ const CartItem = ({ product }: Props) => {
             {/* Контент */}
             <div className="flex flex-col justify-between flex-grow p-4">
                 <div>
-                    <p className="text-white font-bold text-lg">{product.name}</p>
-                    <p className="text-white text-sm mt-2 line-clamp-3">
+                    <p className="text-[#e8262b] font-bold text-lg">{product.name}</p>
+                    <p className="text-[#ADADAD] text-sm mt-2 line-clamp-3">
                         {product.description}
                     </p>
                 </div>
 
                 <div className="mt-4">
                     <div className="flex items-center gap-2">
-                        <span className="font-bold text-xl">{product.price} ₽</span>
+                        <span className="font-bold text-xl text-[#e8262b]">{product.price} ₽</span>
                     </div>
 
                     <div className="flex justify-between mt-4 gap-2 relative">
@@ -115,6 +121,7 @@ const CartItem = ({ product }: Props) => {
                         )}
                     </div>
                 </div>
+            </div>
             </div>
 
             {/* Модалка через Portal - рендерится в body, вне всех контейнеров */}

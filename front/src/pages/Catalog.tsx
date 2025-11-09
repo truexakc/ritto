@@ -84,10 +84,10 @@ const Catalog = () => {
             <li>
               <button
                   onClick={() => handleCategoryChange(undefined)}
-                  className={`text-sm md:text-base border border-[#e8262b] px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
+                  className={`text-sm md:text-base border px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
                       !selectedHierarchicalId
-                          ? "bg-[#e8262b] text-black font-bold"
-                          : "text-[#e8262b] hover:bg-[#e8262b] hover:text-black"
+                          ? "bg-white text-black font-bold border-white"
+                          : "text-white border-white/30 hover:bg-white hover:text-black hover:border-white"
                   }`}
               >
                 Все
@@ -97,10 +97,10 @@ const Catalog = () => {
                 <li key={cat.hierarchical_id || cat.id}>
                   <button
                       onClick={() => handleCategoryChange(cat.hierarchical_id)}
-                      className={`text-sm md:text-base border border-[#e8262b] px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
+                      className={`text-sm md:text-base border px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
                           selectedHierarchicalId === cat.hierarchical_id
-                              ? "bg-[#e8262b] text-black font-bold"
-                              : "text-[#e8262b] hover:bg-[#e8262b] hover:text-black"
+                              ? "bg-white text-black font-bold border-white"
+                              : "text-white border-white/30 hover:bg-white hover:text-black hover:border-white"
                       }`}
                   >
                     {cat.name}

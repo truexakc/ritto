@@ -82,22 +82,13 @@ const About = () => {
             >
               <div className="space-y-4">
                 <p className="text-[#ADADAD] text-base lg:text-lg leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-                  animi laudantium, id vitae numquam nulla, dolorem voluptas
-                  reprehenderit hic ullam repudiandae, esse est voluptatum.
-                  Provident vel ea molestiae officia non?
+                Добро пожаловать в мир изысканной японской кухни с SUSHIRITTO! Мы — команда, которая страстно любит это искусство и готова поделиться с вами настоящими кулинарными шедеврами.
                 </p>
                 <p className="text-[#ADADAD] text-base lg:text-lg leading-relaxed">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi
-                  praesentium porro nesciunt quaerat voluptatum deserunt? Ducimus
-                  sit aliquid, ad doloribus iusto amet eaque mollitia exercitationem
-                  possimus quisquam consequatur, inventore provident!
+                Одним из основных принципов нашей работы является использование только свежих и качественных продуктов. Мы тщательно отбираем ингредиенты, чтобы каждая порция роллов удивляла вас гармонией вкуса и текстуры. Наша команда шеф-поваров непрерывно изучает новые технологии и рецепты, чтобы предложить вам разнообразное меню, которое будет радовать глаз и пробуждать аппетит.
                 </p>
                 <p className="text-[#ADADAD] text-base lg:text-lg leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo
-                  laudantium quibusdam dolores ut officiis quis repudiandae!
-                  Expedita, ratione obcaecati numquam excepturi doloribus nesciunt
-                  rerum totam fuga esse voluptate, eius aspernatur!
+                Мы гордимся тем, что на протяжении всего нашего пути длиной в 6 лет - постоянно растем и развиваемся, чтобы улучшать наш сервис и предлагать вам лучшие блюда. Для нас важно, чтобы каждая доставка была на высшем уровне, а каждый ваш заказ оказался шедевром. Ваше удовлетворение — наша главная награда!
                 </p>
               </div>
             </motion.div>

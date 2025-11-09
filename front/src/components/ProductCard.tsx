@@ -11,7 +11,7 @@ const currencyFormat = (value: number) =>
 export default function ProductCard({ product, onClick }: Props) {
     return (
         <div
-            className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-sm overflow-hidden cursor-pointer hover:bg-white/10 hover:border-white/20 hover:shadow-lg transition-all duration-300"
             onClick={() => onClick?.(product)}
         >
             {product.image_url ? (
@@ -22,23 +22,23 @@ export default function ProductCard({ product, onClick }: Props) {
                     loading="lazy"
                 />
             ) : (
-                <div className="w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400">
+                <div className="w-full h-40 bg-white/5 flex items-center justify-center text-[#ADADAD]">
                     Нет изображения
                 </div>
             )}
 
             <div className="p-3 space-y-1.5">
                 <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-sm font-medium text-white line-clamp-2">{product.name}</h3>
-                    <span className="text-sm font-semibold text-white shrink-0">
+                    <h3 className="text-sm font-medium text-[#E9E9E9] line-clamp-2">{product.name}</h3>
+                    <span className="text-sm font-semibold text-[#e8262b] shrink-0">
                         {currencyFormat(product.price)}
                     </span>
                 </div>
                 {product.category_id && (
-                    <div className="text-xs text-white">{product.category_id}</div>
+                    <div className="text-xs text-[#ADADAD]">{product.category_id}</div>
                 )}
                 {product.description && (
-                    <p className="text-xs text-white line-clamp-2">{product.description}</p>
+                    <p className="text-xs text-[#ADADAD] line-clamp-2">{product.description}</p>
                 )}
             </div>
         </div>
