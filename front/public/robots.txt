@@ -1,0 +1,41 @@
+# robots.txt для SUSHIRITTO
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /profile
+Disallow: /checkout
+Disallow: /basket
+
+# Основные страницы для индексации
+Allow: /catalog
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Sitemap
+Sitemap: https://sushiritto.ru/sitemap.xml
+
+# Яндекс
+User-agent: Yandex
+Allow: /
+Disallow: /admin
+Disallow: /profile
+Disallow: /checkout
+Disallow: /basket
+Crawl-delay: 1
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /profile
+Disallow: /checkout
+Disallow: /basket
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /profile
+Disallow: /checkout
+Disallow: /basket

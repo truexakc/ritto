@@ -1,0 +1,27 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фон -->
+  <rect width="64" height="64" rx="12" fill="#0a0a0a"/>
+  
+  <!-- Декоративный круг -->
+  <circle cx="32" cy="32" r="24" fill="#b12e2e" opacity="0.2"/>
+  
+  <!-- Суши/ролл -->
+  <ellipse cx="32" cy="28" rx="16" ry="12" fill="#f6eaea"/>
+  <ellipse cx="32" cy="28" rx="14" ry="10" fill="#b12e2e"/>
+  <ellipse cx="32" cy="28" rx="10" ry="7" fill="#1a1a1a"/>
+  <ellipse cx="32" cy="28" rx="6" ry="4" fill="#9a2525"/>
+  
+  <!-- Рис снизу -->
+  <ellipse cx="32" cy="36" rx="18" ry="8" fill="#f6eaea"/>
+  <ellipse cx="32" cy="36" rx="16" ry="6" fill="#e9e9e9"/>
+  
+  <!-- Детали риса -->
+  <circle cx="28" cy="35" r="1.5" fill="#d7d7d7"/>
+  <circle cx="36" cy="35" r="1.5" fill="#d7d7d7"/>
+  <circle cx="32" cy="37" r="1.5" fill="#d7d7d7"/>
+  <circle cx="25" cy="37" r="1" fill="#d7d7d7"/>
+  <circle cx="39" cy="37" r="1" fill="#d7d7d7"/>
+  
+  <!-- Блик -->
+  <ellipse cx="28" cy="26" rx="4" ry="2" fill="white" opacity="0.3"/>
+</svg>
