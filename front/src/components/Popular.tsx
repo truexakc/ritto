@@ -73,7 +73,7 @@ const Popular = () => {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 1 }}
                 >
-                    <h2 className="text-[#e8262b] font-bold lg:text-5xl text-2xl">
+                    <h2 className="text-[#b12e2e] font-bold lg:text-5xl text-2xl">
                         ПОПУЛЯРНЫЕ
                     </h2>
                     <p className="text-[#E9E9E9] font-bold lg:text-5xl pl-2 lg:pl-0 text-2xl">
@@ -90,7 +90,7 @@ const Popular = () => {
                                 onClick={() => setSlide(index)}
                                 className={`transition-all duration-300 rounded-full ${
                                     slide === index
-                                        ? 'bg-[#e8262b] w-8 h-2'
+                                        ? 'bg-[#b12e2e] w-8 h-2'
                                         : 'bg-gray-400 hover:bg-gray-300 w-2 h-2'
                                 }`}
                                 aria-label={`Перейти к слайду ${index + 1}`}
@@ -131,7 +131,7 @@ const Popular = () => {
                 {totalSlides > 1 && (
                     <div className="hidden lg:block w-full bg-gray-700 h-1 rounded-full mt-4 overflow-hidden">
                         <motion.div
-                            className="bg-[#e8262b] h-full"
+                            className="bg-[#b12e2e] h-full"
                             initial={{ width: 0 }}
                             animate={{ width: `${((slide + 1) / totalSlides) * 100}%` }}
                             transition={{ duration: 0.3 }}
@@ -142,7 +142,7 @@ const Popular = () => {
                 <div className="hidden lg:block text-center mt-10">
                     <Link 
                         to="/catalog" 
-                        className="inline-block text-[#ffffff] hover:bg-[#d12026] font-bold text-xl bg-[#e8262b] py-4 px-10 mb-14 transition-colors duration-300 rounded-full"
+                        className="inline-block text-[#ffffff] hover:bg-[#9a2525] font-bold text-xl bg-[#b12e2e] py-4 px-10 mb-14 transition-colors duration-300 rounded-full"
                     >
                         Перейти в каталог
                     </Link>

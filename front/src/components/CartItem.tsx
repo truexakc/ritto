@@ -60,8 +60,8 @@ const CartItem = ({ product }: Props) => {
     return (
         <div className="flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 h-[500px] overflow-hidden relative rounded-2xl group">
             {/* Анимированный фон при ховере */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#e8262b]/0 to-[#e8262b]/0 group-hover:from-[#e8262b]/10 group-hover:to-[#e8262b]/5 transition-all duration-700 ease-out rounded-2xl"></div>
-            <div className="absolute inset-0 border border-white/10 group-hover:border-[#e8262b]/30 transition-all duration-700 ease-out rounded-2xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#b12e2e]/0 to-[#b12e2e]/0 group-hover:from-[#b12e2e]/10 group-hover:to-[#b12e2e]/5 transition-all duration-700 ease-out rounded-2xl"></div>
+            <div className="absolute inset-0 border border-white/10 group-hover:border-[#b12e2e]/30 transition-all duration-700 ease-out rounded-2xl"></div>
             
             {/* Контент */}
             <div className="relative z-10 flex flex-col h-full">
@@ -83,7 +83,7 @@ const CartItem = ({ product }: Props) => {
             {/* Контент */}
             <div className="flex flex-col justify-between flex-grow p-4">
                 <div>
-                    <p className="text-[#e8262b] font-bold text-lg">{product.name}</p>
+                    <p className="text-[#b12e2e] font-bold text-lg">{product.name}</p>
                     <p className="text-[#ADADAD] text-sm mt-2 line-clamp-3">
                         {product.description}
                     </p>
@@ -91,7 +91,7 @@ const CartItem = ({ product }: Props) => {
 
                 <div className="mt-4">
                     <div className="flex items-center gap-2">
-                        <span className="font-bold text-xl text-[#e8262b]">{product.price} ₽</span>
+                        <span className="font-bold text-xl text-[#b12e2e]">{product.price} ₽</span>
                     </div>
 
                     <div className="flex justify-between mt-4 gap-2 relative">
@@ -109,7 +109,7 @@ const CartItem = ({ product }: Props) => {
                             className="bg-black hover:bg-[#f0f0f0] rounded-full p-2 shadow-md transition-all flex items-center justify-center"
                             title="Добавить в корзину"
                         >
-                            <ShoppingCart className="text-[#e8262b] w-6 h-6 hover:scale-110 transition-transform" />
+                            <ShoppingCart className="text-[#b12e2e] w-6 h-6 hover:scale-110 transition-transform" />
                         </button>
 
                         {/* Popup-уведомление */}

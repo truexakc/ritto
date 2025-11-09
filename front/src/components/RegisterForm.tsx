@@ -38,7 +38,7 @@ const RegisterForm = () => {
                         placeholder="Имя"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e8262b]"
+                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b12e2e]"
                         required
                     />
                     <input
@@ -46,7 +46,7 @@ const RegisterForm = () => {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e8262b]"
+                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b12e2e]"
                         required
                     />
                     <input
@@ -54,12 +54,12 @@ const RegisterForm = () => {
                         placeholder="Пароль"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e8262b]"
+                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b12e2e]"
                         required
                     />
                     <button
                         type="submit"
-                        className="w-full py-3 bg-[#e8262b] hover:bg-[#d12026] text-white font-semibold rounded-full transition"
+                        className="w-full py-3 bg-[#b12e2e] hover:bg-[#9a2525] text-white font-semibold rounded-full transition"
                         disabled={loading}
                     >
                         {loading ? 'Создание...' : 'Создать аккаунт'}
@@ -72,7 +72,7 @@ const RegisterForm = () => {
 
                 <p className="text-sm text-center text-gray-400 mt-6">
                     Уже есть аккаунт?{' '}
-                    <a href="/login" className="text-[#e8262b] hover:underline font-semibold">
+                    <a href="/login" className="text-[#b12e2e] hover:underline font-semibold">
                         Войти
                     </a>
                 </p>

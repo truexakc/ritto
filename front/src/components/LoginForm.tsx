@@ -44,7 +44,7 @@ const LoginForm = () => {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e8262b]"
+                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b12e2e]"
                         required
                     />
                     <input
@@ -52,13 +52,13 @@ const LoginForm = () => {
                         placeholder="Пароль"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e8262b]"
+                        className="w-full px-4 py-3 rounded-md bg-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b12e2e]"
                         required
                     />
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-[#e8262b] hover:bg-[#d12026] text-white font-semibold rounded-full transition"
+                        className="w-full py-3 bg-[#b12e2e] hover:bg-[#9a2525] text-white font-semibold rounded-full transition"
                     >
                         {loading ? 'Вход...' : 'Войти'}
                     </button>
@@ -70,7 +70,7 @@ const LoginForm = () => {
 
                 <p className="text-sm text-center text-gray-400 mt-6">
                     Нет аккаунта?{' '}
-                    <Link to="/register" className="text-[#e8262b] hover:underline font-semibold">
+                    <Link to="/register" className="text-[#b12e2e] hover:underline font-semibold">
                         Зарегистрироваться
                     </Link>
                 </p>

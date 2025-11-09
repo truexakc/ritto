@@ -66,11 +66,11 @@ const About = () => {
             >
               <h1 className="text-[#E9E9E9] font-bold text-4xl sm:text-5xl lg:text-6xl">
                 О
-                <span className="text-[#e8262b] font-bold ml-3">
+                <span className="text-[#b12e2e] font-bold ml-3">
                   НАС
                 </span>
               </h1>
-              <div className="w-20 h-1 bg-gradient-to-r from-[#e8262b] to-transparent mt-4 rounded-full"></div>
+              <div className="w-20 h-1 bg-gradient-to-r from-[#b12e2e] to-transparent mt-4 rounded-full"></div>
             </motion.div>
 
             {/* Текст */}
@@ -179,13 +179,13 @@ const About = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <div className="relative">
-                      <div className="w-20 h-20 lg:w-24 lg:h-24 bg-[#e8262b] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-3xl transition-all duration-300">
+                      <div className="w-20 h-20 lg:w-24 lg:h-24 bg-[#b12e2e] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-3xl transition-all duration-300">
                         <SlControlPlay className="text-white text-2xl lg:text-3xl ml-1" />
                       </div>
                       
                       {/* Анимированная волна */}
                       <motion.div
-                        className="absolute inset-0 border-2 border-[#e8262b] rounded-full"
+                        className="absolute inset-0 border-2 border-[#b12e2e] rounded-full"
                         animate={{
                           scale: [1, 1.2, 1.4],
                           opacity: [1, 0.5, 0]
@@ -202,8 +202,8 @@ const About = () => {
               )}
 
               {/* Декоративный элемент */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#e8262b]/20 rounded-full blur-xl -z-10"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#e8262b]/10 rounded-full blur-xl -z-10"></div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#b12e2e]/20 rounded-full blur-xl -z-10"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#b12e2e]/10 rounded-full blur-xl -z-10"></div>
             </div>
 
             {/* Подпись под видео */}
@@ -246,7 +246,7 @@ const About = () => {
               }}
               transition={{ duration: 0.3 }}
             >
-              <div className="text-[#e8262b] font-bold text-2xl lg:text-3xl mb-2">
+              <div className="text-[#b12e2e] font-bold text-2xl lg:text-3xl mb-2">
                 {stat.number}
               </div>
               <div className="text-[#ADADAD] text-sm lg:text-base">

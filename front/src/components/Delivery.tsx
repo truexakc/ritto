@@ -43,7 +43,7 @@ const Delivery = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <motion.h2
-              className="text-[#e8262b] font-bold text-4xl sm:text-5xl lg:text-6xl mb-8"
+              className="text-[#b12e2e] font-bold text-4xl sm:text-5xl lg:text-6xl mb-8"
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -59,7 +59,7 @@ const Delivery = () => {
             >
               {/* Заголовок с иконкой */}
               <div className="flex items-center gap-4 mb-6 text-white">
-                <div className="bg-[#e8262b] p-3 rounded-xl shadow-lg">
+                <div className="bg-[#b12e2e] p-3 rounded-xl shadow-lg">
                   <SlClock className="text-white text-xl" />
                 </div>
                 <div>
@@ -81,7 +81,7 @@ const Delivery = () => {
                 {/* Самовывоз */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <SlLocationPin className="text-[#e8262b] font-bold" />
+                    <SlLocationPin className="text-[#b12e2e] font-bold" />
                     <span className="font-bold text-[#E9E9E9] text-lg">
                       Самовывоз
                     </span>
@@ -96,7 +96,7 @@ const Delivery = () => {
                 {/* Доставка */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <SlArrowDown className="text-[#e8262b] font-bold" />
+                    <SlArrowDown className="text-[#b12e2e] font-bold" />
                     <span className="font-bold text-[#E9E9E9] text-lg">
                       Доставка
                     </span>
@@ -117,7 +117,7 @@ const Delivery = () => {
 
                 {/* Кнопка заказа */}
                 <motion.button
-                  className="w-full bg-[#e8262b] text-white py-4 rounded-xl font-bold text-lg mt-4 hover:bg-[#d12026] transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full bg-[#b12e2e] text-white py-4 rounded-xl font-bold text-lg mt-4 hover:bg-[#9a2525] transition-all duration-300 shadow-lg hover:shadow-xl"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -140,7 +140,7 @@ const Delivery = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <div className="relative lg:w-96 w-80 h-80 mx-auto">
-                <div className="absolute inset-0 bg-gradient-to-r bg-[#e8262b] to-[#883434] rounded-full blur-xl opacity-30"></div>
+                <div className="absolute inset-0 bg-gradient-to-r bg-[#b12e2e] to-[#883434] rounded-full blur-xl opacity-30"></div>
                 <img 
                   src="/pizza.png" 
                   alt="Pizza" 
@@ -165,11 +165,11 @@ const Delivery = () => {
                   transition={{ duration: 0.6, delay: 1 + index * 0.2 }}
                 >
                   <div className="flex items-start gap-4 p-4 rounded-xl transition-all duration-300 group-hover:bg-white/5 group-hover:scale-105">
-                    <div className="text-4xl flex-shrink-0 bg-gradient-to-br from-[#e8262b] to-[#d12026] p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <div className="text-4xl flex-shrink-0 bg-gradient-to-br from-[#b12e2e] to-[#9a2525] p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
                       {step.icon}
                     </div>
                     <div>
-                      <h3 className="text-[#e8262b] font-bold text-lg mb-2">
+                      <h3 className="text-[#b12e2e] font-bold text-lg mb-2">
                         {step.title}
                       </h3>
                       <p className="text-[#ADADAD] text-sm leading-relaxed">
@@ -180,7 +180,7 @@ const Delivery = () => {
                   
                   {/* Линия между шагами */}
                   {index < steps.length - 1 && (
-                    <div className="h-6 border-l-2 border-dashed border-[#e8262b]/30 ml-9"></div>
+                    <div className="h-6 border-l-2 border-dashed border-[#b12e2e]/30 ml-9"></div>
                   )}
                 </motion.div>
               ))}

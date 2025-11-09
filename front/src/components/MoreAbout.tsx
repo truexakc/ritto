@@ -36,7 +36,7 @@ const MoreAbout = ({ product, onAddToCart }: Props) => {
               <span className="text-gray-500 font-semibold line-through text-sm">
                 {Math.round(product.price * 1.2)} ₽
               </span>
-                <span className="text-3xl text-[#e8262b] font-extrabold">
+                <span className="text-3xl text-[#b12e2e] font-extrabold">
                 {product.price} ₽
               </span>
               </div>
@@ -45,7 +45,7 @@ const MoreAbout = ({ product, onAddToCart }: Props) => {
             <div className="flex justify-end">
               <button
                   onClick={onAddToCart}
-                  className="flex items-center gap-2 bg-[#e8262b] hover:bg-[#d12026] text-[#0C0C0C] font-bold text-lg py-3 px-6 rounded-full transition-all shadow-md"
+                  className="flex items-center gap-2 bg-[#b12e2e] hover:bg-[#9a2525] text-[#0C0C0C] font-bold text-lg py-3 px-6 rounded-full transition-all shadow-md"
               >
                 <ShoppingCart className="w-5 h-5" />
                 Добавить в корзину

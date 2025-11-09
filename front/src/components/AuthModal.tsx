@@ -21,7 +21,7 @@ const AuthModal = ({ onClose }: AuthModalProps) => {
                 </p>
                 <Link
                     to="/login"
-                    className="bg-[#e8262b] text-white px-6 py-2 rounded-full font-medium hover:bg-[#d12026]"
+                    className="bg-[#b12e2e] text-white px-6 py-2 rounded-full font-medium hover:bg-[#9a2525]"
                 >
                     Войти
                 </Link>

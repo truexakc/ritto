@@ -30,7 +30,7 @@ export default function ProductCard({ product, onClick }: Props) {
             <div className="p-3 space-y-1.5">
                 <div className="flex items-start justify-between gap-2">
                     <h3 className="text-sm font-medium text-[#E9E9E9] line-clamp-2">{product.name}</h3>
-                    <span className="text-sm font-semibold text-[#e8262b] shrink-0">
+                    <span className="text-sm font-semibold text-[#b12e2e] shrink-0">
                         {currencyFormat(product.price)}
                     </span>
                 </div>

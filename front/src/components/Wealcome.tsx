@@ -135,7 +135,7 @@ const FullscreenParallaxSlider = () => {
                         <h1 className="text-6xl md:text-8xl font-bold mb-4 tracking-wider">
                             Sushiritto
                         </h1>
-                        <div className="w-24 h-1 bg-[#e8262b] mx-auto rounded-full" />
+                        <div className="w-24 h-1 bg-[#b12e2e] mx-auto rounded-full" />
                     </motion.div>
 
                     {/* Текст слайда */}
@@ -160,7 +160,7 @@ const FullscreenParallaxSlider = () => {
                     {/* Кнопка заказа */}
                     <motion.a
                         href="#order"
-                        className="inline-block bg-[#e8262b] text-white px-12 py-4 rounded-full text-xl font-semibold hover:bg-[#d12026] transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                        className="inline-block bg-[#b12e2e] text-white px-12 py-4 rounded-full text-xl font-semibold hover:bg-[#9a2525] transition-all duration-300 transform hover:scale-105 shadow-2xl"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         style={{ opacity }}
@@ -177,7 +177,7 @@ const FullscreenParallaxSlider = () => {
                         key={index}
                         className={`relative w-16 h-1 rounded-full transition-all duration-500 ${
                             index === currentSlide 
-                                ? 'bg-[#e8262b]' 
+                                ? 'bg-[#b12e2e]' 
                                 : 'bg-white/30 hover:bg-white/50'
                         }`}
                         onClick={() => setCurrentSlide(index)}
@@ -185,7 +185,7 @@ const FullscreenParallaxSlider = () => {
                         {/* Анимированный прогресс-бар внутри индикатора */}
                         {index === currentSlide && (
                             <motion.div
-                                className="absolute top-0 left-0 h-full bg-[#e8262b] rounded-full"
+                                className="absolute top-0 left-0 h-full bg-[#b12e2e] rounded-full"
                                 initial={{ width: "0%" }}
                                 animate={{ width: "100%" }}
                                 transition={{ 

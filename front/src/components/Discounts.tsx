@@ -24,7 +24,7 @@ const Discounts = () => {
   if (isError || !discount) return null;
 
   return (
-      <section className="mt-10 lg:mt-28 bg-[#e8262b] overflow-hidden border-4 border-black">
+      <section className="mt-10 lg:mt-28 bg-[#b12e2e] overflow-hidden border-4 border-black">
         <div className="container lg:pt-24 lg:pb-16 pt-12 pb-8">
           <div className="grid lg:grid-cols-2 gap-12 grid-cols-1">
             <motion.div

@@ -55,8 +55,8 @@ const Basket = () => {
     return (
         <section className="relative py-20 lg:py-28 min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c]">
             {/* Декоративные элементы */}
-            <div className="absolute top-10 right-10 w-72 h-72 bg-[#e8262b]/10 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#e8262b]/5 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute top-10 right-10 w-72 h-72 bg-[#b12e2e]/10 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#b12e2e]/5 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4">
                 {/* Заголовок */}
@@ -67,7 +67,7 @@ const Basket = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <h2 className="text-[#E9E9E9] text-4xl lg:text-6xl font-bold mb-4">
-                        Моя <span className="text-[#e8262b]">корзина</span>
+                        Моя <span className="text-[#b12e2e]">корзина</span>
                     </h2>
                     <p className="text-[#ADADAD] text-lg">
                         {cartItems.length > 0 
@@ -116,7 +116,7 @@ const Basket = () => {
                         animate={{ opacity: 1 }}
                     >
                         <div className="text-center">
-                            <div className="w-16 h-16 border-4 border-[#e8262b] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                            <div className="w-16 h-16 border-4 border-[#b12e2e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                             <p className="text-[#ADADAD]">Загрузка корзины...</p>
                         </div>
                     </motion.div>
@@ -128,7 +128,7 @@ const Basket = () => {
                         transition={{ duration: 0.6 }}
                     >
                         <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <ShoppingBag className="w-12 h-12 text-[#e8262b]" />
+                            <ShoppingBag className="w-12 h-12 text-[#b12e2e]" />
                         </div>
                         <h3 className="text-2xl text-[#E9E9E9] font-bold mb-4">Корзина пуста</h3>
                         <p className="text-[#ADADAD] mb-8 max-w-md mx-auto">
@@ -136,7 +136,7 @@ const Basket = () => {
                         </p>
                         <Link to="/catalog">
                             <motion.button
-                                className="bg-[#e8262b] hover:bg-[#d12025] text-white font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
+                                className="bg-[#b12e2e] hover:bg-[#9a2525] text-white font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -178,7 +178,7 @@ const Basket = () => {
                                                 <span className="bg-white/5 px-3 py-1 rounded-full text-[#ADADAD] text-sm border border-white/10">
                                                     {item.category}
                                                 </span>
-                                                <span className="text-[#e8262b] font-bold text-lg">
+                                                <span className="text-[#b12e2e] font-bold text-lg">
                                                     {item.price} ₽/шт
                                                 </span>
                                             </div>
@@ -189,18 +189,18 @@ const Basket = () => {
                                             <div className="flex items-center gap-3 bg-white/5 rounded-2xl p-2 border border-white/10">
                                                 <motion.button
                                                     onClick={() => handleDecrease(item.productId)}
-                                                    className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#e8262b] text-[#E9E9E9] hover:text-white transition-all duration-200 flex items-center justify-center"
+                                                    className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#b12e2e] text-[#E9E9E9] hover:text-white transition-all duration-200 flex items-center justify-center"
                                                     whileHover={{ scale: 1.1 }}
                                                     whileTap={{ scale: 0.9 }}
                                                 >
                                                     <Minus size={16} />
                                                 </motion.button>
-                                                <span className="text-[#e8262b] font-bold text-lg min-w-8 text-center">
+                                                <span className="text-[#b12e2e] font-bold text-lg min-w-8 text-center">
                                                     {item.quantity}
                                                 </span>
                                                 <motion.button
                                                     onClick={() => handleIncrease(item.productId)}
-                                                    className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#e8262b] text-[#E9E9E9] hover:text-white transition-all duration-200 flex items-center justify-center"
+                                                    className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#b12e2e] text-[#E9E9E9] hover:text-white transition-all duration-200 flex items-center justify-center"
                                                     whileHover={{ scale: 1.1 }}
                                                     whileTap={{ scale: 0.9 }}
                                                 >
@@ -239,7 +239,7 @@ const Basket = () => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
                         {/* Итоговая сумма */}
-                        <div className="bg-gradient-to-r from-[#e8262b] to-[#d12025] rounded-2xl p-8 text-white shadow-2xl mb-8">
+                        <div className="bg-gradient-to-r from-[#b12e2e] to-[#9a2525] rounded-2xl p-8 text-white shadow-2xl mb-8">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <h3 className="text-2xl font-bold mb-2">Итоговая сумма</h3>
@@ -258,7 +258,7 @@ const Basket = () => {
                         <div className="flex justify-center">
                             <motion.button
                                 onClick={handleCheckout}
-                                className="group bg-[#e8262b] hover:bg-[#d12025] text-white text-xl font-bold rounded-2xl px-12 py-5 shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden"
+                                className="group bg-[#b12e2e] hover:bg-[#9a2525] text-white text-xl font-bold rounded-2xl px-12 py-5 shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >

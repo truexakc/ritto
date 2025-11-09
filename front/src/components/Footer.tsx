@@ -27,7 +27,7 @@ const Footer = () => {
       icon: <SlPhone className="text-xl lg:text-2xl" />,
       href: "#",
       name: "Phone",
-      color: "hover:text-[#e8262b]"
+      color: "hover:text-[#b12e2e]"
     }
   ];
 
@@ -41,8 +41,8 @@ const Footer = () => {
   return (
     <footer className="relative bg-gradient-to-br from-[#1a1a1a] to-[#242424] border-t border-white/10">
       {/* Декоративные элементы */}
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#e8262b]/5 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#e8262b]/3 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#b12e2e]/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#b12e2e]/3 rounded-full blur-3xl -z-10"></div>
 
       <div className="container mx-auto px-4 py-12 lg:py-16">
         <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
@@ -95,7 +95,7 @@ const Footer = () => {
                 <motion.li key={index} whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
                   <a
                     href={link.href}
-                    className="text-[#ADADAD] hover:text-[#e8262b] transition-colors duration-200 text-sm lg:text-base"
+                    className="text-[#ADADAD] hover:text-[#b12e2e] transition-colors duration-200 text-sm lg:text-base"
                   >
                     {link.name}
                   </a>
@@ -158,10 +158,10 @@ const Footer = () => {
                 <input
                   type="email"
                   placeholder="Ваш email"
-                  className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-[#ADADAD] focus:outline-none focus:border-[#e8262b] transition-colors"
+                  className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-[#ADADAD] focus:outline-none focus:border-[#b12e2e] transition-colors"
                 />
                 <motion.button
-                  className="bg-[#e8262b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#d12025] transition-colors"
+                  className="bg-[#b12e2e] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#9a2525] transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -189,13 +189,13 @@ const Footer = () => {
           <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6">
             <a
               href="#"
-              className="text-[#ADADAD] hover:text-[#e8262b] text-xs lg:text-sm transition-colors duration-200"
+              className="text-[#ADADAD] hover:text-[#b12e2e] text-xs lg:text-sm transition-colors duration-200"
             >
               Политика конфиденциальности
             </a>
             <a
               href="#"
-              className="text-[#ADADAD] hover:text-[#e8262b] text-xs lg:text-sm transition-colors duration-200"
+              className="text-[#ADADAD] hover:text-[#b12e2e] text-xs lg:text-sm transition-colors duration-200"
             >
               Условия использования
             </a>

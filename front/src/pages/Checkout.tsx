@@ -272,7 +272,7 @@ const Checkout = () => {
                     </div>
 
                     {/* Total */}
-                    <div className="flex justify-between items-center font-bold text-lg text-[#e8262b]">
+                    <div className="flex justify-between items-center font-bold text-lg text-[#b12e2e]">
                         <span>Сумма заказа:</span>
                         <span>{totalPrice} ₽</span>
                     </div>
@@ -283,7 +283,7 @@ const Checkout = () => {
                         className={`w-full py-3 rounded-full font-bold text-lg transition ${
                             isSubmitting
                                 ? "bg-gray-500 cursor-not-allowed"
-                                : "bg-[#e8262b] hover:bg-[#d12026] text-white"
+                                : "bg-[#b12e2e] hover:bg-[#9a2525] text-white"
                         }`}
                         disabled={isSubmitting}
                     >

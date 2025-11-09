@@ -76,7 +76,7 @@ const Catalog = () => {
   return (
       <section className="pt-10 lg:pt-28">
         <div className="container">
-          <h2 className="text-[#e8262b] font-bold mt-16 pb-2 lg:pl-3 lg:text-5xl text-4xl mb-6">
+          <h2 className="text-[#b12e2e] font-bold mt-16 pb-2 lg:pl-3 lg:text-5xl text-4xl mb-6">
             КАТАЛОГ
           </h2>
 
@@ -138,7 +138,7 @@ const Catalog = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 border border-[#e8262b] text-[#e8262b] rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#e8262b] hover:text-black transition-all"
+                className="px-4 py-2 border border-[#b12e2e] text-[#b12e2e] rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b12e2e] hover:text-black transition-all"
               >
                 Назад
               </button>
@@ -150,7 +150,7 @@ const Catalog = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 border border-[#e8262b] text-[#e8262b] rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#e8262b] hover:text-black transition-all"
+                className="px-4 py-2 border border-[#b12e2e] text-[#b12e2e] rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b12e2e] hover:text-black transition-all"
               >
                 Вперёд
               </button>

@@ -34,8 +34,8 @@ const Contact = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#242424] to-[#171717] -z-10"></div>
       
       {/* Декоративные элементы */}
-      <div className="absolute top-10 left-10 w-72 h-72 bg-[#e8262b]/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#e8262b]/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-10 left-10 w-72 h-72 bg-[#b12e2e]/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#b12e2e]/5 rounded-full blur-3xl -z-10"></div>
 
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -53,10 +53,10 @@ const Contact = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="text-[#e8262b] font-bold text-4xl sm:text-5xl lg:text-6xl text-center lg:text-start">
+              <h2 className="text-[#b12e2e] font-bold text-4xl sm:text-5xl lg:text-6xl text-center lg:text-start">
                 КОНТАКТЫ
               </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-[#e8262b] to-transparent mt-4 rounded-full"></div>
+              <div className="w-20 h-1 bg-gradient-to-r from-[#b12e2e] to-transparent mt-4 rounded-full"></div>
               <p className="text-[#ADADAD] text-lg mt-4 text-center lg:text-start">
                 Свяжитесь с нами удобным для вас способом
               </p>
@@ -83,7 +83,7 @@ const Contact = () => {
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
               >
-                  <div className="flex-shrink-0 w-12 h-12 bg-[#e8262b] rounded-xl flex items-center justify-center">
+                  <div className="flex-shrink-0 w-12 h-12 bg-[#b12e2e] rounded-xl flex items-center justify-center">
                     <div className="text-white">
                       {item.icon}
                     </div>
@@ -110,7 +110,7 @@ const Contact = () => {
               transition={{ duration: 0.8, delay: 1 }}
             >
               <motion.button
-                className="group relative w-full lg:w-auto bg-[#e8262b] text-white font-bold text-lg lg:text-xl py-5 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden"
+                className="group relative w-full lg:w-auto bg-[#b12e2e] text-white font-bold text-lg lg:text-xl py-5 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -132,8 +132,8 @@ const Contact = () => {
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               {/* Декоративные элементы вокруг карты */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#e8262b]/20 rounded-full blur-xl -z-10"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#e8262b]/10 rounded-full blur-xl -z-10"></div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#b12e2e]/20 rounded-full blur-xl -z-10"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#b12e2e]/10 rounded-full blur-xl -z-10"></div>
               
               {/* Карта */}
               <div className="w-full h-[500px] lg:h-[600px] rounded-2xl overflow-hidden relative">
@@ -154,7 +154,7 @@ const Contact = () => {
                 transition={{ duration: 0.6, delay: 1 }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-[#e8262b] rounded-full"></div>
+                  <div className="w-3 h-3 bg-[#b12e2e] rounded-full"></div>
                   <div>
                     <p className="text-[#171717] font-bold text-sm">
                       Shushiritto

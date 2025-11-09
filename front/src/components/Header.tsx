@@ -37,7 +37,7 @@ const Header = () => {
             <li>
                 <RouterLink 
                     to="/" 
-                    className="nav-link hover:text-[#e8262b] text-white transition-colors duration-200"
+                    className="nav-link hover:text-[#b12e2e] text-white transition-colors duration-200"
                     onClick={() => setMenuOpen(false)}
                 >
                     Главная
@@ -46,7 +46,7 @@ const Header = () => {
             <li>
                 <RouterLink 
                     to="/catalog" 
-                    className="nav-link hover:text-[#e8262b] text-white transition-colors duration-200"
+                    className="nav-link hover:text-[#b12e2e] text-white transition-colors duration-200"
                     onClick={() => setMenuOpen(false)}
                 >
                     Каталог
@@ -59,7 +59,7 @@ const Header = () => {
                             to="delivery" 
                             smooth 
                             offset={-80}
-                            className="nav-link cursor-pointer text-white hover:text-[#e8262b] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             Доставка
@@ -70,7 +70,7 @@ const Header = () => {
                             to="discounts" 
                             smooth 
                             offset={-80}
-                            className="nav-link cursor-pointer text-white hover:text-[#e8262b] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             Акции
@@ -81,7 +81,7 @@ const Header = () => {
                             to="about" 
                             smooth 
                             offset={-80} 
-                            className="nav-link cursor-pointer text-white hover:text-[#e8262b] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             О нас
@@ -92,7 +92,7 @@ const Header = () => {
                             to="contact" 
                             smooth 
                             offset={-80}
-                            className="nav-link cursor-pointer text-white hover:text-[#e8262b] transition-colors duration-200"
+                            className="nav-link cursor-pointer text-white hover:text-[#b12e2e] transition-colors duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
                             Контакты
@@ -142,9 +142,9 @@ const Header = () => {
                             className="relative group p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
                             title="Корзина"
                         >
-                            <ShoppingCart className="w-6 h-6 text-[#e8262b] group-hover:scale-110 transition-transform"/>
+                            <ShoppingCart className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
                             {totalItems > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#e8262b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-lg">
+                                <span className="absolute -top-1 -right-1 bg-[#b12e2e] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-lg">
                                     {totalItems}
                                 </span>
                             )}
@@ -155,7 +155,7 @@ const Header = () => {
                             <div className="flex items-center gap-2">
                                 <RouterLink 
                                     to="/profile" 
-                                    className="w-10 h-10 bg-gradient-to-br from-[#e8262b] to-[#d12025] rounded-full flex items-center justify-center text-xl hover:scale-110 transition-transform shadow-lg"
+                                    className="w-10 h-10 bg-gradient-to-br from-[#b12e2e] to-[#9a2525] rounded-full flex items-center justify-center text-xl hover:scale-110 transition-transform shadow-lg"
                                     title="Профиль"
                                 >
                                     {getUserEmoji(currentUser.id)}
@@ -163,7 +163,7 @@ const Header = () => {
                                 <LogoutButton 
                                     icon={
                                         <div className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 group">
-                                            <LogOut className="w-6 h-6 text-[#e8262b] group-hover:scale-110 transition-transform"/>
+                                            <LogOut className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
                                         </div>
                                     }
                                     onLogout={() => {}}
@@ -175,7 +175,7 @@ const Header = () => {
                                 className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 group"
                                 title="Войти"
                             >
-                                <LogIn className="w-6 h-6 text-[#e8262b] group-hover:scale-110 transition-transform"/>
+                                <LogIn className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
                             </RouterLink>
                         ) : null}
                     </div>
@@ -188,9 +188,9 @@ const Header = () => {
                             className="relative p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
                             onClick={() => setMenuOpen(false)}
                         >
-                            <ShoppingCart className="w-6 h-6 text-[#e8262b]"/>
+                            <ShoppingCart className="w-6 h-6 text-[#b12e2e]"/>
                             {totalItems > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#e8262b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                                <span className="absolute -top-1 -right-1 bg-[#b12e2e] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                                     {totalItems}
                                 </span>
                             )}
@@ -201,7 +201,7 @@ const Header = () => {
                             <>
                                 <RouterLink 
                                     to="/profile" 
-                                    className="w-10 h-10 bg-gradient-to-br from-[#e8262b] to-[#d12025] rounded-full flex items-center justify-center text-xl shadow-lg"
+                                    className="w-10 h-10 bg-gradient-to-br from-[#b12e2e] to-[#9a2525] rounded-full flex items-center justify-center text-xl shadow-lg"
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     {getUserEmoji(currentUser.id)}
@@ -209,7 +209,7 @@ const Header = () => {
                                 <LogoutButton 
                                     icon={
                                         <div className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200">
-                                            <LogOut className="w-6 h-6 text-[#e8262b]"/>
+                                            <LogOut className="w-6 h-6 text-[#b12e2e]"/>
                                         </div>
                                     }
                                     onLogout={() => setMenuOpen(false)}
@@ -221,14 +221,14 @@ const Header = () => {
                                 className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200"
                                 onClick={() => setMenuOpen(false)}
                             >
-                                <LogIn className="w-6 h-6 text-[#e8262b]"/>
+                                <LogIn className="w-6 h-6 text-[#b12e2e]"/>
                             </RouterLink>
                         ) : null}
 
                         {/* Бургер меню */}
                         <button 
                             onClick={toggleMenu} 
-                            className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 text-[#e8262b]"
+                            className="p-2 rounded-lg hover:bg-white/5 transition-all duration-200 text-[#b12e2e]"
                         >
                             {menuOpen ? <X className="w-6 h-6"/> : <Menu className="w-6 h-6"/>}
                         </button>
@@ -254,7 +254,7 @@ const Header = () => {
                 {/* Дополнительная информация в мобильном меню */}
                 <div className="mt-12 pt-8 border-t border-white/10">
                     <div className="text-[#ADADAD] space-y-2">
-                        <p className="font-semibold text-[#e8262b]">+7 (900) 00-00-00</p>
+                        <p className="font-semibold text-[#b12e2e]">+7 (900) 00-00-00</p>
                         <p className="text-sm">ул. Ногорная д. 7</p>
                         <p className="text-sm">Ежедневно: 10:00 - 23:00</p>
                     </div>
