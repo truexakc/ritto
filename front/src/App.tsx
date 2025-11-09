@@ -20,7 +20,7 @@ const App = () => {
     }
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <>
             <Toaster position="top-right" toastOptions={{
                 duration: 4000,
                 style: {
@@ -31,11 +31,9 @@ const App = () => {
             />
             <Header />
             <ScrollToTop />
-            <main className="flex-grow">
-                <Outlet />
-            </main>
+            <Outlet />
             <Footer />
-        </div>
+        </>
     );
 };
 

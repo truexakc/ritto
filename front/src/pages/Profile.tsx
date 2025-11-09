@@ -6,18 +6,6 @@ import { selectCurrentUser, logoutUser } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../services/axios';
 import { getUserEmoji } from '../utils/emoji';
-import { 
-    colors, 
-    borderRadius, 
-    cardStyles,
-    buttonStyles,
-    badgeStyles,
-    textStyles,
-    decorativeStyles,
-    containerStyles,
-    avatarStyles,
-    cn 
-} from '../styles';
 
 interface UserProfile {
     id: string;
@@ -85,10 +73,10 @@ const Profile = () => {
     };
 
     return (
-        <div className={cn("relative", containerStyles.page)}>
+        <div className="relative min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0c0c0c] overflow-hidden py-20 px-4">
             {/* Декоративные элементы */}
-            <div className={cn(decorativeStyles.blob.primary, "top-1/4 left-10")}></div>
-            <div className={cn(decorativeStyles.blob.secondary, "bottom-1/4 right-10")}></div>
+            <div className="absolute top-1/4 left-10 w-80 h-80 bg-[#e8262b]/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#e8262b]/5 rounded-full blur-3xl"></div>
 
             <div className="relative z-10 max-w-4xl mx-auto">
                 <motion.div
@@ -98,10 +86,10 @@ const Profile = () => {
                 >
                     {/* Заголовок */}
                     <div className="text-center mb-12">
-                        <h1 className={cn(textStyles.h1, "mb-4")}>
+                        <h1 className="text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#e8262b] to-[#d12025] bg-clip-text text-transparent mb-4">
                             Мой профиль
                         </h1>
-                        <p className={cn(`text-[${colors.text.secondary}]`, "text-lg")}>
+                        <p className="text-[#ADADAD] text-lg">
                             Управляйте своим аккаунтом и просматривайте статистику
                         </p>
                     </div>
@@ -111,12 +99,12 @@ const Profile = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className={cn(cardStyles.base, "p-8 mb-6")}
+                        className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-6"
                     >
                         {/* Аватар и основная информация */}
                         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
                             <motion.div 
-                                className={avatarStyles.large}
+                                className="w-24 h-24 bg-gradient-to-br from-[#e8262b] to-[#d12025] rounded-full flex items-center justify-center text-5xl shadow-2xl"
                                 whileHover={{ scale: 1.1, rotate: 5 }}
                                 transition={{ type: "spring", stiffness: 300 }}
                             >
@@ -125,21 +113,21 @@ const Profile = () => {
                             
                             <div className="flex-1 text-center md:text-left">
                                 <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-                                    <h2 className={textStyles.h2}>
+                                    <h2 className="text-3xl font-bold text-[#E9E9E9]">
                                         {profile.name || 'Пользователь'}
                                     </h2>
                                     {profile.isAdmin && (
-                                        <span className={cn(badgeStyles.primary, "flex items-center gap-1")}>
+                                        <span className="bg-[#e8262b]/20 text-[#e8262b] px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                                             <Shield className="w-4 h-4" />
                                             Админ
                                         </span>
                                     )}
                                 </div>
-                                <div className={cn("flex items-center justify-center md:justify-start gap-2", `text-[${colors.text.secondary}]`, "mb-4")}>
+                                <div className="flex items-center justify-center md:justify-start gap-2 text-[#ADADAD] mb-4">
                                     <Mail className="w-4 h-4" />
                                     <span>{profile.email}</span>
                                 </div>
-                                <div className={cn("flex items-center justify-center md:justify-start gap-2", `text-[${colors.text.secondary}]`)}>
+                                <div className="flex items-center justify-center md:justify-start gap-2 text-[#ADADAD]">
                                     <Calendar className="w-4 h-4" />
                                     <span>Регистрация: {formatDate(profile.createdAt)}</span>
                                 </div>
@@ -147,13 +135,7 @@ const Profile = () => {
 
                             <button
                                 onClick={handleLogout}
-                                className={cn(
-                                    "group bg-white/5 hover:bg-[#e8262b]/20",
-                                    `text-[${colors.text.primary}] hover:text-[${colors.primary.main}]`,
-                                    "font-medium", borderRadius.lg, "px-6 py-3",
-                                    "border border-white/10 hover:border-[#e8262b]/50",
-                                    "transition-all duration-300 flex items-center gap-2"
-                                )}
+                                className="group bg-white/5 hover:bg-[#e8262b]/20 text-[#E9E9E9] hover:text-[#e8262b] font-medium rounded-2xl px-6 py-3 border border-white/10 hover:border-[#e8262b]/50 transition-all duration-300 flex items-center gap-2"
                             >
                                 <LogOut className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 Выйти
@@ -164,15 +146,15 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <motion.div
                                 whileHover={{ scale: 1.02 }}
-                                className={cn(cardStyles.base, "p-6")}
+                                className="bg-white/5 rounded-2xl p-6 border border-white/10"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className={cn("w-14 h-14", `bg-[${colors.primary.main}]/20`, borderRadius.md, "flex items-center justify-center")}>
-                                        <ShoppingBag className={cn("w-7 h-7", `text-[${colors.primary.main}]`)} />
+                                    <div className="w-14 h-14 bg-[#e8262b]/20 rounded-xl flex items-center justify-center">
+                                        <ShoppingBag className="w-7 h-7 text-[#e8262b]" />
                                     </div>
                                     <div>
-                                        <p className={cn(`text-[${colors.text.secondary}]`, "text-sm mb-1")}>Всего заказов</p>
-                                        <p className={cn("text-3xl font-bold", `text-[${colors.text.primary}]`)}>
+                                        <p className="text-[#ADADAD] text-sm mb-1">Всего заказов</p>
+                                        <p className="text-3xl font-bold text-[#E9E9E9]">
                                             {profile.totalOrders}
                                         </p>
                                     </div>
@@ -181,15 +163,15 @@ const Profile = () => {
 
                             <motion.div
                                 whileHover={{ scale: 1.02 }}
-                                className={cn(cardStyles.base, "p-6")}
+                                className="bg-white/5 rounded-2xl p-6 border border-white/10"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className={cn("w-14 h-14", `bg-[${colors.primary.main}]/20`, borderRadius.md, "flex items-center justify-center")}>
-                                        <DollarSign className={cn("w-7 h-7", `text-[${colors.primary.main}]`)} />
+                                    <div className="w-14 h-14 bg-[#e8262b]/20 rounded-xl flex items-center justify-center">
+                                        <DollarSign className="w-7 h-7 text-[#e8262b]" />
                                     </div>
                                     <div>
-                                        <p className={cn(`text-[${colors.text.secondary}]`, "text-sm mb-1")}>Потрачено</p>
-                                        <p className={cn("text-3xl font-bold", `text-[${colors.text.primary}]`)}>
+                                        <p className="text-[#ADADAD] text-sm mb-1">Потрачено</p>
+                                        <p className="text-3xl font-bold text-[#E9E9E9]">
                                             {profile.totalSpent.toLocaleString('ru-RU')} ₽
                                         </p>
                                     </div>
@@ -207,14 +189,14 @@ const Profile = () => {
                     >
                         <button
                             onClick={() => navigate('/catalog')}
-                            className={buttonStyles.primary}
+                            className="bg-[#e8262b] hover:bg-[#d12025] text-white font-bold rounded-2xl px-8 py-4 shadow-2xl hover:shadow-3xl transition-all duration-300"
                         >
                             Перейти в каталог
                         </button>
                         
                         <button
                             onClick={() => navigate('/basket')}
-                            className={buttonStyles.secondary}
+                            className="bg-white/5 hover:bg-white/10 text-[#E9E9E9] font-medium rounded-2xl px-8 py-4 border border-white/10 hover:border-white/20 transition-all duration-300"
                         >
                             Моя корзина
                         </button>
@@ -223,9 +205,9 @@ const Profile = () => {
             </div>
 
             {/* Декоративная сетка */}
-            <div className={decorativeStyles.grid}>
-                <div className={cn(decorativeStyles.gridLine.horizontal, "top-1/3")}></div>
-                <div className={cn(decorativeStyles.gridLine.vertical, "left-1/3")}></div>
+            <div className="absolute inset-0 pointer-events-none opacity-10">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#e8262b] to-transparent w-full h-px top-1/3"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#e8262b] to-transparent w-px h-full left-1/3"></div>
             </div>
         </div>
     );
