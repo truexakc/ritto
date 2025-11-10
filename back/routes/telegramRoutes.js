@@ -4,8 +4,8 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Создание заказа с отправкой в Telegram
-router.post('/order', protect, sendOrderNotification);
+// Создание заказа с отправкой в Telegram (доступно без авторизации)
+router.post('/order', sendOrderNotification);
 
 // Тестовая отправка сообщения (только для админа)
 router.post('/test', protect, admin, sendTestMessage);
