@@ -98,7 +98,7 @@ const CartItem = ({ product }: Props) => {
                         {/* Кнопка подробнее */}
                         <button
                             onClick={handleOpenModal}
-                            className="flex-1 text-[#f6eaea] py-2 px-4 bg-black hover:-translate-y-1 transition-transform rounded-full"
+                            className="flex-1 text-[#f6eaea] py-2 px-3 sm:px-4 text-sm sm:text-base bg-black hover:-translate-y-1 transition-transform rounded-full"
                         >
                             Подробнее
                         </button>
@@ -106,10 +106,10 @@ const CartItem = ({ product }: Props) => {
                         {/* Кнопка добавления */}
                         <button
                             onClick={handleAddToCart}
-                            className="bg-black hover:bg-[#f0f0f0] rounded-full p-2 shadow-md transition-all flex items-center justify-center"
+                            className="bg-black hover:bg-[#f0f0f0] rounded-full p-1.5 sm:p-2 shadow-md transition-all flex items-center justify-center"
                             title="Добавить в корзину"
                         >
-                            <ShoppingCart className="text-[#b12e2e] w-6 h-6 hover:scale-110 transition-transform" />
+                            <ShoppingCart className="text-[#b12e2e] w-5 h-5 sm:w-6 sm:h-6 hover:scale-110 transition-transform" />
                         </button>
 
                         {/* Popup-уведомление */}

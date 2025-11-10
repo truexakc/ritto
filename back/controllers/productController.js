@@ -3,7 +3,7 @@ const { query } = require('../config/postgres');
 
 const getCategories = async (req, res) => {
     try {
-        const result = await query('SELECT * FROM categories ORDER BY sort DESC, name ASC');
+        const result = await query('SELECT * FROM categories ORDER BY name ASC');
         res.json(result.rows);
     } catch (error) {
         console.error('Get categories error:', error);
