@@ -32,6 +32,22 @@ export const fetchCart = createAsyncThunk<CartItem[]>(
     }
 );
 
+// 🔹 Тихое обновление корзины (без индикатора загрузки)
+export const silentFetchCart = createAsyncThunk<CartItem[]>(
+    "cart/silentFetchCart",
+    async (_, thunkAPI) => {
+        try {
+            const res = await axiosInstance.get("/cart");
+            return res.data.items;
+        } catch (err: unknown) {
+            if (err instanceof AxiosError) {
+                return thunkAPI.rejectWithValue(err.response?.data?.message || "Ошибка запроса");
+            }
+            return thunkAPI.rejectWithValue("Неизвестная ошибка");
+        }
+    }
+);
+
 // 🔹 Добавление товара
 export const addToCart = createAsyncThunk<
     { productId: string; quantity: number },
@@ -40,6 +56,8 @@ export const addToCart = createAsyncThunk<
 >("cart/addToCart", async ({ productId, quantity }, thunkAPI) => {
     try {
         await axiosInstance.post("/cart/add", { product_id: productId, quantity });
+        // Автоматически обновляем корзину после добавления (без индикатора загрузки)
+        thunkAPI.dispatch(silentFetchCart());
         return { productId, quantity };
     } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -60,6 +78,8 @@ export const removeFromCart = createAsyncThunk<
 >("cart/removeFromCart", async (productId, thunkAPI) => {
     try {
         await axiosInstance.post("/cart/remove", {product_id: productId});
+        // Автоматически обновляем корзину после удаления (без индикатора загрузки)
+        thunkAPI.dispatch(silentFetchCart());
         return {productId}; // возвращаем id
     } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -68,7 +88,6 @@ export const removeFromCart = createAsyncThunk<
         return thunkAPI.rejectWithValue("Неизвестная ошибка");
     }
 });
-;
 
 export const clearCartThunk = createAsyncThunk<void>(
     "cart/clearCart",
@@ -122,36 +141,22 @@ const cartSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
-            .addCase(addToCart.fulfilled, (state, action) => {
-                const {productId, quantity} = action.payload;
-                const existingItem = state.items.find(item => item.productId === productId);
-                if (existingItem) {
-                    existingItem.quantity += quantity;
-                } else {
-                    // Пример простого добавления нового товара (без деталей)
-                    state.items.push({
-                        id: Math.random().toString(), // временный id
-                        productId,
-                        quantity,
-                        name: '',
-                        price: 0,
-                        image: '',
-                        category: '',
-                        description: ''
-                    });
-                }
+            .addCase(silentFetchCart.fulfilled, (state, action: PayloadAction<CartItem[]>) => {
+                // Обновляем items без изменения loading
+                state.items = action.payload;
+            })
+            .addCase(addToCart.fulfilled, () => {
+                // Не обновляем items здесь, дождемся silentFetchCart
+            })
+            .addCase(addToCart.rejected, (state, action) => {
+                state.error = action.payload as string;
             })
 
-            .addCase(removeFromCart.fulfilled, (state, action) => {
-                const {productId} = action.payload;
-                const index = state.items.findIndex(item => item.productId === productId);
-                if (index !== -1) {
-                    if (state.items[index].quantity > 1) {
-                        state.items[index].quantity -= 1;
-                    } else {
-                        state.items.splice(index, 1);
-                    }
-                }
+            .addCase(removeFromCart.fulfilled, () => {
+                // Не обновляем items здесь, дождемся silentFetchCart
+            })
+            .addCase(removeFromCart.rejected, (state, action) => {
+                state.error = action.payload as string;
             })
             .addCase(clearCartThunk.fulfilled, (state) => {
                 state.items = [];

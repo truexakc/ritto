@@ -29,17 +29,14 @@ const Basket = () => {
 
     const handleIncrease = async (productId: string) => {
         await dispatch(addToCart({ productId, quantity: 1 }));
-        dispatch(fetchCart());
     };
 
     const handleDecrease = async (productId: string) => {
         await dispatch(removeFromCart(productId));
-        dispatch(fetchCart());
     };
 
     const handleClearCart = async () => {
         await dispatch(clearCartThunk());
-        dispatch(fetchCart());
     };
 
     const handleCheckout = () => {
