@@ -29,7 +29,8 @@ const sessionConfig = {
         secure: false, // Отключаем для работы через nginx без HTTPS
         sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        domain: process.env.NODE_ENV === 'production' ? '83.166.246.163' : undefined
+        // Не устанавливаем domain - браузер сам определит по текущему хосту
+        // domain: undefined
     },
     name: 'sessionId', // Явное имя для cookie
     proxy: true // Доверяем прокси (nginx)
