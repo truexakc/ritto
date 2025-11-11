@@ -74,12 +74,12 @@ const register = async (req, res) => {
         const sessionCart = req.session.cart || [];
         await mergeSessionCart(user.id, sessionCart);
 
-        // Очищаем сессию после объединения
-        req.session.cart = [];
-        req.session.destroy((err) => {
-            if (err) console.error('Error destroying session:', err);
-        });
+        // Очищаем только корзину в сессии (не уничтожаем всю сессию)
+        if (req.session) {
+            req.session.cart = [];
+        }
 
+        // Отправляем ответ
         res.status(201).json({
             user: {
                 id: user.id,
@@ -120,12 +120,12 @@ const login = async (req, res) => {
         
         console.log(`✅ Merged ${mergedCount} items from session to user cart`);
 
-        // Очищаем сессию после объединения
-        req.session.cart = [];
-        req.session.destroy((err) => {
-            if (err) console.error('Error destroying session:', err);
-        });
+        // Очищаем только корзину в сессии (не уничтожаем всю сессию)
+        if (req.session) {
+            req.session.cart = [];
+        }
 
+        // Отправляем ответ
         res.json({
             user: {
                 id: user.id,
