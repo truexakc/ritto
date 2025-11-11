@@ -13,6 +13,9 @@ dotenv.config();
 
 const app = express();
 
+// Trust proxy - важно для правильного определения IP в Docker/nginx
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(morgan('dev'));
 app.use(express.json());

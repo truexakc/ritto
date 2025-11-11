@@ -21,8 +21,8 @@ const RegisterForm = () => {
         const result = await dispatch(registerUser({ name, email, password }));
 
         if (registerUser.fulfilled.match(result)) {
-            toast.success("📧 Проверьте почту и подтвердите email");
-            navigate("/login");
+            toast.success("Регистрация успешна! Добро пожаловать!");
+            navigate("/");
         } else {
             setFormError("Пользователь с таким email уже существует или произошла ошибка");
         }
