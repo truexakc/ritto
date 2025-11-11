@@ -1,4 +1,5 @@
 const { supabase } = require('../config/db');
+const logger = require('../utils/logger');
 
 const getOrderItems = async (req, res) => {
     try {
@@ -28,7 +29,7 @@ const getOrderItems = async (req, res) => {
         res.status(200).json({ data: transformed, total: transformed.length });
 
     } catch (error) {
-        console.error('❌ Ошибка при получении order_items:', error);
+        logger.error('❌ Ошибка при получении order_items:', error);
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };
@@ -49,7 +50,7 @@ const deleteOrderItem = async (req, res) => {
 
         res.status(200).json({ data: { id } }); // именно так требует react-admin
     } catch (error) {
-        console.error('❌ Ошибка при удалении order_item:', error);
+        logger.error('❌ Ошибка при удалении order_item:', error);
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };

@@ -3,6 +3,7 @@ const axios = require('axios');
 const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
+const logger = require('./logger');
 
 const downloadSabyImage = async (imageUrl, token) => {
     if (!imageUrl) return null;
@@ -20,7 +21,7 @@ const downloadSabyImage = async (imageUrl, token) => {
                     finalImageUrl = params.PhotoURL || imageUrl;
                 }
             } catch (error) {
-                console.warn('Не удалось распарсить URL изображения:', error);
+                logger.warn('Не удалось распарсить URL изображения:', error);
             }
         }
         
@@ -51,7 +52,7 @@ const downloadSabyImage = async (imageUrl, token) => {
         return `/uploads/products/${fileName}`;
         
     } catch (error) {
-        console.error('Ошибка загрузки изображения:', error.message);
+        logger.error('Ошибка загрузки изображения:', error.message);
         return null;
     }
 };

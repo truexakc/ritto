@@ -48,7 +48,9 @@ const CartItem = ({ product }: Props) => {
                 setTimeout(() => setShowAddedPopup(false), 1500);
             }
         } catch (err) {
-            console.error("Ошибка при добавлении:", err);
+            if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+                console.error("Ошибка при добавлении:", err);
+            }
         }
     };
 

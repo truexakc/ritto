@@ -1,5 +1,6 @@
 // controllers/discountController.ts
 const { supabase } = require('../config/db');
+const logger = require('../utils/logger');
 
 const getActiveDiscount = async (req, res) => {
     try {
@@ -11,7 +12,7 @@ const getActiveDiscount = async (req, res) => {
             .single();
 
         if (error) throw error;
-        console.log("💡 Полученная скидка:", data);
+        logger.log("💡 Полученная скидка:", data);
         res.json(data);
     } catch (error) {
         res.status(500).json({ message: 'Ошибка получения скидки', error: error.message });

@@ -25,7 +25,9 @@ const LoginForm = () => {
             try {
                 await dispatch(mergeSessionCart());
             } catch (error) {
-                console.error('Ошибка переноса корзины:', error);
+                if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+                    console.error('Ошибка переноса корзины:', error);
+                }
                 // Не блокируем вход при ошибке переноса корзины
             }
             navigate('/');

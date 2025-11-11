@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { supabase } = require('../config/db.js');
+const logger = require('../utils/logger');
 
 // 1. Инициация платежа (заглушка, пока нет API СБИС)
 const processPayment = async (req, res) => {
@@ -42,7 +43,7 @@ const markOrderAsPaid = async (req, res) => {
         .maybeSingle(); // 👈 безопасный аналог single()
 
     if (error || !data) {
-        console.error('Ошибка при обновлении оплаты:', error);
+        logger.error('Ошибка при обновлении оплаты:', error);
         return res.status(404).json({ message: 'Заказ не найден или не обновлён', error });
     }
 

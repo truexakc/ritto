@@ -143,7 +143,9 @@ const Checkout = () => {
                 throw new Error("Ошибка запроса");
             }
         } catch (err) {
-            console.error(err);
+            if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+                console.error(err);
+            }
             setError("❌ Ошибка при оформлении заказа. Попробуйте позже.");
         } finally {
             setIsSubmitting(false);

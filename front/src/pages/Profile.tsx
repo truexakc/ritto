@@ -30,7 +30,9 @@ const Profile = () => {
                 const response = await axiosInstance.get('/auth/profile');
                 setProfile(response.data.user);
             } catch (error) {
-                console.error('Error fetching profile:', error);
+                if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+                    console.error('Error fetching profile:', error);
+                }
             } finally {
                 setLoading(false);
             }

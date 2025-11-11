@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/postgres');
+const logger = require('../utils/logger');
 
 // Проверка токенов для защищенных роутов
 const protect = async (req, res, next) => {
     let token;
 
-    console.log('🔐 Auth middleware - Headers:', {
+    logger.log('🔐 Auth middleware - Headers:', {
         authorization: req.headers.authorization,
         hasAuth: !!req.headers.authorization
     });
@@ -13,15 +14,15 @@ const protect = async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             token = req.headers.authorization.split(' ')[1];
-            console.log('🔑 Token extracted:', token ? 'exists' : 'missing');
+            logger.log('🔑 Token extracted:', token ? 'exists' : 'missing');
             
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            console.log('✅ Token decoded:', decoded);
+            logger.log('✅ Token decoded:', decoded);
 
             const result = await query('SELECT id, email, full_name, role FROM users WHERE id = $1', [decoded.id]);
 
             if (result.rows.length === 0) {
-                console.log('❌ User not found in DB');
+                logger.warn('❌ User not found in DB');
                 return res.status(401).json({ message: 'Not authorized, user not found' });
             }
 
@@ -32,14 +33,14 @@ const protect = async (req, res, next) => {
                 isAdmin: result.rows[0].role === 'admin'
             };
 
-            console.log('✅ User authenticated:', req.user.email);
+            logger.log('✅ User authenticated:', req.user.email);
             next();
         } catch (error) {
-            console.error('❌ Token verification error:', error.message);
+            logger.error('❌ Token verification error:', error.message);
             return res.status(401).json({ message: 'Not authorized, token failed' });
         }
     } else {
-        console.log('❌ No authorization header or invalid format');
+        logger.warn('❌ No authorization header or invalid format');
         return res.status(401).json({ message: 'Not authorized, no token' });
     }
 };
@@ -64,7 +65,7 @@ const optionalAuth = async (req, res, next) => {
                 };
             }
         } catch (error) {
-            console.error('Optional auth token verification error:', error);
+            logger.log('Optional auth token verification error:', error);
         }
     }
 

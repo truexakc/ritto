@@ -8,6 +8,7 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
+const logger = require('./utils/logger');
 
 dotenv.config();
 
@@ -55,23 +56,23 @@ const allowedOrigins = [
     process.env.CLIENT_URL
 ].filter(Boolean);
 
-console.log('🌐 Allowed CORS origins:', allowedOrigins);
+logger.log('🌐 Allowed CORS origins:', allowedOrigins);
 
 const corsOptions = {
     origin: function (origin, callback) {
-        console.log('🔍 CORS check for origin:', origin);
+        logger.log('🔍 CORS check for origin:', origin);
         
         // Разрешаем запросы без origin (например, curl, Postman, same-origin)
         if (!origin) {
-            console.log('✅ No origin - allowing');
+            logger.log('✅ No origin - allowing');
             return callback(null, true);
         }
         
         if (allowedOrigins.indexOf(origin) !== -1) {
-            console.log('✅ Origin allowed:', origin);
+            logger.log('✅ Origin allowed:', origin);
             callback(null, true);
         } else {
-            console.log('❌ Origin blocked:', origin);
+            logger.warn('❌ Origin blocked:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
@@ -120,8 +121,8 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5001;
 
 const server = app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+    logger.log(`🚀 Server running on port ${PORT}`);
+    logger.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 module.exports = { app, server };

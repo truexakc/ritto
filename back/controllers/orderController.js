@@ -1,4 +1,5 @@
 const { supabase } = require('../config/db');
+const logger = require('../utils/logger');
 
 // 🔹 Создание заказа
 const createOrder = async (req, res) => {
@@ -82,14 +83,14 @@ const createOrder = async (req, res) => {
             .insert(orderItemsWithId);
 
         if (orderItemsError) {
-            console.error("Ошибка добавления order_items:", orderItemsError);
+            logger.error("Ошибка добавления order_items:", orderItemsError);
             return res.status(500).json({ message: "Ошибка добавления товаров в заказ" });
         }
 
         res.status(201).json({ message: "Заказ успешно создан", order });
 
     } catch (error) {
-        console.error("❌ Ошибка при создании заказа:", error.message || error);
+        logger.error("❌ Ошибка при создании заказа:", error.message || error);
         res.status(500).json({ message: "Ошибка сервера", error: error.message });
     }
 };
@@ -118,7 +119,7 @@ const getOrderDetails = async (req, res) => {
         res.status(200).json({ id: order.id, ...order });
 
     } catch (error) {
-        console.error('❌ Ошибка при получении заказа:', error);
+        logger.error('❌ Ошибка при получении заказа:', error);
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };
@@ -195,7 +196,7 @@ const updateOrderStatus = async (req, res) => {
         res.json({ message: 'Статус заказа обновлён', order: data });
 
     } catch (error) {
-        console.error('❌ Ошибка при обновлении статуса заказа:', error);
+        logger.error('❌ Ошибка при обновлении статуса заказа:', error);
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };
@@ -224,7 +225,7 @@ const getAllOrders = async (req, res) => {
         res.json(data);
 
     } catch (error) {
-        console.error('Ошибка при получении заказов:', error);
+        logger.error('Ошибка при получении заказов:', error);
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };
@@ -243,7 +244,7 @@ const deleteOrder = async (req, res) => {
         res.status(200).json({ data: { id } });
 
     } catch (error) {
-        console.error('❌ Ошибка при удалении заказа:', error);
+        logger.error('❌ Ошибка при удалении заказа:', error);
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };

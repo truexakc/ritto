@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/postgres');
+const logger = require('../utils/logger');
 
 // Генерация JWT токенов
 const generateToken = (id) => {
@@ -40,7 +41,7 @@ const mergeSessionCart = async (userId, sessionCart) => {
             }
             mergedCount++;
         } catch (error) {
-            console.error('Error merging cart item:', error);
+            logger.error('Error merging cart item:', error);
         }
     }
 
@@ -90,7 +91,7 @@ const register = async (req, res) => {
             token: generateToken(user.id),
         });
     } catch (error) {
-        console.error('Registration error:', error);
+        logger.error('Registration error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
@@ -118,7 +119,7 @@ const login = async (req, res) => {
         const sessionCart = req.session.cart || [];
         const mergedCount = await mergeSessionCart(user.id, sessionCart);
         
-        console.log(`✅ Merged ${mergedCount} items from session to user cart`);
+        logger.log(`✅ Merged ${mergedCount} items from session to user cart`);
 
         // Очищаем только корзину в сессии (не уничтожаем всю сессию)
         if (req.session) {
@@ -136,7 +137,7 @@ const login = async (req, res) => {
             token: generateToken(user.id),
         });
     } catch (error) {
-        console.error('Login error:', error);
+        logger.error('Login error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
@@ -177,7 +178,7 @@ const getProfile = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Get profile error:', error);
+        logger.error('Get profile error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -207,7 +208,7 @@ const getMe = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Get me error:', error);
+        logger.error('Get me error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

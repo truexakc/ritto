@@ -2,6 +2,7 @@
 const axios = require('axios');
 const { query, getClient } = require('../config/postgres');
 const { downloadSabyImage } = require('../utils/imageDownloader');
+const logger = require('../utils/logger');
 
 // Константы
 const PAGE_SIZE = 1000;
@@ -205,10 +206,10 @@ class NomenclatureProcessor {
             }
 
             await client.query('COMMIT');
-            console.log(`✅ Обработан батч из ${items.length} элементов`);
+            logger.log(`✅ Обработан батч из ${items.length} элементов`);
         } catch (error) {
             await client.query('ROLLBACK');
-            console.error(`❌ Ошибка обработки батча:`, error.message);
+            logger.error(`❌ Ошибка обработки батча:`, error.message);
             throw error;
         } finally {
             client.release();
@@ -231,8 +232,8 @@ const importFunction = async (req, res) => {
             });
         }
 
-        console.log('🔄 Начало импорта из SBIS API...');
-        console.log(`📋 Параметры: pointId=${pointId}, priceListId=${priceListId}, pageSize=${PAGE_SIZE}`);
+        logger.log('🔄 Начало импорта из SBIS API...');
+        logger.log(`📋 Параметры: pointId=${pointId}, priceListId=${priceListId}, pageSize=${PAGE_SIZE}`);
 
         // Получение данных из API
         const response = await axios.get(
@@ -250,7 +251,7 @@ const importFunction = async (req, res) => {
         );
 
         const nomenclatures = response.data.nomenclatures || [];
-        console.log(`📦 Получено ${nomenclatures.length} номенклатур`);
+        logger.log(`📦 Получено ${nomenclatures.length} номенклатур`);
 
         if (nomenclatures.length === 0) {
             return res.json({
@@ -264,32 +265,32 @@ const importFunction = async (req, res) => {
         const categories = nomenclatures.filter(item => item.isParent && !item.hierarchicalParent);
         const products = nomenclatures.filter(item => item.hierarchicalParent);
 
-        console.log(`📂 Категорий: ${categories.length}, Продуктов: ${products.length}`);
+        logger.log(`📂 Категорий: ${categories.length}, Продуктов: ${products.length}`);
 
         const processor = new NomenclatureProcessor(token);
 
         // Обработка категорий батчами
-        console.log('🔄 Обработка категорий...');
+        logger.log('🔄 Обработка категорий...');
         for (let i = 0; i < categories.length; i += TRANSACTION_BATCH_SIZE) {
             const batch = categories.slice(i, i + TRANSACTION_BATCH_SIZE);
             await processor.processBatch(batch);
-            console.log(`  Прогресс категорий: ${Math.min(i + TRANSACTION_BATCH_SIZE, categories.length)}/${categories.length}`);
+            logger.log(`  Прогресс категорий: ${Math.min(i + TRANSACTION_BATCH_SIZE, categories.length)}/${categories.length}`);
         }
 
         // Обработка продуктов батчами
-        console.log('🔄 Обработка продуктов...');
+        logger.log('🔄 Обработка продуктов...');
         for (let i = 0; i < products.length; i += TRANSACTION_BATCH_SIZE) {
             const batch = products.slice(i, i + TRANSACTION_BATCH_SIZE);
             await processor.processBatch(batch);
-            console.log(`  Прогресс продуктов: ${Math.min(i + TRANSACTION_BATCH_SIZE, products.length)}/${products.length}`);
+            logger.log(`  Прогресс продуктов: ${Math.min(i + TRANSACTION_BATCH_SIZE, products.length)}/${products.length}`);
         }
 
         const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
-        console.log('✅ Импорт успешно завершен!');
-        console.log(`📊 Категории: создано ${processor.stats.categories.created}, обновлено ${processor.stats.categories.updated}`);
-        console.log(`📊 Продукты: создано ${processor.stats.products.created}, обновлено ${processor.stats.products.updated}`);
-        console.log(`⏱️  Время выполнения: ${duration}s`);
+        logger.log('✅ Импорт успешно завершен!');
+        logger.log(`📊 Категории: создано ${processor.stats.categories.created}, обновлено ${processor.stats.categories.updated}`);
+        logger.log(`📊 Продукты: создано ${processor.stats.products.created}, обновлено ${processor.stats.products.updated}`);
+        logger.log(`⏱️  Время выполнения: ${duration}s`);
 
         res.json({
             success: true,
@@ -302,10 +303,10 @@ const importFunction = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('❌ Ошибка импорта:', error.message);
+        logger.error('❌ Ошибка импорта:', error.message);
         if (error.response) {
-            console.error('Response status:', error.response.status);
-            console.error('Response data:', error.response.data);
+            logger.error('Response status:', error.response.status);
+            logger.error('Response data:', error.response.data);
         }
         
         res.status(500).json({

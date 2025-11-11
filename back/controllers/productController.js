@@ -1,12 +1,13 @@
 const { supabase } = require('../config/db');
 const { query } = require('../config/postgres');
+const logger = require('../utils/logger');
 
 const getCategories = async (req, res) => {
     try {
         const result = await query('SELECT * FROM categories ORDER BY name ASC');
         res.json(result.rows);
     } catch (error) {
-        console.error('Get categories error:', error);
+        logger.error('Get categories error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -91,7 +92,7 @@ const getProducts = async (req, res) => {
             res.json(result.rows);
         }
     } catch (error) {
-        console.error('Get products error:', error);
+        logger.error('Get products error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -115,7 +116,7 @@ const getPopularProducts = async (req, res) => {
         const result = await query(queryText, [limit]);
         res.json(result.rows);
     } catch (error) {
-        console.error('Get popular products error:', error);
+        logger.error('Get popular products error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

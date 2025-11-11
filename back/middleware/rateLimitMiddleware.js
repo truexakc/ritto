@@ -1,4 +1,5 @@
 const rateLimit = require('express-rate-limit');
+const logger = require('../utils/logger');
 
 // Rate limiter для регистрации - ограничение по IP
 const registerLimiter = rateLimit({
@@ -12,7 +13,7 @@ const registerLimiter = rateLimit({
     // Используем IP адрес как ключ
     keyGenerator: (req) => {
         const ip = req.ip || req.connection.remoteAddress;
-        console.log(`🔍 Rate limit check - IP: ${ip}`);
+        logger.log(`🔍 Rate limit check - IP: ${ip}`);
         return ip;
     },
     // Пропускаем успешные запросы (не считаем их в лимит)
@@ -20,7 +21,7 @@ const registerLimiter = rateLimit({
     // Пропускаем неудачные запросы
     skipFailedRequests: false,
     handler: (req, res) => {
-        console.log(`⚠️  Rate limit exceeded for IP: ${req.ip}`);
+        logger.warn(`⚠️  Rate limit exceeded for IP: ${req.ip}`);
         res.status(429).json({
             message: 'Слишком много попыток регистрации с этого IP. Попробуйте позже через 15 минут.',
             retryAfter: Math.ceil(req.rateLimit.resetTime / 1000)
@@ -42,7 +43,7 @@ const loginLimiter = rateLimit({
     },
     skipSuccessfulRequests: true, // Не считаем успешные входы
     handler: (req, res) => {
-        console.log(`⚠️  Login rate limit exceeded for IP: ${req.ip}`);
+        logger.warn(`⚠️  Login rate limit exceeded for IP: ${req.ip}`);
         res.status(429).json({
             message: 'Слишком много попыток входа. Попробуйте позже через 15 минут.',
             retryAfter: Math.ceil(req.rateLimit.resetTime / 1000)
@@ -63,7 +64,7 @@ const passwordResetLimiter = rateLimit({
         return req.ip || req.connection.remoteAddress;
     },
     handler: (req, res) => {
-        console.log(`⚠️  Password reset rate limit exceeded for IP: ${req.ip}`);
+        logger.warn(`⚠️  Password reset rate limit exceeded for IP: ${req.ip}`);
         res.status(429).json({
             message: 'Слишком много запросов на сброс пароля. Попробуйте позже через час.',
             retryAfter: Math.ceil(req.rateLimit.resetTime / 1000)

@@ -1,4 +1,5 @@
 const { query } = require('../config/postgres');
+const logger = require('../utils/logger');
 
 // 🔹 Получение корзины пользователя
 const getCart = async (req, res) => {
@@ -37,7 +38,7 @@ const getCart = async (req, res) => {
             }));
         } else {
             // Неавторизованный пользователь - получаем из сессии
-            console.log('📦 Получение корзины из сессии:', {
+            logger.log('📦 Получение корзины из сессии:', {
                 sessionId: req.sessionID,
                 hasCart: !!req.session.cart,
                 cartLength: req.session.cart?.length || 0
@@ -79,7 +80,7 @@ const getCart = async (req, res) => {
 
         res.json({ items: enrichedItems });
     } catch (error) {
-        console.error('Ошибка при получении корзины:', error);
+        logger.error('Ошибка при получении корзины:', error);
         res.status(500).json({ message: 'Ошибка при получении корзины', error: error.message });
     }
 };
@@ -125,7 +126,7 @@ const addToCart = async (req, res) => {
             }
         } else {
             // Неавторизованный пользователь - сохраняем в сессии
-            console.log('📦 Добавление в сессию:', {
+            logger.log('📦 Добавление в сессию:', {
                 sessionId: req.sessionID,
                 productId: product_id,
                 quantity,
@@ -147,17 +148,17 @@ const addToCart = async (req, res) => {
                 });
             }
             
-            console.log('📦 Корзина после добавления:', req.session.cart);
+            logger.log('📦 Корзина после добавления:', req.session.cart);
             
             // Явно сохраняем сессию
             await new Promise((resolve, reject) => {
                 req.session.save((err) => {
                     if (err) {
-                        console.error('❌ Ошибка сохранения сессии:', err);
+                        logger.error('❌ Ошибка сохранения сессии:', err);
                         reject(err);
                     } else {
-                        console.log('✅ Сессия сохранена успешно, sessionId:', req.sessionID);
-                        console.log('🍪 Cookie будет отправлен:', req.session.cookie);
+                        logger.log('✅ Сессия сохранена успешно, sessionId:', req.sessionID);
+                        logger.log('🍪 Cookie будет отправлен:', req.session.cookie);
                         resolve();
                     }
                 });
@@ -166,7 +167,7 @@ const addToCart = async (req, res) => {
 
         res.json({ message: 'Товар добавлен в корзину' });
     } catch (error) {
-        console.error('Ошибка при добавлении в корзину:', error);
+        logger.error('Ошибка при добавлении в корзину:', error);
         res.status(500).json({ message: 'Ошибка при добавлении в корзину', error: error.message });
     }
 };
@@ -236,7 +237,7 @@ const removeFromCart = async (req, res) => {
         }
 
     } catch (error) {
-        console.error('Ошибка при удалении товара:', error);
+        logger.error('Ошибка при удалении товара:', error);
         res.status(500).json({ message: 'Ошибка при удалении товара', error: error.message });
     }
 };
@@ -264,7 +265,7 @@ const clearCart = async (req, res) => {
 
         res.json({ message: 'Корзина очищена' });
     } catch (error) {
-        console.error('Ошибка при очистке корзины:', error);
+        logger.error('Ошибка при очистке корзины:', error);
         res.status(500).json({ message: 'Ошибка при очистке корзины', error: error.message });
     }
 };
@@ -315,7 +316,7 @@ const mergeSessionCartToDb = async (req, res) => {
             merged: mergedCount 
         });
     } catch (error) {
-        console.error('Ошибка при переносе корзины:', error);
+        logger.error('Ошибка при переносе корзины:', error);
         res.status(500).json({ message: 'Ошибка при переносе корзины', error: error.message });
     }
 };

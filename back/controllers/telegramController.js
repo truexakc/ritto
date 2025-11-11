@@ -1,11 +1,12 @@
 const TelegramBot = require('node-telegram-bot-api');
+const logger = require('../utils/logger');
 
 // Инициализация бота
 let bot = null;
 
 const initBot = () => {
     if (!process.env.TELEGRAM_BOT_TOKEN) {
-        console.warn('⚠️ TELEGRAM_BOT_TOKEN не установлен в .env');
+        logger.warn('⚠️ TELEGRAM_BOT_TOKEN не установлен в .env');
         return null;
     }
     
@@ -108,10 +109,10 @@ const sendOrderNotification = async (req, res) => {
         for (const chatId of chatIdList) {
             try {
                 await telegramBot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
-                console.log(`✅ Уведомление о заказе отправлено в Telegram (Chat ID: ${chatId})`);
+                logger.log(`✅ Уведомление о заказе отправлено в Telegram (Chat ID: ${chatId})`);
                 sendResults.push({ chatId, success: true });
             } catch (telegramError) {
-                console.error(`❌ Ошибка отправки в Telegram (Chat ID: ${chatId}):`, telegramError.message);
+                logger.error(`❌ Ошибка отправки в Telegram (Chat ID: ${chatId}):`, telegramError.message);
                 sendResults.push({ chatId, success: false, error: telegramError.message });
             }
         }
@@ -144,7 +145,7 @@ const sendOrderNotification = async (req, res) => {
         });
         
     } catch (error) {
-        console.error("❌ Ошибка при отправке заказа:", error.message || error);
+        logger.error("❌ Ошибка при отправке заказа:", error.message || error);
         res.status(500).json({ 
             message: "Ошибка сервера", 
             error: error.message 
@@ -180,10 +181,10 @@ const sendTestMessage = async (req, res) => {
         for (const chatId of chatIdList) {
             try {
                 await telegramBot.sendMessage(chatId, '✅ Тестовое сообщение от Ritto Bot!');
-                console.log(`✅ Тестовое сообщение отправлено в Chat ID: ${chatId}`);
+                logger.log(`✅ Тестовое сообщение отправлено в Chat ID: ${chatId}`);
                 sendResults.push({ chatId, success: true });
             } catch (error) {
-                console.error(`❌ Ошибка отправки в Chat ID ${chatId}:`, error.message);
+                logger.error(`❌ Ошибка отправки в Chat ID ${chatId}:`, error.message);
                 sendResults.push({ chatId, success: false, error: error.message });
             }
         }
@@ -202,7 +203,7 @@ const sendTestMessage = async (req, res) => {
         });
         
     } catch (error) {
-        console.error('❌ Ошибка отправки тестового сообщения:', error);
+        logger.error('❌ Ошибка отправки тестового сообщения:', error);
         res.status(500).json({ 
             message: 'Ошибка отправки сообщения',
             error: error.message,

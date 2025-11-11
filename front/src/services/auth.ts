@@ -40,7 +40,9 @@ export const register = async (payload: RegisterDto): Promise<{ token: string; u
 
 export const getMe = async (): Promise<User> => {
     const res = await axiosInstance.get('/auth/me');
-    console.log("📡 /auth/me response", res.data);
+    if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+        console.log("📡 /auth/me response", res.data);
+    }
     return res.data.user; // <--- добавь `.user` если нужно
 };
 

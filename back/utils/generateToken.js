@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const logger = require('./logger');
 
 const generateToken = (id) => {
-    console.log("🎫 Генерация токена для ID:", id); // Добавляем логирование перед созданием токена
+    logger.log("🎫 Генерация токена для ID:", id);
 
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
