@@ -47,7 +47,7 @@ fi
 
 # Остановка nginx (освобождаем порт 80)
 echo -e "${YELLOW}Остановка nginx...${NC}"
-docker-compose stop nginx
+docker compose stop nginx
 
 # Формирование аргументов доменов
 domain_args=""
@@ -70,7 +70,7 @@ echo "Домены: ${domains[@]}"
 echo "Email: $email"
 echo ""
 
-docker-compose run --rm -p 80:80 --entrypoint "\
+docker compose run --rm -p 80:80 --entrypoint "\
   certbot certonly --standalone \
     $staging_arg \
     $domain_args \
@@ -87,10 +87,10 @@ if [ ! -d "./certbot/conf/live/${domains[0]}" ]; then
   echo "Проверьте:"
   echo "1. DNS: nslookup ${domains[0]}"
   echo "2. Порт 80 открыт: sudo ufw status"
-  echo "3. Логи: docker-compose logs certbot"
+  echo "3. Логи: docker compose logs certbot"
   echo ""
   echo "Запуск nginx обратно..."
-  docker-compose up -d nginx
+  docker compose up -d nginx
   exit 1
 fi
 
@@ -98,12 +98,12 @@ echo -e "${GREEN}Сертификат успешно получен!${NC}"
 
 # Запуск nginx с новым сертификатом
 echo -e "${YELLOW}Запуск nginx...${NC}"
-docker-compose up -d nginx
+docker compose up -d nginx
 
 # Проверка конфигурации
 sleep 2
 echo -e "${YELLOW}Проверка nginx...${NC}"
-docker-compose exec nginx nginx -t
+docker compose exec nginx nginx -t
 
 echo ""
 echo -e "${GREEN}=== Готово! ===${NC}"
