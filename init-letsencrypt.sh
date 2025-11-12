@@ -56,8 +56,8 @@ fi
 
 # Перезапуск nginx с HTTP-only конфигурацией
 echo -e "${YELLOW}Перезапуск nginx...${NC}"
-docker-compose down nginx
-docker-compose up -d nginx
+docker compose down nginx
+docker compose up -d nginx
 
 # Небольшая пауза для запуска nginx
 sleep 3
@@ -84,7 +84,7 @@ fi
 
 # Запрос сертификата
 echo -e "${YELLOW}Запрос сертификата...${NC}"
-docker-compose run --rm --entrypoint "\
+docker compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
     $domain_args \
@@ -100,12 +100,12 @@ if [ ! -d "./certbot/conf/live/${domains[0]}" ]; then
   echo "Проверьте:"
   echo "1. DNS-запись для ${domains[0]} указывает на этот сервер"
   echo "2. Порт 80 открыт и доступен из интернета"
-  echo "3. Логи: docker-compose logs certbot"
+  echo "3. Логи: docker compose logs certbot"
   
   # Восстанавливаем оригинальную конфигурацию
   if [ -f "nginx.conf.backup" ]; then
     mv nginx.conf.backup nginx.conf
-    docker-compose restart nginx
+    docker compose restart nginx
   fi
   exit 1
 fi
@@ -118,11 +118,11 @@ fi
 
 # Перезапуск nginx с полной конфигурацией
 echo -e "${YELLOW}Перезапуск nginx с SSL...${NC}"
-docker-compose restart nginx
+docker compose restart nginx
 
 # Проверка конфигурации nginx
 echo -e "${YELLOW}Проверка конфигурации nginx...${NC}"
-docker-compose exec nginx nginx -t
+docker compose exec nginx nginx -t
 
 echo ""
 echo -e "${GREEN}=== Готово! ===${NC}"
