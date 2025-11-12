@@ -52,6 +52,8 @@ const allowedOrigins = [
     'http://localhost',
     'http://localhost:3000',
     'http://83.166.246.163',
+    'http://sushiritto.ru',
+    'https://sushiritto.ru',
     process.env.FRONTEND_URL,
     process.env.CLIENT_URL
 ].filter(Boolean);
