@@ -4,8 +4,8 @@
 # Использование: ./init-letsencrypt.sh
 
 # Настройки
-domains=(sushiritto.ru www.sushiritto.ru)
-email="your-email@example.com" # Замените на ваш email
+domains=(sushiritto.ru)  # Убрали www, так как нет DNS-записи для www
+email="sushi.ritto@mail.ru"
 staging=0 # Установите 1 для тестирования (staging), 0 для production
 
 # Цвета для вывода
@@ -16,13 +16,6 @@ NC='\033[0m' # No Color
 
 echo -e "${GREEN}=== Инициализация Let's Encrypt SSL-сертификата ===${NC}"
 echo ""
-
-# Проверка email
-if [ "$email" = "your-email@example.com" ]; then
-  echo -e "${RED}Ошибка: Пожалуйста, укажите ваш email в скрипте!${NC}"
-  echo "Откройте файл init-letsencrypt.sh и замените 'your-email@example.com' на ваш реальный email"
-  exit 1
-fi
 
 # Создание необходимых директорий
 echo -e "${YELLOW}Создание директорий для сертификатов...${NC}"
@@ -53,29 +46,24 @@ if [ ! -e "./certbot/conf/options-ssl-nginx.conf" ] || [ ! -e "./certbot/conf/ss
   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "./certbot/conf/ssl-dhparams.pem"
 fi
 
-# Создание временного самоподписанного сертификата
-echo -e "${YELLOW}Создание временного самоподписанного сертификата...${NC}"
-path="/etc/letsencrypt/live/${domains[0]}"
-mkdir -p "./certbot/conf/live/${domains[0]}"
-docker-compose run --rm --entrypoint "\
-  openssl req -x509 -nodes -newkey rsa:2048 -days 1\
-    -keyout '$path/privkey.pem' \
-    -out '$path/fullchain.pem' \
-    -subj '/CN=localhost'" certbot
+# Шаг 1: Используем HTTP-only конфигурацию для получения сертификата
+echo -e "${YELLOW}Шаг 1: Переключение на HTTP-only конфигурацию...${NC}"
+if [ -f "nginx-http-only.conf" ]; then
+  cp nginx.conf nginx.conf.backup
+  cp nginx-http-only.conf nginx.conf
+  echo "Создана резервная копия: nginx.conf.backup"
+fi
 
-# Запуск nginx
-echo -e "${YELLOW}Запуск nginx...${NC}"
+# Перезапуск nginx с HTTP-only конфигурацией
+echo -e "${YELLOW}Перезапуск nginx...${NC}"
+docker-compose down nginx
 docker-compose up -d nginx
 
-# Удаление временного сертификата
-echo -e "${YELLOW}Удаление временного сертификата...${NC}"
-docker-compose run --rm --entrypoint "\
-  rm -rf /etc/letsencrypt/live/${domains[0]} && \
-  rm -rf /etc/letsencrypt/archive/${domains[0]} && \
-  rm -rf /etc/letsencrypt/renewal/${domains[0]}.conf" certbot
+# Небольшая пауза для запуска nginx
+sleep 3
 
-# Получение настоящего сертификата
-echo -e "${GREEN}Получение настоящего SSL-сертификата Let's Encrypt...${NC}"
+# Шаг 2: Получение настоящего сертификата
+echo -e "${GREEN}Шаг 2: Получение SSL-сертификата Let's Encrypt...${NC}"
 echo "Домены: ${domains[@]}"
 echo "Email: $email"
 
@@ -95,6 +83,7 @@ else
 fi
 
 # Запрос сертификата
+echo -e "${YELLOW}Запрос сертификата...${NC}"
 docker-compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
@@ -105,9 +94,35 @@ docker-compose run --rm --entrypoint "\
     --force-renewal \
     --non-interactive" certbot
 
-# Перезагрузка nginx
-echo -e "${YELLOW}Перезагрузка nginx...${NC}"
-docker-compose exec nginx nginx -s reload
+# Проверка успешности получения сертификата
+if [ ! -d "./certbot/conf/live/${domains[0]}" ]; then
+  echo -e "${RED}Ошибка: Не удалось получить сертификат!${NC}"
+  echo "Проверьте:"
+  echo "1. DNS-запись для ${domains[0]} указывает на этот сервер"
+  echo "2. Порт 80 открыт и доступен из интернета"
+  echo "3. Логи: docker-compose logs certbot"
+  
+  # Восстанавливаем оригинальную конфигурацию
+  if [ -f "nginx.conf.backup" ]; then
+    mv nginx.conf.backup nginx.conf
+    docker-compose restart nginx
+  fi
+  exit 1
+fi
+
+# Шаг 3: Восстанавливаем полную конфигурацию с HTTPS
+echo -e "${YELLOW}Шаг 3: Переключение на HTTPS конфигурацию...${NC}"
+if [ -f "nginx.conf.backup" ]; then
+  mv nginx.conf.backup nginx.conf
+fi
+
+# Перезапуск nginx с полной конфигурацией
+echo -e "${YELLOW}Перезапуск nginx с SSL...${NC}"
+docker-compose restart nginx
+
+# Проверка конфигурации nginx
+echo -e "${YELLOW}Проверка конфигурации nginx...${NC}"
+docker-compose exec nginx nginx -t
 
 echo ""
 echo -e "${GREEN}=== Готово! ===${NC}"
@@ -119,3 +134,8 @@ echo -e "${YELLOW}Важно:${NC}"
 echo "1. Сертификат будет автоматически обновляться каждые 12 часов"
 echo "2. Если использовали staging режим, запустите скрипт снова с staging=0"
 echo "3. После проверки работы SSL раскомментируйте HSTS в nginx.conf"
+echo ""
+echo "Если хотите добавить www.sushiritto.ru:"
+echo "1. Создайте DNS A-запись для www.sushiritto.ru"
+echo "2. Добавьте домен в массив domains в скрипте"
+echo "3. Запустите скрипт снова"
