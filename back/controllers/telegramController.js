@@ -18,7 +18,16 @@ const initBot = () => {
 
 // Форматирование сообщения о заказе
 const formatOrderMessage = (orderData) => {
-    const timestamp = new Date().toLocaleString('ru-RU');
+    // GMT+5 (Екатеринбург, Челябинск, Уфа и т.д.)
+    const timestamp = new Date().toLocaleString('ru-RU', { 
+        timeZone: 'Asia/Yekaterinburg',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
     let message = `🛒 *НОВЫЙ ЗАКАЗ*\n\n`;
     
     message += `👤 *Клиент:*\n`;
