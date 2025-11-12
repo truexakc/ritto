@@ -4,7 +4,7 @@
 # Использование: ./init-letsencrypt.sh
 
 # Настройки
-domains=(sushiritto.ru)  # Убрали www, так как нет DNS-записи для www
+domains=(sushiritto.ru www.sushiritto.ru)  # Оба домена для сертификата
 email="sushi.ritto@mail.ru"
 staging=0 # Установите 1 для тестирования (staging), 0 для production
 

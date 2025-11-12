@@ -4,7 +4,7 @@
 # Использует standalone режим (временно останавливает nginx)
 
 # Настройки
-domains=(sushiritto.ru)
+domains=(sushiritto.ru www.sushiritto.ru)
 email="sushi.ritto@mail.ru"
 staging=0 # Установите 1 для тестирования
 
