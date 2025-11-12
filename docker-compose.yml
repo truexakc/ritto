@@ -78,14 +78,28 @@ services:
     container_name: ritto-nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - frontend
       - backend
     networks:
       - ritto-network
     restart: unless-stopped
+
+  # Certbot для автоматического обновления сертификатов
+  certbot:
+    image: certbot/certbot
+    container_name: ritto-certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - ritto-network
 
   # Adminer - веб-интерфейс для управления PostgreSQL
   adminer:
