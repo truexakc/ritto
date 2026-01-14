@@ -1,7 +1,7 @@
 # Отладка проблемы 404 для API запросов
 
 ## Проблема
-Запросы из браузера на `http://83.166.246.163/api/products/category` возвращают 404.
+Запросы из браузера на `http://89.111.152.163/api/products/category` возвращают 404.
 
 ## Шаги для отладки
 
@@ -42,7 +42,7 @@ docker-compose logs -f nginx
 
 Сделайте запрос и сразу проверьте логи:
 ```bash
-curl -v http://83.166.246.163/api/products/category
+curl -v http://89.111.152.163/api/products/category
 docker-compose logs --tail=10 nginx
 ```
 
