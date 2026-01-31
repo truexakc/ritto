@@ -92,6 +92,15 @@ app.use((req, res, next) => {
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
