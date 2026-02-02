@@ -191,26 +191,56 @@ CLIENT_URL=http://localhost
 
 ## 📦 Основные команды
 
-### Docker
+### Docker - Безопасный деплой
+
+**⚠️ ВАЖНО:** Не используйте `docker compose up -d --build` на продакшене!
+Это может перегрузить сервер и привести к падению.
+
+**Используйте безопасные скрипты:**
 
 ```bash
-# Запуск всех сервисов
-docker-compose up -d
+# Полный деплой (первый запуск или большие изменения)
+./safe-deploy.sh
 
-# Остановка
-docker-compose down
+# Быстрое обновление одного сервиса
+./quick-update.sh backend
+./quick-update.sh frontend
+./quick-update.sh all
 
-# Пересборка
-docker-compose build
+# Откат изменений
+./rollback.sh
 
 # Просмотр логов
-docker-compose logs -f
+docker compose logs -f
+docker compose logs -f backend
 
-# Просмотр логов конкретного сервиса
-docker-compose logs -f backend
+# Статус контейнеров
+docker compose ps
 
 # Перезапуск сервиса
-docker-compose restart backend
+docker compose restart backend
+```
+
+**Шпаргалка:** См. `QUICK_REFERENCE.txt` для быстрого доступа
+**Полная инструкция:** См. `DEPLOY_GUIDE.txt` для детальной информации
+
+### Docker - Базовые команды
+
+```bash
+# Остановка (volumes сохраняются!)
+docker compose down
+
+# Просмотр ресурсов
+docker stats
+
+# Очистка неиспользуемых образов
+docker system prune -a
+
+# Резервное копирование БД
+docker compose exec postgres pg_dump -U postgres ritto_db > backup.sql
+
+# Восстановление БД
+docker compose exec -T postgres psql -U postgres ritto_db < backup.sql
 ```
 
 ### Логирование
@@ -308,6 +338,12 @@ npm test
 ```
 
 ## 🚀 Развертывание
+
+### Решенные проблемы
+
+✅ **Исправлена ошибка сборки Go сервисов** (monitor-service, saby-service)
+- Добавлен `go mod tidy` в Dockerfile для корректной работы модулей
+- Теперь сборка проходит без ошибок "package not in std"
 
 ### Production Checklist
 

@@ -2,11 +2,20 @@ FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
+# Копируем go.mod и go.sum
 COPY go.mod go.sum ./
-RUN go mod download
 
+# Скачиваем зависимости
+RUN go mod download
+RUN go mod verify
+
+# Копируем весь исходный код
 COPY . .
 
+# Проверяем и синхронизируем зависимости
+RUN go mod tidy
+
+# Собираем приложение
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o monitor ./cmd/app
 
 FROM alpine:latest
