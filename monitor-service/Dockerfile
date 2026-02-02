@@ -9,14 +9,17 @@ WORKDIR /app
 # Копируем весь исходный код сразу
 COPY . .
 
-# Показываем версию Go для отладки
-RUN go version
+# Показываем версию Go и содержимое go.mod для отладки
+RUN go version && echo "=== go.mod ===" && cat go.mod && echo "=== end go.mod ==="
 
 # Создаем go.sum и скачиваем зависимости
 RUN go mod tidy && go mod download
 
-# Собираем приложение
-RUN CGO_ENABLED=0 GOOS=linux go build -o monitor ./cmd/app
+# Проверяем что go.sum создался
+RUN echo "=== Files ===" && ls -la go.* && echo "=== Module info ===" && go list -m
+
+# Собираем приложение с verbose
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o monitor ./cmd/app
 
 FROM alpine:latest
 
