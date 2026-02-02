@@ -4,15 +4,11 @@ FROM golang:1.23-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy go mod files (go.sum is optional with [m] pattern)
-COPY go.mod ./
-COPY go.su[m] ./
-
-# Download dependencies and create go.sum
-RUN go mod download && go mod tidy
-
-# Copy source code
+# Copy all source code
 COPY . .
+
+# Create go.sum and download dependencies
+RUN go mod tidy && go mod download
 
 # Build binary with static linking
 RUN CGO_ENABLED=0 GOOS=linux go build -o saby-service ./cmd/app
