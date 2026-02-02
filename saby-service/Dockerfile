@@ -1,13 +1,14 @@
 # Builder stage
-FROM golang:1.22-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy go mod files
-COPY go.mod go.sum ./
+# Copy go mod files (go.sum is optional with [m] pattern)
+COPY go.mod ./
+COPY go.su[m] ./
 
-# Download dependencies
+# Download dependencies (will create go.sum if missing)
 RUN go mod download
 
 # Copy source code

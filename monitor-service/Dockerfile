@@ -1,11 +1,12 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
-# Копируем go.mod и go.sum
-COPY go.mod go.sum ./
+# Копируем go.mod и go.sum (если есть)
+COPY go.mod ./
+COPY go.su[m] ./
 
-# Скачиваем зависимости
+# Скачиваем зависимости (создаст go.sum если его нет)
 RUN go mod download
 
 # Копируем весь исходный код

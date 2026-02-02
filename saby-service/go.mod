@@ -1,6 +1,8 @@
 module saby-service
 
-go 1.22.2
+// Go 1.23 for consistency with monitor-service
+// Local development may use Go 1.22, but Docker build uses Go 1.23
+go 1.23
 
 require (
 	github.com/bytedance/sonic v1.9.1 // indirect
