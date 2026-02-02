@@ -6,8 +6,8 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.su[m] ./
 
-# Скачиваем зависимости (создаст go.sum если его нет)
-RUN go mod download
+# Скачиваем зависимости и создаем go.sum
+RUN go mod download && go mod tidy
 
 # Копируем весь исходный код
 COPY . .

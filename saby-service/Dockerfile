@@ -8,8 +8,8 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.su[m] ./
 
-# Download dependencies (will create go.sum if missing)
-RUN go mod download
+# Download dependencies and create go.sum
+RUN go mod download && go mod tidy
 
 # Copy source code
 COPY . .
