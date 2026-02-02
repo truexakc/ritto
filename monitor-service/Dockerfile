@@ -7,16 +7,12 @@ COPY go.mod go.sum ./
 
 # Скачиваем зависимости
 RUN go mod download
-RUN go mod verify
 
 # Копируем весь исходный код
 COPY . .
 
-# Проверяем и синхронизируем зависимости
-RUN go mod tidy
-
 # Собираем приложение
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o monitor ./cmd/app
+RUN CGO_ENABLED=0 GOOS=linux go build -o monitor ./cmd/app
 
 FROM alpine:latest
 
