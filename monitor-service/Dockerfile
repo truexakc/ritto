@@ -8,8 +8,8 @@ COPY . .
 # Создаем go.sum и скачиваем зависимости
 RUN go mod tidy && go mod download
 
-# Собираем приложение
-RUN CGO_ENABLED=0 GOOS=linux go build -o monitor ./cmd/app
+# Собираем приложение с явным включением модулей
+RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -o monitor ./cmd/app
 
 FROM alpine:latest
 

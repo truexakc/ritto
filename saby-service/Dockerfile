@@ -10,8 +10,8 @@ COPY . .
 # Create go.sum and download dependencies
 RUN go mod tidy && go mod download
 
-# Build binary with static linking
-RUN CGO_ENABLED=0 GOOS=linux go build -o saby-service ./cmd/app
+# Build binary with static linking and explicit module mode
+RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -o saby-service ./cmd/app
 
 # Runtime stage
 FROM alpine:latest
