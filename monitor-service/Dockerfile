@@ -18,6 +18,13 @@ RUN go mod tidy && go mod download
 # Проверяем что go.sum создался
 RUN echo "=== Files ===" && ls -la go.* && echo "=== Module info ===" && go list -m
 
+# Проверяем структуру internal
+RUN echo "=== Checking internal structure ===" && \
+    ls -la internal/ && \
+    ls -la internal/monitor/ && \
+    ls -la internal/monitor/docker/ && \
+    find internal -name "*.go" -type f
+
 # Собираем приложение с verbose
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o monitor ./cmd/app
 
