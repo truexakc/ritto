@@ -39,11 +39,11 @@ docker compose build backend
 echo "  📦 Frontend..."
 docker compose build frontend
 
-echo "  📦 SABY Service..."
-docker compose build saby-service
+echo "  📦 SABY Service (без кэша для Go модулей)..."
+docker compose build --no-cache saby-service
 
-echo "  📦 Monitor Service..."
-docker compose build monitor-service
+echo "  📦 Monitor Service (без кэша для Go модулей)..."
+docker compose build --no-cache monitor-service
 
 echo ""
 echo "🚀 Запуск сервисов..."

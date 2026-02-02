@@ -1,8 +1,8 @@
 module saby-service
 
-// Go 1.23 for consistency with monitor-service
-// Local development may use Go 1.22, but Docker build uses Go 1.23
-go 1.23
+// Go 1.24 for consistency with monitor-service
+// Local development may use Go 1.22, but Docker build uses Go 1.24
+go 1.24
 
 require github.com/gin-gonic/gin v1.9.1
 
