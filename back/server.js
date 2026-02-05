@@ -112,6 +112,7 @@ app.use('/api/order_items', require('./routes/orderItemRoutes'));
 app.use('/api/discounts', require('./routes/discountRoutes'));
 app.use('/api/manual', require('./routes/manualRoutes'));
 app.use('/api/telegram', require('./routes/telegramRoutes'));
+app.use('/api/catalog', require('./routes/catalogRoutes'));
 
 // Error handling
 app.use((req, res, next) => {

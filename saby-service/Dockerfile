@@ -23,8 +23,8 @@ FROM alpine:latest
 # Install ca-certificates and tzdata
 RUN apk --no-cache add ca-certificates tzdata
 
-# Create non-root user appuser with UID 1000
-RUN adduser -D -u 1000 appuser
+# Create non-root user appuser with UID 1001 (matching backend container)
+RUN adduser -D -u 1001 appuser
 
 # Set working directory
 WORKDIR /home/appuser
@@ -32,8 +32,10 @@ WORKDIR /home/appuser
 # Copy binary from builder stage
 COPY --from=builder /app/saby-service .
 
-# Change ownership to appuser
-RUN chown appuser:appuser saby-service
+# Create uploads directory structure with correct permissions
+RUN mkdir -p /app/public/uploads/products && \
+    chown -R appuser:appuser /app && \
+    chown appuser:appuser saby-service
 
 # Switch to appuser
 USER appuser

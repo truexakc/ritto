@@ -109,12 +109,30 @@ services:
     container_name: ritto-saby-service
     ports:
       - "8080:8080"
+    volumes:
+      # Share the same uploads directory with backend for images
+      - uploads_data:/app/public/uploads
+    environment:
+      # Database connection (using postgres service)
+      - DB_CONNECTION_STRING=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      # Image storage path inside container (same as backend)
+      - IMAGE_STORAGE_PATH=/app/public/uploads/products
+      # Import configuration
+      - SBIS_ACCESS_TOKEN=${SBIS_ACCESS_TOKEN}
+      - SBIS_POINT_ID=${SBIS_POINT_ID}
+      - SBIS_PRICE_LIST_ID=${SBIS_PRICE_LIST_ID}
+      - IMPORT_PAGE_SIZE=${IMPORT_PAGE_SIZE:-100}
+      - IMPORT_SCHEDULE=${IMPORT_SCHEDULE:-0 3 * * *}
+      - IMPORT_TIMEOUT=${IMPORT_TIMEOUT:-30m}
+      - MAX_PAGINATION_PAGES=${MAX_PAGINATION_PAGES:-1000}
+      - ENABLE_SCHEDULER=${ENABLE_SCHEDULER:-true}
     env_file:
       - ./saby-service/.env
     networks:
       - ritto-network
     depends_on:
-      - backend
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
