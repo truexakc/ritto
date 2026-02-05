@@ -5,7 +5,8 @@ import { useAppSelector } from "../store/hooks";
 import { selectIsAuth, selectIsInitialized, selectCurrentUser } from "../store/slices/authSlice";
 import { selectCartItems } from "../store/slices/cartSlice";
 import LogoutButton from "./LogoutButton";
-import { ShoppingCart, Menu, X, LogOut, LogIn } from "lucide-react";
+import ReviewsModal from "./ReviewsModal";
+import { ShoppingCart, Menu, X, LogOut, LogIn, Star } from "lucide-react";
 import { getUserEmoji } from "../utils/emoji";
 
 const Header = () => {
@@ -18,6 +19,7 @@ const Header = () => {
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const [menuOpen, setMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -86,6 +88,18 @@ const Header = () => {
                         >
                             О нас
                         </ScrollLink>
+                    </li>
+                    <li>
+                        <button
+                            onClick={() => {
+                                setIsReviewsModalOpen(true);
+                                setMenuOpen(false);
+                            }}
+                            className="nav-link cursor-pointer text-[#f6eaea] hover:text-[#b12e2e] transition-colors duration-200 flex items-center gap-2"
+                        >
+                            <Star className="w-4 h-4" />
+                            Отзывы
+                        </button>
                     </li>
                     <li>
                         <ScrollLink 
@@ -276,6 +290,12 @@ const Header = () => {
                 </div>
             </div>
         </div>
+
+        {/* Модальное окно отзывов */}
+        <ReviewsModal 
+            isOpen={isReviewsModalOpen} 
+            onClose={() => setIsReviewsModalOpen(false)} 
+        />
         </>
     );
 };

@@ -1,8 +1,12 @@
 import { motion } from "framer-motion";
 import { SlSocialVkontakte, SlEnvolope, SlPhone } from "react-icons/sl";
+import { Star } from "lucide-react";
+import { useState } from "react";
+import ReviewsModal from "./ReviewsModal";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
 
   const socialLinks = [
     {
@@ -184,6 +188,13 @@ const Footer = () => {
           </div>
           
           <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6">
+            <button
+              onClick={() => setIsReviewsModalOpen(true)}
+              className="flex items-center gap-2 text-[#ADADAD] hover:text-[#b12e2e] text-xs lg:text-sm transition-colors duration-200 group"
+            >
+              <Star className="w-4 h-4 group-hover:fill-[#b12e2e]" />
+              <span>Отзывы</span>
+            </button>
             <a
               href="/privacy-policy"
               className="text-[#ADADAD] hover:text-[#b12e2e] text-xs lg:text-sm transition-colors duration-200"
@@ -199,6 +210,12 @@ const Footer = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Модальное окно отзывов */}
+      <ReviewsModal 
+        isOpen={isReviewsModalOpen} 
+        onClose={() => setIsReviewsModalOpen(false)} 
+      />
     </footer>
   );
 };
