@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import CartItem from "../components/CartItem";
 import { useProducts } from "../hooks/useProducts";
 import { useCategories } from "../hooks/useCategories";
@@ -18,6 +18,7 @@ const Catalog = () => {
   const [searchInput, setSearchInput] = useState<string>(searchQuery);
   const [currentPage, setCurrentPage] = useState(1);
   const [showProducts, setShowProducts] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: products, isLoading: productsLoading, isError } = useProducts({
     hierarchicalParent: selectedHierarchicalId,
@@ -78,12 +79,14 @@ const Catalog = () => {
   const handleCategoryChange = (hierarchicalId?: string) => {
     // Не делаем ничего, если категория уже выбрана
     if (hierarchicalId === selectedHierarchicalId) {
+      setCategoryDropdownOpen(false);
       return;
     }
     
     setShowProducts(false);
     setSelectedHierarchicalId(hierarchicalId);
     setCurrentPage(1);
+    setCategoryDropdownOpen(false);
     
     // Update URL params
     const params: Record<string, string> = {};
@@ -132,6 +135,11 @@ const Catalog = () => {
     setSearchParams(params);
   };
 
+  const selectedCategory = useMemo(() => {
+    if (!selectedHierarchicalId) return null;
+    return uniqueCategories.find(cat => cat.hierarchical_id === selectedHierarchicalId);
+  }, [selectedHierarchicalId, uniqueCategories]);
+
   return (
       <section className="pt-10 lg:pt-28">
         <div className="container">
@@ -139,62 +147,83 @@ const Catalog = () => {
             КАТАЛОГ
           </h2>
 
-          {/* Поиск */}
-          <form onSubmit={handleSearch} className="mb-6">
-            <div className="relative max-w-2xl mx-auto">
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Поиск по названию или описанию..."
-                className="w-full px-4 py-3 pl-12 pr-12 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-full text-[#f6eaea] placeholder-[#f6eaea]/50 focus:outline-none focus:border-[#b12e2e] transition-colors"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#f6eaea]/50" />
-              {searchInput && (
-                <button
-                  type="button"
-                  onClick={handleClearSearch}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-[#f6eaea]/10 rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5 text-[#f6eaea]/50 hover:text-[#b12e2e]" />
-                </button>
+          {/* Поиск и категории в одну строку */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            {/* Выпадающий список категорий */}
+            <div className="relative sm:w-64">
+              <button
+                onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-full text-[#f6eaea] hover:border-[#b12e2e] transition-colors flex items-center justify-between"
+              >
+                <span className="truncate">
+                  {selectedCategory ? selectedCategory.name : 'Все категории'}
+                </span>
+                <ChevronDown className={`w-5 h-5 text-[#f6eaea]/50 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {/* Dropdown menu */}
+              {categoryDropdownOpen && (
+                <>
+                  {/* Backdrop для закрытия при клике вне */}
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setCategoryDropdownOpen(false)}
+                  />
+                  
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-2xl shadow-xl z-20 max-h-96 overflow-y-auto">
+                    <button
+                      onClick={() => handleCategoryChange(undefined)}
+                      className={`w-full px-4 py-3 text-left hover:bg-[#f6eaea]/10 transition-colors first:rounded-t-2xl ${
+                        !selectedHierarchicalId ? 'bg-[#b12e2e]/20 text-[#b12e2e] font-semibold' : 'text-[#f6eaea]'
+                      }`}
+                    >
+                      Все категории
+                    </button>
+                    {uniqueCategories.map((cat) => (
+                      <button
+                        key={cat.hierarchical_id || cat.id}
+                        onClick={() => handleCategoryChange(cat.hierarchical_id)}
+                        className={`w-full px-4 py-3 text-left hover:bg-[#f6eaea]/10 transition-colors last:rounded-b-2xl ${
+                          selectedHierarchicalId === cat.hierarchical_id 
+                            ? 'bg-[#b12e2e]/20 text-[#b12e2e] font-semibold' 
+                            : 'text-[#f6eaea]'
+                        }`}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
-          </form>
 
-          {/* Категории */}
-          <ul className="flex mt-4 gap-2 sm:gap-3 md:gap-4 flex-wrap justify-start md:justify-center">
-            <li>
-              <button
-                  onClick={() => handleCategoryChange(undefined)}
-                  className={`text-sm md:text-base border px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
-                      !selectedHierarchicalId
-                          ? "bg-[#f6eaea] text-black font-bold border-[#f6eaea]"
-                          : "text-[#f6eaea] border-[#f6eaea]/30 hover:bg-[#f6eaea] hover:text-black hover:border-[#f6eaea]"
-                  }`}
-              >
-                Все
-              </button>
-            </li>
-            {uniqueCategories.map((cat) => (
-                <li key={cat.hierarchical_id || cat.id}>
+            {/* Поле поиска */}
+            <form onSubmit={handleSearch} className="flex-1">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Поиск по названию или описанию..."
+                  className="w-full px-4 py-3 pl-12 pr-12 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-full text-[#f6eaea] placeholder-[#f6eaea]/50 focus:outline-none focus:border-[#b12e2e] transition-colors"
+                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#f6eaea]/50" />
+                {searchInput && (
                   <button
-                      onClick={() => handleCategoryChange(cat.hierarchical_id)}
-                      className={`text-sm md:text-base border px-3 md:px-4 py-2 flex justify-center items-center cursor-pointer transition-all duration-200 rounded-full whitespace-nowrap ${
-                          selectedHierarchicalId === cat.hierarchical_id
-                              ? "bg-[#f6eaea] text-black font-bold border-[#f6eaea]"
-                              : "text-[#f6eaea] border-[#f6eaea]/30 hover:bg-[#f6eaea] hover:text-black hover:border-[#f6eaea]"
-                      }`}
+                    type="button"
+                    onClick={handleClearSearch}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-[#f6eaea]/10 rounded-full transition-colors"
                   >
-                    {cat.name}
+                    <X className="w-5 h-5 text-[#f6eaea]/50 hover:text-[#b12e2e]" />
                   </button>
-                </li>
-            ))}
-          </ul>
+                )}
+              </div>
+            </form>
+          </div>
 
           {/* Результаты поиска */}
           {searchQuery && (
-            <div className="mt-4 text-center text-[#f6eaea]/70">
+            <div className="mb-4 text-center text-[#f6eaea]/70">
               Результаты поиска: <span className="text-[#b12e2e] font-semibold">"{searchQuery}"</span>
               {products && products.length > 0 && (
                 <span> — найдено {products.length} {products.length === 1 ? 'товар' : products.length < 5 ? 'товара' : 'товаров'}</span>
