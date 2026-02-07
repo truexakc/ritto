@@ -66,13 +66,12 @@ back/
 - `POST /api/auth/refresh` - Обновление токена
 - `GET /api/auth/me` - Текущий пользователь
 
-### Products
-- `GET /api/products` - Список продуктов
-- `GET /api/products/popular` - Популярные продукты
-- `GET /api/products/categories` - Категории
-- `POST /api/products` - Создать продукт (admin)
-- `PUT /api/products/:id` - Обновить продукт (admin)
-- `DELETE /api/products/:id` - Удалить продукт (admin)
+### Products (Catalog API - через saby-service)
+- `GET /api/catalog/categories` - Категории
+- `GET /api/catalog/products` - Список продуктов с фильтрацией
+- `GET /api/catalog/products/popular` - Популярные продукты
+- `POST /api/catalog/import` - Запустить импорт каталога (admin)
+- `GET /api/catalog/import/status` - Статус импорта
 
 ### Cart
 - `GET /api/cart` - Получить корзину

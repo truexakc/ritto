@@ -103,7 +103,6 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/cart', require('./routes/cartRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
@@ -112,7 +111,6 @@ app.use('/api/order_items', require('./routes/orderItemRoutes'));
 app.use('/api/discounts', require('./routes/discountRoutes'));
 app.use('/api/manual', require('./routes/manualRoutes'));
 app.use('/api/telegram', require('./routes/telegramRoutes'));
-app.use('/api/catalog', require('./routes/catalogRoutes'));
 
 // Error handling
 app.use((req, res, next) => {

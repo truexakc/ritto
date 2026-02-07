@@ -146,9 +146,12 @@ npm test
 
 ```bash
 # Проверка здоровья API
-curl http://localhost:5001/api/products
+curl http://localhost:5001/health
 
-# Должен вернуть список продуктов
+# Проверка каталога через saby-service
+curl http://localhost:8080/api/catalog/categories
+
+# Должен вернуть список категорий
 ```
 
 ### 2. Проверка Frontend
@@ -205,10 +208,12 @@ CLIENT_URL=http://localhost:5173
 - `POST /api/auth/login` - Вход
 - `GET /api/auth/me` - Профиль
 
-### Продукты
-- `GET /api/products` - Список продуктов
-- `GET /api/products/popular` - Популярные
-- `GET /api/products/categories` - Категории
+### Продукты (Catalog)
+- `GET /api/catalog/categories` - Категории
+- `GET /api/catalog/products` - Список продуктов
+- `GET /api/catalog/products/popular` - Популярные продукты
+- `POST /api/catalog/import` - Запустить импорт каталога (admin)
+- `GET /api/catalog/import/status` - Статус импорта
 
 ### Корзина
 - `GET /api/cart` - Получить корзину

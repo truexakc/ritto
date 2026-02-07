@@ -116,6 +116,12 @@ func main() {
 		ImportParams:  importParams,
 	})
 
+	// Initialize catalog service
+	catalogService := service.NewCatalogService(db, logger)
+
+	// Initialize catalog handler
+	catalogHandler := handler.NewCatalogHandler(catalogService, logger)
+
 	// Create Gin router using gin.New() for explicit control
 	router := gin.New()
 
@@ -145,6 +151,11 @@ func main() {
 		catalogAPI.POST("/import", importHandler.TriggerImport)
 		// Register GET /api/catalog/import/status endpoint
 		catalogAPI.GET("/import/status", importHandler.GetImportStatus)
+
+		// Register catalog endpoints
+		catalogAPI.GET("/categories", catalogHandler.GetCategories)
+		catalogAPI.GET("/products", catalogHandler.GetProducts)
+		catalogAPI.GET("/products/popular", catalogHandler.GetPopularProducts)
 	}
 
 	// Start HTTP server on configured port
