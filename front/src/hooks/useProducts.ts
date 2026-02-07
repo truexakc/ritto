@@ -3,10 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/product";
 import { Product } from "../types/Product";
 
-export const useProducts = (hierarchicalParent?: string) => {
+export const useProducts = (params?: { hierarchicalParent?: string; search?: string }) => {
     return useQuery<Product[]>({
-        queryKey: ["products", hierarchicalParent],
-        queryFn: () => getProducts(hierarchicalParent),
+        queryKey: ["products", params?.hierarchicalParent, params?.search],
+        queryFn: () => getProducts(params),
     });
 };
-

@@ -15,8 +15,21 @@ export const getCategories = async (): Promise<Category[]> => {
  * Получить список всех продуктов
  * GET /api/catalog/products
  */
-export const getProducts = async (hierarchicalParent?: string): Promise<Product[]> => {
-    const query = hierarchicalParent ? `?hierarchical_parent=${encodeURIComponent(hierarchicalParent)}` : '';
+export const getProducts = async (params?: {
+    hierarchicalParent?: string;
+    search?: string;
+}): Promise<Product[]> => {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.hierarchicalParent) {
+        queryParams.append('hierarchical_parent', params.hierarchicalParent);
+    }
+    
+    if (params?.search) {
+        queryParams.append('search', params.search);
+    }
+    
+    const query = queryParams.toString() ? `?${queryParams.toString()}` : '';
     const response = await axiosInstance.get(`/catalog/products${query}`);
     return response.data;
 };

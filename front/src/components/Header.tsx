@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { useAppSelector } from "../store/hooks";
 import { selectIsAuth, selectIsInitialized, selectCurrentUser } from "../store/slices/authSlice";
 import { selectCartItems } from "../store/slices/cartSlice";
 import LogoutButton from "./LogoutButton";
 import ReviewsModal from "./ReviewsModal";
-import { ShoppingCart, Menu, X, LogOut, LogIn, Star } from "lucide-react";
+import { ShoppingCart, Menu, X, LogOut, LogIn, Star, Search } from "lucide-react";
 import { getUserEmoji } from "../utils/emoji";
 
 const Header = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const isHomePage = location.pathname === "/";
     const isAuth = useAppSelector(selectIsAuth);
     const isInitialized = useAppSelector(selectIsInitialized);
@@ -20,6 +21,8 @@ const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         const handleScroll = () => {
@@ -33,6 +36,17 @@ const Header = () => {
     if (!isInitialized) return null;
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        const trimmedQuery = searchQuery.trim();
+        if (trimmedQuery) {
+            navigate(`/catalog?search=${encodeURIComponent(trimmedQuery)}`);
+            setSearchOpen(false);
+            setSearchQuery("");
+            setMenuOpen(false);
+        }
+    };
 
     const NavLinks = () => (
         <>
@@ -150,6 +164,43 @@ const Header = () => {
 
                     {/* Desktop Icons */}
                     <div className="hidden lg:flex gap-6 items-center">
+                        {/* Поиск */}
+                        {searchOpen ? (
+                            <form onSubmit={handleSearch} className="relative">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Поиск..."
+                                    autoFocus
+                                    onBlur={() => {
+                                        if (!searchQuery) {
+                                            setTimeout(() => setSearchOpen(false), 200);
+                                        }
+                                    }}
+                                    className="w-48 px-4 py-2 pr-10 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-full text-[#f6eaea] placeholder-[#f6eaea]/50 focus:outline-none focus:border-[#b12e2e] transition-all"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setSearchOpen(false);
+                                        setSearchQuery("");
+                                    }}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-[#f6eaea]/10 rounded-full transition-colors"
+                                >
+                                    <X className="w-4 h-4 text-[#f6eaea]/50" />
+                                </button>
+                            </form>
+                        ) : (
+                            <button
+                                onClick={() => setSearchOpen(true)}
+                                className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200 group"
+                                title="Поиск"
+                            >
+                                <Search className="w-6 h-6 text-[#b12e2e] group-hover:scale-110 transition-transform"/>
+                            </button>
+                        )}
+
                         {/* Корзина */}
                         <RouterLink 
                             to="/basket" 
@@ -196,6 +247,17 @@ const Header = () => {
 
                     {/* Mobile icons */}
                     <div className="flex lg:hidden gap-3 items-center">
+                        {/* Поиск */}
+                        <button
+                            onClick={() => {
+                                setSearchOpen(true);
+                                setMenuOpen(true);
+                            }}
+                            className="p-2 rounded-lg hover:bg-[#f6eaea]/5 transition-all duration-200"
+                        >
+                            <Search className="w-6 h-6 text-[#b12e2e]"/>
+                        </button>
+
                         {/* Корзина */}
                         <RouterLink 
                             to="/basket" 
@@ -230,6 +292,20 @@ const Header = () => {
             lg:hidden
         `}>
             <div className="container mx-auto px-4 py-8">
+                {/* Поиск в мобильном меню */}
+                <form onSubmit={handleSearch} className="mb-6">
+                    <div className="relative">
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Поиск по каталогу..."
+                            className="w-full px-4 py-3 pl-12 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-full text-[#f6eaea] placeholder-[#f6eaea]/50 focus:outline-none focus:border-[#b12e2e] transition-colors"
+                        />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#f6eaea]/50" />
+                    </div>
+                </form>
+
                 {/* Профиль пользователя */}
                 {isAuth && currentUser ? (
                     <div className="mb-8 pb-6 border-b border-[#f6eaea]/10">
