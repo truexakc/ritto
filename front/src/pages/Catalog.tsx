@@ -60,9 +60,9 @@ const Catalog = () => {
     if (urlHierarchical && !categoriesLoading && uniqueCategories.length > 0) {
       // Проверяем, существует ли категория с таким hierarchical_id
       const categoryExists = uniqueCategories.some(
-        cat => cat.hierarchical_id === urlHierarchical
+        cat => String(cat.hierarchical_id) === String(urlHierarchical)
       );
-      if (categoryExists && selectedHierarchicalId !== urlHierarchical) {
+      if (categoryExists && String(selectedHierarchicalId) !== String(urlHierarchical)) {
         setSelectedHierarchicalId(urlHierarchical);
       }
     }
@@ -93,7 +93,7 @@ const Catalog = () => {
 
   const handleCategoryChange = (hierarchicalId?: string) => {
     // Не делаем ничего, если категория уже выбрана
-    if (hierarchicalId === selectedHierarchicalId) {
+    if (String(hierarchicalId) === String(selectedHierarchicalId)) {
       setCategoryDropdownOpen(false);
       return;
     }
@@ -152,7 +152,7 @@ const Catalog = () => {
 
   const selectedCategory = useMemo(() => {
     if (!selectedHierarchicalId) return null;
-    return uniqueCategories.find(cat => cat.hierarchical_id === selectedHierarchicalId);
+    return uniqueCategories.find(cat => String(cat.hierarchical_id) === String(selectedHierarchicalId));
   }, [selectedHierarchicalId, uniqueCategories]);
 
   return (
@@ -204,7 +204,7 @@ const Catalog = () => {
                         key={cat.hierarchical_id || cat.id}
                         onClick={() => handleCategoryChange(cat.hierarchical_id)}
                         className={`w-full px-4 py-3 text-left hover:bg-[#f6eaea]/10 transition-colors last:rounded-b-2xl ${
-                          selectedHierarchicalId === cat.hierarchical_id 
+                          String(selectedHierarchicalId) === String(cat.hierarchical_id)
                             ? 'bg-[#b12e2e]/20 text-[#b12e2e] font-semibold' 
                             : 'text-[#f6eaea]'
                         }`}
