@@ -266,11 +266,14 @@ const Checkout = () => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
-                                placeholder="Улица, дом, квартира"
+                                placeholder="Город, улица, дом, квартира (например: Ярославль, Кондратово, Садовое кольцо, 14)"
                                 required
                                 autoComplete="street-address"
                                 disabled={isSubmitting}
                             />
+                            <p className="text-xs text-[#ADADAD] mt-1">
+                                Укажите полный адрес с городом для точной доставки
+                            </p>
                         </div>
                     )}
 
