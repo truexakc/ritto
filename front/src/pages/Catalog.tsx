@@ -25,6 +25,16 @@ const Catalog = () => {
     search: searchQuery || undefined,
   });
 
+  const uniqueCategories = useMemo(() => {
+    const seen = new Set<string>();
+    return (categories ?? []).filter((c) => {
+      const key = c.hierarchical_id || c.id;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [categories]);
+
   // Sync URL with state only on initial load and browser back/forward
   useEffect(() => {
     const urlHierarchical = searchParams.get('hierarchical_parent') || undefined;
@@ -57,16 +67,6 @@ const Catalog = () => {
       }
     }
   }, [categoriesLoading, uniqueCategories, searchParams, selectedHierarchicalId]);
-
-  const uniqueCategories = useMemo(() => {
-    const seen = new Set<string>();
-    return (categories ?? []).filter((c) => {
-      const key = c.hierarchical_id || c.id;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }, [categories]);
 
   const totalPages = useMemo(() => {
     return Math.ceil((products?.length || 0) / ITEMS_PER_PAGE);
