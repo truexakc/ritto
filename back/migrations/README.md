@@ -7,6 +7,7 @@
 - `001_initial_schema.sql` - Основная схема базы данных (таблицы, индексы, триггеры)
 - `002_seed_data.sql` - Тестовые данные для разработки
 - `003_add_unique_constraints.sql` - Добавление уникальных ограничений для external_id (необходимо для автоимпорта)
+- `004_vk_orders_schema.sql` - Схема для VK Mini App (таблицы заказов, элементов заказов, rate limiting)
 
 ## Автоматический запуск
 
@@ -42,6 +43,7 @@ psql -h localhost -U ritto_user -d ritto_db -f migrations/002_seed_data.sql
 
 ## Таблицы базы данных
 
+### Основные таблицы
 - **users** - Пользователи системы
 - **categories** - Категории продуктов
 - **products** - Продукты
@@ -51,6 +53,11 @@ psql -h localhost -U ritto_user -d ritto_db -f migrations/002_seed_data.sql
 - **payments** - Платежи
 - **discounts** - Скидки и промокоды
 - **reviews** - Отзывы на продукты
+
+### VK Mini App таблицы
+- **vk_orders** - Заказы из VK Mini App
+- **vk_order_items** - Элементы заказов VK
+- **vk_rate_limits** - Rate limiting для VK пользователей
 
 ## Тестовые данные
 

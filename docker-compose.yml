@@ -39,6 +39,7 @@ services:
       - uploads_data:/app/public/uploads
     environment:
       - NODE_ENV=production
+      - DEBUG=false
       - PORT=5001
       - CLIENT_URL=${CLIENT_URL}
       - DB_HOST=postgres
@@ -73,6 +74,28 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  # VK Mini App (DISABLED)
+  # vk-mini-app:
+  #   build:
+  #     context: ./vk-mini-app
+  #     dockerfile: Dockerfile
+  #   container_name: ritto-vk-mini-app
+  #   ports:
+  #     - "3001:80"
+  #   volumes:
+  #     # Volume mount for development (hot reload)
+  #     - ./vk-mini-app/src:/app/src
+  #     - ./vk-mini-app/public:/app/public
+  #   environment:
+  #     - VITE_VK_APP_ID=${VK_APP_ID}
+  #     - VITE_BACKEND_API_URL=${VK_BACKEND_API_URL:-https://sushiritto.ru}
+  #     - VITE_SABY_SERVICE_URL=${VK_SABY_SERVICE_URL:-https://sushiritto.ru}
+  #   networks:
+  #     - ritto-network
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - no-new-privileges:true
+
   nginx:
     image: nginx:alpine
     container_name: ritto-nginx
@@ -86,6 +109,7 @@ services:
     depends_on:
       - frontend
       - backend
+      # - vk-mini-app
     networks:
       - ritto-network
     restart: unless-stopped

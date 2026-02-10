@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
 const logger = require('./utils/logger');
+const { errorHandler, notFound } = require('./middleware/errorHandler');
 
 dotenv.config();
 
@@ -55,7 +56,9 @@ const allowedOrigins = [
     'http://sushiritto.ru',
     'https://sushiritto.ru',
     process.env.FRONTEND_URL,
-    process.env.CLIENT_URL
+    process.env.CLIENT_URL,
+    process.env.VK_MINI_APP_URL,
+    'https://vk.com' // VK platform domain
 ].filter(Boolean);
 
 logger.log('🌐 Allowed CORS origins:', allowedOrigins);
@@ -103,30 +106,17 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/cart', require('./routes/cartRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/payment', require('./routes/paymentRoutes'));
-app.use('/api/order_items', require('./routes/orderItemRoutes'));
 app.use('/api/discounts', require('./routes/discountRoutes'));
 app.use('/api/manual', require('./routes/manualRoutes'));
 app.use('/api/telegram', require('./routes/telegramRoutes'));
+app.use('/api/vk', require('./routes/vk'));
 
 // Error handling
-app.use((req, res, next) => {
-    const error = new Error(`Not Found - ${req.originalUrl}`);
-    res.status(404);
-    next(error);
-});
-
-app.use((err, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode);
-    res.json({
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-    });
-});
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 

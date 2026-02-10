@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
@@ -30,12 +31,22 @@ func NewHandler(service service.SabyService) *Handler {
 func (h *Handler) CreateOrder(c *gin.Context) {
 	requestID := middleware.GetRequestID(c)
 
-	// Bind JSON request body to OrderRequest struct
+	// Read raw JSON without any validation
 	var req model.OrderRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		log.Printf("[%s] Binding error: %v", requestID, err)
+	body, err := c.GetRawData()
+	if err != nil {
+		log.Printf("[%s] Failed to read body: %v", requestID, err)
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+			Error: model.ErrorDetail{
+				Code:    model.ErrorCodeValidation,
+				Message: "Failed to read request body",
+			},
+		})
+		return
+	}
 
-		// Return standardized error response on binding failure (HTTP 400)
+	if err := json.Unmarshal(body, &req); err != nil {
+		log.Printf("[%s] JSON unmarshal error: %v", requestID, err)
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
 			Error: model.ErrorDetail{
 				Code:    model.ErrorCodeValidation,

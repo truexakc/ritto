@@ -1,7 +1,5 @@
 package model
 
-import "time"
-
 // PaymentType represents the payment method for an order
 type PaymentType string
 
@@ -16,60 +14,57 @@ const (
 
 // OrderRequest represents the request payload for creating an order
 type OrderRequest struct {
-	Product       string         `json:"product" binding:"required"`
-	PointID       int            `json:"pointId" binding:"required"`
-	Comment       string         `json:"comment"`
-	Customer      Customer       `json:"customer" binding:"required"`
-	Datetime      time.Time      `json:"datetime" binding:"required"`
-	Promocode     string         `json:"promocode"`
-	PromocodeV2   string         `json:"promocodeV2"`
-	Nomenclatures []Nomenclature `json:"nomenclatures" binding:"required,min=1"`
-	Delivery      Delivery       `json:"delivery" binding:"required"`
+	Product       string         `json:"product"`
+	PointID       int            `json:"pointId"`
+	Comment       string         `json:"comment,omitempty"`
+	Customer      Customer       `json:"customer"`
+	Datetime      string         `json:"datetime"`
+	Promocode     string         `json:"promocode,omitempty"`
+	PromocodeV2   string         `json:"promocodeV2,omitempty"`
+	Nomenclatures []Nomenclature `json:"nomenclatures"`
+	Delivery      Delivery       `json:"delivery"`
 }
 
 // Customer represents customer information in an order
 type Customer struct {
-	ExternalID string `json:"externalId"`
-	Name       string `json:"name" binding:"required"`
-	Lastname   string `json:"lastname"`
-	Patronymic string `json:"patronymic"`
-	Email      string `json:"email" binding:"omitempty,email"`
-	Phone      string `json:"phone" binding:"required,e164"`
+	ExternalID *string `json:"externalId,omitempty"`
+	Name       string  `json:"name"`
+	Lastname   string  `json:"lastname,omitempty"`
+	Patronymic string  `json:"patronymic,omitempty"`
+	Email      string  `json:"email,omitempty"`
+	Phone      string  `json:"phone"`
 }
 
 // Nomenclature represents a product item in an order
 type Nomenclature struct {
-	ExternalID     string     `json:"externalId"`
-	ID             int        `json:"id"`
-	NomNumber      string     `json:"nomNumber"`
-	Count          float64    `json:"count" binding:"required,gt=0"`
-	Cost           float64    `json:"cost"`
-	Name           string     `json:"name"`
-	Modifiers      []Modifier `json:"modifiers"`
-	PriceListID    int        `json:"priceListId" binding:"required"`
-	HierarchicalID int        `json:"hierarchicalId"`
-	SerialNumbers  []string   `json:"serialNumbers"`
+	NomNumber     string     `json:"nomNumber"`
+	Count         float64    `json:"count"`
+	PriceListID   int        `json:"priceListId"`
+	Cost          float64    `json:"cost,omitempty"`
+	Name          string     `json:"name,omitempty"`
+	Modifiers     []Modifier `json:"modifiers,omitempty"`
+	SerialNumbers []string   `json:"serialNumbers,omitempty"`
 }
 
 // Modifier represents a product modifier in an order
 type Modifier struct {
-	ID             int     `json:"id" binding:"required"`
-	HierarchicalID int     `json:"hierarchicalId" binding:"required"`
-	Count          int     `json:"count" binding:"required,gt=0"`
+	ID             int     `json:"id"`
+	HierarchicalID int     `json:"hierarchicalId"`
+	Count          int     `json:"count"`
 	Cost           float64 `json:"cost"`
 	Name           string  `json:"name"`
 }
 
 // Delivery represents delivery information for an order
 type Delivery struct {
-	IsPickup     bool        `json:"isPickup" binding:"required"`
-	AddressJSON  string      `json:"addressJSON"`
-	AddressFull  string      `json:"addressFull"`
-	Persons      int         `json:"persons"`
-	District     int         `json:"district"`
-	ChangeAmount float64     `json:"changeAmount"`
-	PaymentType  PaymentType `json:"paymentType" binding:"required,oneof=card online cash"`
-	ShopURL      string      `json:"shopURL"`
-	SuccessURL   string      `json:"successURL"`
-	ErrorURL     string      `json:"errorURL"`
+	IsPickup     bool        `json:"isPickup"`
+	AddressJSON  string      `json:"addressJSON,omitempty"`
+	AddressFull  string      `json:"addressFull,omitempty"`
+	Persons      int         `json:"persons,omitempty"`
+	District     int         `json:"district,omitempty"`
+	ChangeAmount float64     `json:"changeAmount,omitempty"`
+	PaymentType  PaymentType `json:"paymentType"`
+	ShopURL      string      `json:"shopURL,omitempty"`
+	SuccessURL   string      `json:"successURL,omitempty"`
+	ErrorURL     string      `json:"errorURL,omitempty"`
 }

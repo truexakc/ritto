@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"saby-service/internal/client"
 	"saby-service/internal/model"
@@ -32,6 +33,14 @@ func (s *sabyServiceImpl) CreateOrder(ctx context.Context, req *model.OrderReque
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	default:
+	}
+
+	// Add datetime if not provided
+	if req.Datetime == "" {
+		now := time.Now()
+		req.Datetime = fmt.Sprintf("%04d-%02d-%02d %02d:%02d:%02d",
+			now.Year(), now.Month(), now.Day(),
+			now.Hour(), now.Minute(), now.Second())
 	}
 
 	// Validate order request
@@ -68,7 +77,7 @@ func validateOrderRequest(req *model.OrderRequest) error {
 	}
 
 	// Validate datetime
-	if req.Datetime.IsZero() {
+	if req.Datetime == "" {
 		return fmt.Errorf("datetime is required")
 	}
 

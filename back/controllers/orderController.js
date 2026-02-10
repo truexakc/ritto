@@ -1,260 +1,180 @@
-const { supabase } = require('../config/db');
+const { query } = require('../config/postgres');
 const logger = require('../utils/logger');
+const { sendOrderToSaby } = require('../services/sabyIntegration');
+const { validateOrderData } = require('../services/orderValidation');
 
 // 🔹 Создание заказа
 const createOrder = async (req, res) => {
     try {
-        const userId = req.user.id;
-        const {
-            products,
-            shipping_address,
-            phone_number,
-            total_price,
-            payment_method,
-            delivery_method,
-            comment,
-            extra_ginger,
-            extra_soy_sauce,
-            extra_wasabi,
-            chopsticks_count
-        } = req.body;
+        // Подготовка данных заказа для валидации
+        const orderData = {
+            phone: req.body.phone_number,
+            delivery_method: req.body.delivery_method,
+            delivery_address: req.body.shipping_address,
+            items: req.body.products || [],
+            payment_method: req.body.payment_method,
+            comment: req.body.comment
+        };
 
-        if (!products || !Array.isArray(products) || products.length === 0) {
-            return res.status(400).json({ message: "Список товаров пуст" });
+        // Получаем информацию о пользователе VK
+        const vkUser = {
+            vk_user_id: req.user?.vk_user_id || req.body.vk_user_id || 'guest'
+        };
+
+        // Получаем реальные данные товаров из базы (включая nomNumber)
+        if (orderData.items.length > 0) {
+            const productIds = orderData.items.map(p => p.id);
+            const { rows: dbProducts } = await query(
+                'SELECT id, name, price, external_id, hierarchical_id, nom_number FROM products WHERE id = ANY($1)',
+                [productIds]
+            );
+
+            if (!dbProducts || dbProducts.length === 0) {
+                return res.status(400).json({ 
+                    success: false,
+                    message: "Ошибка загрузки товаров" 
+                });
+            }
+
+            // Обогащаем items данными из БД (включая nomNumber)
+            orderData.items = orderData.items.map(item => {
+                const product = dbProducts.find(p => p.id === item.id);
+                if (!product) {
+                    throw new Error(`Товар с ID ${item.id} не найден`);
+                }
+                return {
+                    product_id: item.id,
+                    nomNumber: product.nom_number,
+                    quantity: item.quantity,
+                    price: product.price
+                };
+            });
         }
 
-        if (!delivery_method) return res.status(400).json({ message: "Укажите способ получения" });
-        if (!phone_number) return res.status(400).json({ message: "Укажите номер телефона" });
-
-        // Получаем реальные цены из базы
-        const productIds = products.map(p => p.id);
-        const { data: dbProducts, error: dbError } = await supabase
-            .from("products")
-            .select("id, price")
-            .in("id", productIds);
-
-        if (dbError || !dbProducts || dbProducts.length === 0) {
-            return res.status(400).json({ message: "Ошибка загрузки товаров" });
+        // Валидация данных заказа (Requirements 7.1-7.7)
+        const validation = validateOrderData(orderData);
+        if (!validation.valid) {
+            logger.warn('❌ Валидация заказа не пройдена:', validation.errors);
+            return res.status(400).json({
+                success: false,
+                message: 'Ошибка валидации заказа',
+                errors: validation.errors
+            });
         }
 
-        // Проверяем и считаем финальную сумму
-        let calculatedTotal = 0;
-        const orderItems = products.map(item => {
-            const product = dbProducts.find(p => p.id === item.id);
-            if (!product) throw new Error(`Товар с ID ${item.id} не найден`);
-            calculatedTotal += product.price * item.quantity;
-            return {
-                product_id: item.id,
-                quantity: item.quantity
-            };
+        // Отправка заказа в Saby Service (Requirements 8.1, 8.2)
+        const sabyResult = await sendOrderToSaby(orderData, vkUser);
+
+        if (!sabyResult.success) {
+            // Обработка ошибок от Saby Service (Requirements 8.3, 8.4)
+            logger.error('❌ Ошибка отправки в Saby:', {
+                error: sabyResult.error,
+                details: sabyResult.details
+            });
+
+            // Определяем тип ошибки и возвращаем соответствующий статус
+            if (sabyResult.error?.includes('unavailable') || sabyResult.error?.includes('ECONNREFUSED') || sabyResult.error?.includes('timeout')) {
+                return res.status(503).json({
+                    success: false,
+                    message: 'Сервис временно недоступен. Пожалуйста, попробуйте позже.',
+                    error: 'Service unavailable'
+                });
+            }
+
+            // Внутренняя ошибка сервера
+            return res.status(500).json({
+                success: false,
+                message: 'Ошибка при создании заказа',
+                error: sabyResult.error
+            });
+        }
+
+        // Извлечение saby_order_id из ответа (Requirement 8.1)
+        const sabyOrderId = sabyResult.data.orderId || sabyResult.data.order_id;
+        
+        if (!sabyOrderId) {
+            logger.error('❌ Не удалось извлечь order_id из ответа Saby:', sabyResult.data);
+            return res.status(500).json({
+                success: false,
+                message: 'Ошибка обработки ответа от Saby',
+                error: 'Missing order_id in response'
+            });
+        }
+
+        // Сохранение только saby_order_id в таблицу saby_orders (Requirements 1.2, 8.2)
+        const { rows } = await query(
+            'INSERT INTO saby_orders (saby_order_id) VALUES ($1) RETURNING id, saby_order_id, created_at',
+            [sabyOrderId]
+        );
+
+        if (!rows || rows.length === 0) {
+            logger.error('❌ Ошибка сохранения заказа в БД');
+            return res.status(500).json({
+                success: false,
+                message: 'Ошибка сохранения заказа',
+                error: 'Database insert failed'
+            });
+        }
+
+        const savedOrder = rows[0];
+
+        logger.log('✅ Заказ успешно создан:', {
+            order_id: savedOrder.id,
+            saby_order_id: savedOrder.saby_order_id,
+            created_at: savedOrder.created_at
         });
 
-        // Создаём заказ
-        const { data: order, error: orderError } = await supabase
-            .from("orders")
-            .insert([{
-                user_id: userId,
-                total_price: calculatedTotal,
-                payment_method: payment_method || "Не указан",
-                shipping_address: shipping_address || "Не указан",
-                comment: comment || null,
-                phone_number,
-                delivery_method,
-                extra_ginger: extra_ginger || 0,
-                extra_soy_sauce: extra_soy_sauce || 0,
-                extra_wasabi: extra_wasabi || 0,
-                chopsticks_count: chopsticks_count || 0,
-                status: "новый",
-                payment_status: "pending"
-            }])
-            .select()
-            .single();
-
-        if (orderError) throw orderError;
-
-        // Добавляем товары в заказ
-        const orderItemsWithId = orderItems.map(item => ({
-            ...item,
-            order_id: order.id
-        }));
-
-        const { error: orderItemsError } = await supabase
-            .from("order_items")
-            .insert(orderItemsWithId);
-
-        if (orderItemsError) {
-            logger.error("Ошибка добавления order_items:", orderItemsError);
-            return res.status(500).json({ message: "Ошибка добавления товаров в заказ" });
-        }
-
-        res.status(201).json({ message: "Заказ успешно создан", order });
+        // Возврат успешного ответа (Requirement 3.5)
+        res.status(201).json({
+            success: true,
+            message: 'Заказ успешно создан',
+            order_id: savedOrder.id,
+            saby_order_id: savedOrder.saby_order_id,
+            created_at: savedOrder.created_at
+        });
 
     } catch (error) {
-        logger.error("❌ Ошибка при создании заказа:", error.message || error);
-        res.status(500).json({ message: "Ошибка сервера", error: error.message });
+        // Обработка внутренних ошибок (Requirement 8.4)
+        logger.error('❌ Внутренняя ошибка при создании заказа:', {
+            error: error.message,
+            stack: error.stack
+        });
+        
+        res.status(500).json({
+            success: false,
+            message: 'Внутренняя ошибка сервера',
+            error: error.message
+        });
     }
 };
 
 
-
-
-// 🔹 Получение деталей заказа
-const getOrderDetails = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const userId = req.user.id;
-
-        const { data: order, error: orderError } = await supabase
-            .from('orders')
-            .select('*, order_items(*)')
-            .eq('id', id)
-            .single();
-
-        if (orderError || !order) return res.status(404).json({ message: 'Заказ не найден' });
-
-        if (order.user_id !== userId && !req.user.isAdmin) {
-            return res.status(403).json({ message: 'Нет доступа к заказу' });
-        }
-
-        res.status(200).json({ id: order.id, ...order });
-
-    } catch (error) {
-        logger.error('❌ Ошибка при получении заказа:', error);
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
-};
-
-
-// 🔹 Получение всех заказов пользователя
+// Заглушки для других функций (пока не реализованы)
 const getUserOrders = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const { status } = req.query;
-
-        let query = supabase
-            .from('orders')
-            .select('*, order_items(*, products(name))')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false });
-
-        if (status) query = query.eq('status', status);
-
-        const { data, error } = await query;
-        if (error) throw error;
-
-        res.set('Content-Range', `orders 0-${data.length - 1}/${data.length}`);
-        res.json(data);
-
-    } catch (error) {
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
+    res.status(501).json({ message: 'Not implemented yet' });
 };
 
-
-// 🔹 Обновление статуса заказа
 const updateOrderStatus = async (req, res) => {
-    try {
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ message: 'Доступ запрещён' });
-        }
-
-        const { id } = req.params;
-        const { status } = req.body;
-
-        const allowedStatuses = ['новый', 'в доставке', 'доставлен', 'отменён'];
-        if (!allowedStatuses.includes(status)) {
-            return res.status(400).json({ message: `Недопустимый статус. Допустимые: ${allowedStatuses.join(', ')}` });
-        }
-
-        const { data: order, error: orderError } = await supabase
-            .from('orders')
-            .select('payment_status')
-            .eq('id', id)
-            .maybeSingle();
-
-        if (orderError || !order) {
-            return res.status(404).json({ message: 'Заказ не найден' });
-        }
-
-        if (order.payment_status !== 'paid') {
-            return res.status(400).json({ message: 'Заказ ещё не оплачен!' });
-        }
-
-        const { data, error } = await supabase
-            .from('orders')
-            .update({
-                status,
-                status_updated_at: new Date().toISOString()
-            })
-
-            .eq('id', id)
-            .select()
-            .maybeSingle();
-
-        if (error) throw error;
-
-        res.json({ message: 'Статус заказа обновлён', order: data });
-
-    } catch (error) {
-        logger.error('❌ Ошибка при обновлении статуса заказа:', error);
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
+    res.status(501).json({ message: 'Not implemented yet' });
 };
 
+const getOrderDetails = async (req, res) => {
+    res.status(501).json({ message: 'Not implemented yet' });
+};
 
-// 🔹 Получение всех заказов (админ)
 const getAllOrders = async (req, res) => {
-    try {
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ message: 'Доступ запрещён' });
-        }
-
-        const { status } = req.query;
-
-        let query = supabase
-            .from('orders')
-            .select('*, order_items(*, products(*))')
-            .order('created_at', { ascending: false });
-
-        if (status) query = query.eq('status', status);
-
-        const { data, error } = await query;
-        if (error) throw error;
-
-        res.set('Content-Range', `orders 0-${data.length - 1}/${data.length}`);
-        res.json(data);
-
-    } catch (error) {
-        logger.error('Ошибка при получении заказов:', error);
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
+    res.status(501).json({ message: 'Not implemented yet' });
 };
 
-
-// 🔹 Удаление заказа (вместе с товарами)
 const deleteOrder = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        await supabase.from('order_items').delete().eq('order_id', id);
-        const { error } = await supabase.from('orders').delete().eq('id', id);
-
-        if (error) throw error;
-
-        res.status(200).json({ data: { id } });
-
-    } catch (error) {
-        logger.error('❌ Ошибка при удалении заказа:', error);
-        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
-    }
+    res.status(501).json({ message: 'Not implemented yet' });
 };
-
 
 module.exports = {
     createOrder,
-    getOrderDetails,
     getUserOrders,
     updateOrderStatus,
+    getOrderDetails,
     getAllOrders,
     deleteOrder
 };
