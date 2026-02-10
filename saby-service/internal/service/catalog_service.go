@@ -388,7 +388,7 @@ func formatArgIndex(index int) string {
 	return fmt.Sprintf("%d", index)
 }
 
-// GetPopularProducts retrieves popular/featured products with order count
+// GetPopularProducts retrieves popular/featured products
 func (s *catalogServiceImpl) GetPopularProducts(ctx context.Context, limit int) ([]model.PopularProductResponse, error) {
 	s.logger.Info("fetching popular products", "limit", limit)
 
@@ -423,14 +423,11 @@ func (s *catalogServiceImpl) GetPopularProducts(ctx context.Context, limit int) 
 			p.short_code,
 			p.sort,
 			p.created_at,
-			p.updated_at,
-			COUNT(oi.id) as order_count
+			p.updated_at
 		FROM products p
 		LEFT JOIN categories c ON p.category_id = c.id
-		LEFT JOIN order_items oi ON p.id = oi.product_id
-		WHERE p.is_popular = true OR p.is_featured = true
-		GROUP BY p.id, c.name
-		ORDER BY order_count DESC, p.created_at DESC
+		WHERE p.is_popular = true
+		ORDER BY p.sort DESC, p.created_at DESC
 		LIMIT $1
 	`
 
@@ -475,7 +472,6 @@ func (s *catalogServiceImpl) GetPopularProducts(ctx context.Context, limit int) 
 			sort               int
 			createdAt          sql.NullTime
 			updatedAt          sql.NullTime
-			orderCount         int
 		)
 
 		err := rows.Scan(
@@ -509,7 +505,6 @@ func (s *catalogServiceImpl) GetPopularProducts(ctx context.Context, limit int) 
 			&sort,
 			&createdAt,
 			&updatedAt,
-			&orderCount,
 		)
 		if err != nil {
 			s.logger.Error("failed to scan popular product row", "error", err)
@@ -554,8 +549,8 @@ func (s *catalogServiceImpl) GetPopularProducts(ctx context.Context, limit int) 
 			return nil, err
 		}
 
-		// Create popular product response with order count
-		popularProduct := model.NewPopularProductResponseFromDB(productResp, orderCount)
+		// Create popular product response with order count = 0 (not tracked anymore)
+		popularProduct := model.NewPopularProductResponseFromDB(productResp, 0)
 		products = append(products, popularProduct)
 	}
 
