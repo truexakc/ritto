@@ -26,6 +26,10 @@ async function getAddressJSON(addressString) {
         address: addressString
       },
       timeout: 10000,
+      maxRedirects: 5,
+      validateStatus: function (status) {
+        return status >= 200 && status < 300;
+      },
       headers: headers
     });
     
@@ -49,12 +53,35 @@ async function getAddressJSON(addressString) {
   } catch (error) {
     logger.error('❌ Ошибка получения addressJSON:', error.message);
     
-    // Fallback: возвращаем базовую структуру
+    // Fallback: возвращаем базовую структуру без жесткого указания города
+    // Пытаемся извлечь город из адреса, если он там есть
+    const addressParts = addressString.split(',').map(part => part.trim());
+    
+    // Простая эвристика: если первая часть адреса - это город (обычно так вводят)
+    // то используем его, иначе оставляем пустым
+    let locality = '';
+    if (addressParts.length > 1) {
+      // Проверяем, похожа ли первая часть на название города
+      // (обычно города пишутся с большой буквы и не содержат цифр)
+      const firstPart = addressParts[0];
+      if (firstPart && !/\d/.test(firstPart) && firstPart.length > 2) {
+        locality = firstPart;
+      }
+    }
+    
+    const fallbackJSON = {
+      Address: addressString
+    };
+    
+    // Добавляем Locality только если смогли определить
+    if (locality) {
+      fallbackJSON.Locality = locality;
+    }
+    
+    logger.log('⚠️  Используется fallback addressJSON:', JSON.stringify(fallbackJSON));
+    
     return {
-      addressJSON: JSON.stringify({
-        Address: addressString,
-        Locality: 'Ярославль'
-      }),
+      addressJSON: JSON.stringify(fallbackJSON),
       addressFull: addressString
     };
   }

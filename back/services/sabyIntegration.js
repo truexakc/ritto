@@ -39,10 +39,40 @@ async function sendOrderToSaby(orderData, vkUser) {
       const addressData = await getAddressJSON(orderData.delivery_address);
       addressJSON = addressData.addressJSON;
       addressFull = addressData.addressFull;
+      
+      // Убеждаемся, что addressJSON - это строка
+      if (typeof addressJSON !== 'string') {
+        logger.warn('⚠️  addressJSON не является строкой, конвертируем:', typeof addressJSON);
+        addressJSON = JSON.stringify(addressJSON);
+      }
+      
+      // Убеждаемся, что addressFull - это строка
+      if (typeof addressFull !== 'string') {
+        logger.warn('⚠️  addressFull не является строкой, конвертируем:', typeof addressFull);
+        addressFull = String(addressFull);
+      }
+      
+      // Логируем полученные данные адреса
+      logger.log('📍 Данные адреса для отправки в Saby:', {
+        addressJSON: addressJSON,
+        addressFull: addressFull,
+        addressJSONType: typeof addressJSON,
+        addressFullType: typeof addressFull
+      });
     }
 
     // Используем datetime из orderData (уже обработанный в контроллере)
     const datetime = orderData.datetime || formatDateTimeForSBIS(new Date());
+
+    // Валидация данных адреса для доставки
+    if (!isPickup) {
+      if (!addressJSON || typeof addressJSON !== 'string') {
+        throw new Error('addressJSON должен быть непустой строкой для доставки');
+      }
+      if (!addressFull || typeof addressFull !== 'string') {
+        throw new Error('addressFull должен быть непустой строкой для доставки');
+      }
+    }
 
     // Формируем payload согласно схеме Saby API
     const payload = {
@@ -71,6 +101,14 @@ async function sendOrderToSaby(orderData, vkUser) {
 
     // Логирование полного payload перед отправкой
     logger.log('📋 Полный payload для Saby:', JSON.stringify(payload, null, 2));
+    
+    // Дополнительное логирование delivery для отладки
+    logger.log('🚚 Delivery данные:', {
+      isPickup: payload.delivery.isPickup,
+      addressJSON: payload.delivery.addressJSON,
+      addressFull: payload.delivery.addressFull,
+      paymentType: payload.delivery.paymentType
+    });
 
     // Отправляем запрос в saby-service
     const response = await axios.post(
