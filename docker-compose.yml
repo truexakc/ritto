@@ -121,9 +121,12 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    # Автоматическое обновление каждые 12 часов через webroot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot --webroot-path=/var/www/certbot --quiet; sleep 12h & wait ${!}; done;'"
     networks:
       - ritto-network
+    depends_on:
+      - nginx
 
   # SABY Go Microservice
   saby-service:

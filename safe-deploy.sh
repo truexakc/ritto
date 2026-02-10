@@ -78,19 +78,27 @@ if [ "$RENEW_CERT" = true ]; then
     echo ""
     echo -e "${YELLOW}🔐 Обновление SSL сертификата...${NC}"
     
-    # Запускаем только nginx и certbot для обновления
+    # Запускаем nginx для webroot метода
     docker compose up -d nginx
-    sleep 3
+    sleep 5
     
-    # Пробуем обновить сертификат
-    docker compose run --rm certbot renew --quiet
-    
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ Сертификат успешно обновлен${NC}"
-        # Перезагружаем nginx для применения нового сертификата
-        docker compose restart nginx
+    # Проверяем что nginx запущен
+    if ! docker compose ps nginx | grep -q "Up"; then
+        echo -e "${RED}❌ Nginx не запущен, пропускаем обновление сертификата${NC}"
     else
-        echo -e "${YELLOW}⚠️  Обновление сертификата не требуется или произошла ошибка${NC}"
+        # Пробуем обновить сертификат через webroot
+        echo -e "${BLUE}   Попытка обновления через webroot...${NC}"
+        docker compose run --rm certbot renew --webroot --webroot-path=/var/www/certbot --quiet
+        
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✅ Сертификат успешно обновлен${NC}"
+            # Перезагружаем nginx для применения нового сертификата
+            docker compose restart nginx
+            sleep 2
+        else
+            echo -e "${YELLOW}⚠️  Обновление сертификата не требуется или произошла ошибка${NC}"
+            echo -e "${YELLOW}   Certbot автоматически попробует позже${NC}"
+        fi
     fi
     
     # Останавливаем для полного деплоя

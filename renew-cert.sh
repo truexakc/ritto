@@ -67,18 +67,27 @@ fi
 echo ""
 echo -e "${BLUE}🔄 Запуск процесса обновления...${NC}"
 
-# Убеждаемся что nginx и certbot запущены
+# Убеждаемся что nginx запущен (нужен для webroot метода)
 echo -e "${BLUE}   Проверка контейнеров...${NC}"
-docker compose up -d nginx certbot
+docker compose up -d nginx
 
-sleep 3
+sleep 5
 
-# Обновление сертификата
-echo -e "${BLUE}   Обновление сертификата...${NC}"
+# Проверяем что nginx действительно запущен
+if ! docker compose ps nginx | grep -q "Up"; then
+    echo -e "${RED}❌ Nginx не запущен! Невозможно обновить сертификат через webroot${NC}"
+    echo -e "${YELLOW}   Попробуйте:${NC}"
+    echo "   1. docker compose up -d nginx"
+    echo "   2. docker compose logs nginx"
+    exit 1
+fi
+
+# Обновление сертификата через webroot
+echo -e "${BLUE}   Обновление сертификата через webroot...${NC}"
 if [ -n "$FORCE_RENEW" ]; then
-    docker compose run --rm certbot renew $FORCE_RENEW
+    docker compose run --rm certbot renew --webroot --webroot-path=/var/www/certbot $FORCE_RENEW
 else
-    docker compose run --rm certbot renew
+    docker compose run --rm certbot renew --webroot --webroot-path=/var/www/certbot
 fi
 
 if [ $? -eq 0 ]; then
