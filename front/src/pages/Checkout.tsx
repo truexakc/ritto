@@ -39,20 +39,6 @@ const Checkout = () => {
     const [extraSoy, setExtraSoy] = useState(0);
     const [chopsticksCount, setChopsticksCount] = useState(0);
 
-    // Datetime field - default to current time + 1 hour in UTC
-    const getDefaultDatetime = () => {
-        const now = new Date();
-        now.setHours(now.getHours() + 1);
-        const year = now.getUTCFullYear();
-        const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(now.getUTCDate()).padStart(2, '0');
-        const hours = String(now.getUTCHours()).padStart(2, '0');
-        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-    };
-    
-    const [datetime, setDatetime] = useState(getDefaultDatetime());
-
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
