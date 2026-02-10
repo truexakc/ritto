@@ -33,6 +33,9 @@ echo -e "${BLUE}2. Обновление сертификата (standalone ре�
 echo -e "${YELLOW}   Домен: ${DOMAIN}${NC}"
 echo ""
 
+# Используем первый найденный аккаунт (самый новый)
+ACCOUNT_ID="3b05c60630371737fcfb3ec4a9bf35ed"
+
 docker compose run --rm --no-deps -p 80:80 --entrypoint "\
   certbot certonly --standalone \
     -d ${DOMAIN} \
@@ -41,7 +44,8 @@ docker compose run --rm --no-deps -p 80:80 --entrypoint "\
     --non-interactive \
     --agree-tos \
     --email sushi.ritto@mail.ru \
-    --rsa-key-size 4096" certbot
+    --rsa-key-size 4096 \
+    --account ${ACCOUNT_ID}" certbot
 
 if [ $? -eq 0 ]; then
     echo ""
