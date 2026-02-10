@@ -30,6 +30,7 @@ const Catalog = () => {
     const urlHierarchical = searchParams.get('hierarchical_parent') || undefined;
     const urlSearch = searchParams.get('search') || '';
     
+    // Обновляем состояние только если значения действительно изменились
     if (urlHierarchical !== selectedHierarchicalId) {
       setSelectedHierarchicalId(urlHierarchical);
       setShowProducts(false);
@@ -42,6 +43,20 @@ const Catalog = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // Убедимся, что категория из URL установлена после загрузки категорий
+  useEffect(() => {
+    const urlHierarchical = searchParams.get('hierarchical_parent');
+    if (urlHierarchical && !categoriesLoading && uniqueCategories.length > 0) {
+      // Проверяем, существует ли категория с таким hierarchical_id
+      const categoryExists = uniqueCategories.some(
+        cat => cat.hierarchical_id === urlHierarchical
+      );
+      if (categoryExists && selectedHierarchicalId !== urlHierarchical) {
+        setSelectedHierarchicalId(urlHierarchical);
+      }
+    }
+  }, [categoriesLoading, uniqueCategories, searchParams, selectedHierarchicalId]);
 
   const uniqueCategories = useMemo(() => {
     const seen = new Set<string>();
@@ -154,9 +169,14 @@ const Catalog = () => {
               <button
                 onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
                 className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#f6eaea]/20 rounded-full text-[#f6eaea] hover:border-[#b12e2e] transition-colors flex items-center justify-between"
+                disabled={categoriesLoading}
               >
                 <span className="truncate">
-                  {selectedCategory ? selectedCategory.name : 'Все категории'}
+                  {categoriesLoading 
+                    ? 'Загрузка категорий...' 
+                    : selectedCategory 
+                      ? selectedCategory.name 
+                      : 'Все категории'}
                 </span>
                 <ChevronDown className={`w-5 h-5 text-[#f6eaea]/50 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
