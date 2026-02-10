@@ -44,22 +44,18 @@ if [ -d "./certbot/conf/live/${DOMAIN}" ]; then
     if [ "$days_left" -ge 0 ]; then
         if [ "$days_left" -lt 30 ]; then
             echo -e "${YELLOW}⚠️  Сертификат истекает через ${days_left} дней!${NC}"
-            echo -e "${YELLOW}   Рекомендуется обновление${NC}"
-            RENEW_CERT=true
+            echo -e "${YELLOW}   Certbot автоматически обновит его при следующей проверке${NC}"
         else
             echo -e "${GREEN}   Сертификат действителен еще ${days_left} дней${NC}"
-            RENEW_CERT=false
         fi
     else
         echo -e "${YELLOW}⚠️  Не удалось проверить срок действия сертификата${NC}"
-        RENEW_CERT=false
     fi
     
     USE_SSL=true
 else
     echo -e "${YELLOW}⚠️  SSL сертификаты не найдены. Будет использована HTTP конфигурация${NC}"
     USE_SSL=false
-    RENEW_CERT=false
     
     # Переключение на HTTP конфигурацию
     if [ -f "nginx-http-only.conf" ]; then
@@ -72,38 +68,6 @@ fi
 echo ""
 echo -e "${BLUE}🛑 Останавливаем контейнеры...${NC}"
 docker compose down
-
-# Обновление сертификата если нужно
-if [ "$RENEW_CERT" = true ]; then
-    echo ""
-    echo -e "${YELLOW}🔐 Обновление SSL сертификата...${NC}"
-    
-    # Запускаем nginx для webroot метода
-    docker compose up -d nginx
-    sleep 5
-    
-    # Проверяем что nginx запущен
-    if ! docker compose ps nginx | grep -q "Up"; then
-        echo -e "${RED}❌ Nginx не запущен, пропускаем обновление сертификата${NC}"
-    else
-        # Пробуем обновить сертификат через webroot
-        echo -e "${BLUE}   Попытка обновления через webroot...${NC}"
-        docker compose run --rm certbot renew --webroot --webroot-path=/var/www/certbot --quiet
-        
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}✅ Сертификат успешно обновлен${NC}"
-            # Перезагружаем nginx для применения нового сертификата
-            docker compose restart nginx
-            sleep 2
-        else
-            echo -e "${YELLOW}⚠️  Обновление сертификата не требуется или произошла ошибка${NC}"
-            echo -e "${YELLOW}   Certbot автоматически попробует позже${NC}"
-        fi
-    fi
-    
-    # Останавливаем для полного деплоя
-    docker compose down
-fi
 
 echo ""
 echo -e "${BLUE}🔨 Пересобираем образы (это может занять несколько минут)...${NC}"
@@ -202,17 +166,18 @@ if [ "$USE_SSL" = false ]; then
     echo -e "${YELLOW}   Для получения SSL сертификатов выполните:${NC}"
     echo -e "${BLUE}   ./init-letsencrypt.sh${NC}"
     echo ""
-elif [ "$RENEW_CERT" = true ]; then
-    echo -e "${GREEN}🔐 SSL сертификат обновлен${NC}"
-    echo -e "${GREEN}   Certbot автоматически обновляет сертификаты каждые 12 часов${NC}"
-    echo ""
 else
     echo -e "${GREEN}🔐 SSL сертификат активен${NC}"
     days_left=$(check_cert_expiry "$DOMAIN")
     if [ "$days_left" -ge 0 ]; then
-        echo -e "${GREEN}   Действителен еще ${days_left} дней${NC}"
+        if [ "$days_left" -lt 30 ]; then
+            echo -e "${YELLOW}   ⚠️  Истекает через ${days_left} дней - требуется обновление!${NC}"
+            echo -e "${YELLOW}   Для ручного обновления выполните: ./renew-cert.sh${NC}"
+        else
+            echo -e "${GREEN}   Действителен еще ${days_left} дней${NC}"
+        fi
     fi
-    echo -e "${GREEN}   Certbot автоматически обновляет сертификаты каждые 12 часов${NC}"
+    echo -e "${GREEN}   Certbot автоматически обновит сертификат за 30 дней до истечения${NC}"
     echo ""
 fi
 
