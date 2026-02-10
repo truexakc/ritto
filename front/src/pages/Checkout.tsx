@@ -21,12 +21,37 @@ const Checkout = () => {
     const [phone, setPhone] = useState(() => localStorage.getItem("checkout_phone") || "");
     const [paymentMethod, setPaymentMethod] = useState(() => localStorage.getItem("checkout_payment") || "card");
     const [deliveryMethod, setDeliveryMethod] = useState(() => localStorage.getItem("checkout_delivery") || "delivery");
+    const [datetime, setDatetime] = useState(() => {
+        // По умолчанию: текущее время + 1 час
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    });
     const [comment, setComment] = useState("");
 
     const [extraGinger, setExtraGinger] = useState(0);
     const [extraWasabi, setExtraWasabi] = useState(0);
     const [extraSoy, setExtraSoy] = useState(0);
     const [chopsticksCount, setChopsticksCount] = useState(0);
+
+    // Datetime field - default to current time + 1 hour in UTC
+    const getDefaultDatetime = () => {
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+        const year = now.getUTCFullYear();
+        const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(now.getUTCDate()).padStart(2, '0');
+        const hours = String(now.getUTCHours()).padStart(2, '0');
+        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+    
+    const [datetime, setDatetime] = useState(getDefaultDatetime());
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -111,6 +136,16 @@ const Checkout = () => {
         setIsSubmitting(true);
 
         try {
+            // Преобразуем datetime из локального времени в UTC
+            const localDate = new Date(datetime);
+            const utcYear = localDate.getUTCFullYear();
+            const utcMonth = String(localDate.getUTCMonth() + 1).padStart(2, '0');
+            const utcDay = String(localDate.getUTCDate()).padStart(2, '0');
+            const utcHours = String(localDate.getUTCHours()).padStart(2, '0');
+            const utcMinutes = String(localDate.getUTCMinutes()).padStart(2, '0');
+            const utcSeconds = String(localDate.getUTCSeconds()).padStart(2, '0');
+            const datetimeUTC = `${utcYear}-${utcMonth}-${utcDay} ${utcHours}:${utcMinutes}:${utcSeconds}`;
+
             const orderData = {
                 customer_name: name.trim(),
                 products: cartItems.map((item) => ({
@@ -123,6 +158,7 @@ const Checkout = () => {
                 total_price: totalPrice,
                 payment_method: paymentMethod,
                 delivery_method: deliveryMethod,
+                datetime: datetimeUTC,
                 comment: comment.trim(),
                 extra_ginger_count: extraGinger,
                 extra_wasabi_count: extraWasabi,
@@ -251,6 +287,24 @@ const Checkout = () => {
                             />
                         </div>
                     )}
+
+                    {/* Datetime */}
+                    <div>
+                        <label className="block mb-2 text-sm text-[#E9E9E9] font-semibold">
+                            {deliveryMethod === "delivery" ? "Время доставки *" : "Время самовывоза *"}
+                        </label>
+                        <input
+                            type="datetime-local"
+                            value={datetime}
+                            onChange={(e) => setDatetime(e.target.value)}
+                            className="w-full px-4 py-3 bg-[#f6eaea]/5 border border-[#f6eaea]/20 rounded-xl focus:outline-none focus:border-[#b12e2e] transition-colors text-[#f6eaea]"
+                            required
+                            disabled={isSubmitting}
+                        />
+                        <p className="text-xs text-[#ADADAD] mt-1">
+                            Укажите желаемое время {deliveryMethod === "delivery" ? "доставки" : "самовывоза"}
+                        </p>
+                    </div>
 
                     {/* Payment */}
                     <div>
