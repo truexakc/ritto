@@ -23,12 +23,7 @@ export default defineConfig({
   build: {
     // Оптимизация для серверов с ограниченными ресурсами
     target: 'es2015',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,  // Удаляем console.log в production
-      },
-    },
+    minify: 'esbuild',  // Используем встроенный esbuild (быстрее и меньше памяти)
     // Разбиваем на чанки для параллельной сборки
     rollupOptions: {
       output: {
