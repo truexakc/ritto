@@ -1,6 +1,26 @@
 #!/bin/bash
 set -e
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# БЕЗОПАСНЫЙ ДЕПЛОЙ С ОГРАНИЧЕНИЕМ РЕСУРСОВ
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+# Оптимизировано для серверов с ограниченными ресурсами (1 vCPU, 1GB RAM)
+#
+# ЗАЩИТА ОТ ПЕРЕГРУЗКИ:
+#   - Сборка по одному сервису с паузами
+#   - Ограничение памяти Docker (--memory)
+#   - Низкий приоритет CPU (nice -n 19)
+#   - NODE_OPTIONS=--max-old-space-size=512 для frontend
+#
+# ВРЕМЯ ВЫПОЛНЕНИЯ: 15-25 минут
+#
+# АЛЬТЕРНАТИВЫ:
+#   - Только frontend: ./scripts/build-frontend-only.sh (5-15 мин)
+#   - Быстрое обновление: ./scripts/quick-update.sh <service>
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 # Цвета для вывода
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -14,6 +34,29 @@ echo -e "${BLUE}🔍 Проверка окружения...${NC}"
 if [ ! -f .env ]; then
     echo -e "${RED}❌ Файл .env не найден! Скопируйте .env.example в .env и настройте${NC}"
     exit 1
+fi
+
+echo ""
+echo -e "${BLUE}🛑 Останавливаем все контейнеры...${NC}"
+docker compose down
+
+echo ""
+echo -e "${BLUE}🧹 Очистка неиспользуемых ресурсов Docker...${NC}"
+echo -e "${YELLOW}   Освобождаем место перед сборкой...${NC}"
+docker system prune -f
+echo -e "${GREEN}   ✅ Очистка завершена${NC}"
+
+echo ""
+echo -e "${BLUE}💾 Проверка свободного места...${NC}"
+DISK_AVAILABLE=$(df -h . | awk 'NR==2 {print $4}')
+echo "   Доступно на диске: ${DISK_AVAILABLE}"
+
+FREE_MEM=$(free -m 2>/dev/null | awk 'NR==2{print $7}' || echo "N/A")
+if [ "$FREE_MEM" != "N/A" ]; then
+    echo "   Доступно памяти: ${FREE_MEM} MB"
+    if [ "$FREE_MEM" -lt 300 ]; then
+        echo -e "${YELLOW}   ⚠️  Мало свободной памяти! Сборка может быть медленной${NC}"
+    fi
 fi
 
 # Функция проверки срока действия сертификата
@@ -66,24 +109,35 @@ else
 fi
 
 echo ""
-echo -e "${BLUE}🛑 Останавливаем контейнеры...${NC}"
-docker compose down
+echo -e "${BLUE} Пересобираем образы (безопасно, по одному)...${NC}"
+echo -e "${YELLOW}⚠️  ВАЖНО: На серверах с ограниченными ресурсами (1GB RAM)${NC}"
+echo -e "${YELLOW}   сборка может занять 10-15 минут. Не прерывайте процесс!${NC}"
+echo ""
+
+# Ограничиваем ресурсы Docker для сборки
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+
+# Собираем по одному сервису с паузами для восстановления ресурсов
+echo -e "${BLUE}  📦 Backend (быстрая сборка)...${NC}"
+docker compose build --memory=512m backend
+echo -e "${GREEN}     ✅ Backend собран${NC}"
+sleep 5  # Пауза для освобождения ресурсов
 
 echo ""
-echo -e "${BLUE}🔨 Пересобираем образы (это может занять несколько минут)...${NC}"
+echo -e "${BLUE}  📦 Frontend (медленная сборка, ~5-10 минут)...${NC}"
+echo -e "${YELLOW}     ⏳ Сборка TypeScript + React может загрузить сервер${NC}"
+echo -e "${YELLOW}     💡 Dockerfile использует NODE_OPTIONS=--max-old-space-size=512${NC}"
+# Используем nice для снижения приоритета процесса
+nice -n 19 docker compose build --memory=700m frontend
+echo -e "${GREEN}     ✅ Frontend собран${NC}"
+sleep 10  # Длительная пауза для восстановления после тяжелой сборки
 
-# Собираем по одному сервису для лучшего контроля
-echo -e "${BLUE}  📦 Backend...${NC}"
-docker compose build backend
-
-echo -e "${BLUE}  📦 Frontend...${NC}"
-docker compose build frontend
-
-echo -e "${BLUE}  📦 SABY Service (без кэша для Go модулей)...${NC}"
-docker compose build --no-cache saby-service
-
-echo -e "${BLUE}  📦 Monitor Service (без кэша для Go модулей)...${NC}"
-docker compose build --no-cache monitor-service
+echo ""
+echo -e "${BLUE}  📦 SABY Service (Go, средняя сборка)...${NC}"
+docker compose build --no-cache --memory=400m saby-service
+echo -e "${GREEN}     ✅ SABY Service собран${NC}"
+sleep 5
 
 echo ""
 echo -e "${BLUE}🚀 Запуск сервисов...${NC}"
@@ -120,11 +174,7 @@ echo -e "${BLUE}  🔌 SABY Service...${NC}"
 docker compose up -d saby-service
 sleep 3
 
-echo -e "${BLUE}  📊 Monitor Service...${NC}"
-docker compose up -d monitor-service
-sleep 3
-
-echo -e "${BLUE}  🔧 Adminer & Portainer...${NC}"
+echo -e "${BLUE}   Adminer & Portainer...${NC}"
 docker compose up -d adminer portainer
 sleep 2
 

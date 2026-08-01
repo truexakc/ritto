@@ -1,10 +1,17 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
+
+# Устанавливаем переменные для ограничения памяти Node.js
+ENV NODE_OPTIONS="--max-old-space-size=512"
+
 COPY package*.json ./
 # Use npm ci when lockfile is in sync, otherwise fallback to npm install
 RUN npm ci || npm install --no-audit --no-fund
+
 COPY . .
+
+# Сборка с ограничением ресурсов
 RUN npm run build
 
 FROM nginx:alpine
