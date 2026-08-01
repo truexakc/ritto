@@ -8,7 +8,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./back/migrations:/docker-entrypoint-initdb.d
@@ -190,26 +190,6 @@ services:
       - portainer_data:/data
     networks:
       - ritto-network
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-
-  # Monitor Service - мониторинг контейнеров и отправка алертов в Telegram
-  monitor-service:
-    build:
-      context: ./monitor-service
-      dockerfile: Dockerfile
-    container_name: ritto-monitor
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    env_file:
-      - ./monitor-service/.env
-    networks:
-      - ritto-network
-    depends_on:
-      - backend
-      - frontend
-      - saby-service
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true

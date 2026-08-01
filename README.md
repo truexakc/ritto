@@ -8,7 +8,6 @@
 - 👤 Аутентификация и авторизация (JWT + HttpOnly cookies)
 - 💳 Интеграция с платежными системами
 - 📦 Управление заказами с отслеживанием статусов
-- 📱 Telegram Bot интеграция для уведомлений о заказах
 - 🎨 Современный UI на React + TailwindCSS
 - � Doзcker для простого развертывания
 - � Безотпасность (Helmet, XSS protection, HPP, Rate Limiting)
@@ -29,12 +28,18 @@ ritto/
 ├── back/           # Backend API (Node.js + Express)
 ├── front/          # Frontend (React + Vite)
 ├── testAdmin/      # Админ панель
+├── saby-service/   # Go микросервис для интеграции с SBIS
+├── scripts/        # Утилитарные скрипты (деплой, проверки, SSL)
 ├── docs/           # Документация
 │   ├── setup/      # Инструкции по настройке
 │   ├── features/   # Описание функций
 │   └── architecture/ # Архитектура
+├── certbot/        # SSL сертификаты Let's Encrypt
+├── nginx.conf      # Конфигурация Nginx
 └── docker-compose.yml
 ```
+
+**Подробнее:** См. [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) для полного описания структуры
 
 ## 🚀 Быстрый старт
 
@@ -101,8 +106,12 @@ npm run dev
 - [Security Improvements](./docs/SECURITY_IMPROVEMENTS.md) - инструкции по улучшению
 - [Security Summary](./docs/SECURITY_SUMMARY.md) - краткая сводка
 
+### 📊 Мониторинг
+- [API Monitoring](./docs/API_MONITORING.md) - эндпоинты для мониторинга состояния сервиса
+- [Monitoring Options](./docs/MONITORING_OPTIONS.md) - выбор системы мониторинга (Uptime Kuma vs облачные)
+- [UptimeRobot Setup](./docs/UPTIMEROBOT_SETUP.md) - быстрая настройка облачного мониторинга (рекомендуется)
+
 ### 🎯 Функциональность
-- [Telegram Integration](./docs/TELEGRAM_INTEGRATION.md) - интеграция с Telegram Bot
 - [Сессии](./docs/features/SESSION_SETUP.md)
 - [Корзина](./docs/features/CART_TESTING.md)
 - [Загрузка файлов](./docs/features/UPLOADS_SETUP.md)
@@ -118,7 +127,6 @@ npm run dev
 - **PostgreSQL 15+** - база данных
 - **JWT** - аутентификация с HttpOnly cookies
 - **Express Session** - управление сессиями
-- **Telegram Bot API** - уведомления о заказах
 - **Helmet, XSS-Clean, HPP** - безопасность
 - **Rate Limiting** - защита от DDoS
 - **Docker** - контейнеризация
@@ -140,7 +148,6 @@ npm run dev
 
 ### Интеграции
 - **SBIS API** - импорт товаров
-- **Telegram Bot** - уведомления
 - **Stripe** (опционально) - платежи
 
 ## 🔧 Конфигурация
@@ -169,10 +176,6 @@ SESSION_SECRET=your_session_secret
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 
-# Telegram Bot (опционально)
-TELEGRAM_BOT_TOKEN=your_bot_token
-TELEGRAM_CHAT_ID=your_chat_id  # Можно несколько через запятую
-
 # SBIS API (опционально)
 SBIS_LOGIN=your_login
 SBIS_PASSWORD=your_password
@@ -191,6 +194,42 @@ CLIENT_URL=http://localhost
 
 ## 📦 Основные команды
 
+### Проверка статуса сервисов
+
+```bash
+# Детальная проверка статуса (по умолчанию)
+./scripts/check-status.sh
+
+# Быстрая проверка доступности
+./scripts/check-status.sh ping
+
+# Базовая проверка здоровья
+./scripts/check-status.sh health
+
+# Проверка на продакшене
+./scripts/check-status.sh status https://sushiritto.ru
+./scripts/check-status.sh ping https://sushiritto.ru
+./scripts/check-status.sh health https://sushiritto.ru
+
+# Быстрая проверка через curl
+curl https://sushiritto.ru/ping
+curl https://sushiritto.ru/health | jq
+curl https://sushiritto.ru/api/status | jq
+```
+
+### Проверка ресурсов сервера
+
+```bash
+# Проверить использование RAM, CPU, Disk
+./scripts/check-resources.sh
+
+# Проверка конкретного контейнера
+docker stats ritto-backend --no-stream
+
+# Логи контейнера
+docker logs -f ritto-backend
+```
+
 ### Docker - Безопасный деплой
 
 **⚠️ ВАЖНО:** Не используйте `docker compose up -d --build` на продакшене!
@@ -200,15 +239,15 @@ CLIENT_URL=http://localhost
 
 ```bash
 # Полный деплой (первый запуск или большие изменения)
-./safe-deploy.sh
+./scripts/safe-deploy.sh
 
 # Быстрое обновление одного сервиса
-./quick-update.sh backend
-./quick-update.sh frontend
-./quick-update.sh all
+./scripts/quick-update.sh backend
+./scripts/quick-update.sh frontend
+./scripts/quick-update.sh all
 
 # Откат изменений
-./rollback.sh
+./scripts/rollback.sh
 
 # Просмотр логов
 docker compose logs -f
@@ -221,8 +260,8 @@ docker compose ps
 docker compose restart backend
 ```
 
-**Шпаргалка:** См. `QUICK_REFERENCE.txt` для быстрого доступа
-**Полная инструкция:** См. `DEPLOY_GUIDE.txt` для детальной информации
+**Шпаргалка:** См. `scripts/README.md` для полного списка скриптов
+**Полная инструкция:** См. `docs/setup/DEPLOY.md` для детальной информации
 
 ### Docker - Базовые команды
 

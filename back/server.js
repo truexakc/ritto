@@ -95,13 +95,72 @@ app.use((req, res, next) => {
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Health check endpoint
+// Health check endpoint (simple)
 app.get('/health', (req, res) => {
     res.status(200).json({ 
         status: 'ok', 
         timestamp: new Date().toISOString(),
         uptime: process.uptime()
     });
+});
+
+// Ping endpoint (minimal)
+app.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
+// Status endpoint for external monitoring (detailed)
+app.get('/api/status', async (req, res) => {
+    const { query } = require('./config/postgres');
+    
+    const status = {
+        service: 'ritto-backend',
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: Math.floor(process.uptime()),
+        environment: process.env.NODE_ENV || 'development',
+        version: require('./package.json').version || '1.0.0',
+        checks: {}
+    };
+
+    // Check database connection
+    try {
+        const result = await query('SELECT NOW() as now');
+        status.checks.database = {
+            status: 'healthy',
+            responseTime: new Date() - new Date(result.rows[0].now),
+            message: 'Database connection OK'
+        };
+    } catch (error) {
+        status.status = 'unhealthy';
+        status.checks.database = {
+            status: 'unhealthy',
+            error: error.message,
+            message: 'Database connection failed'
+        };
+    }
+
+    // Memory usage
+    const memUsage = process.memoryUsage();
+    status.checks.memory = {
+        status: 'healthy',
+        rss: `${Math.round(memUsage.rss / 1024 / 1024)}MB`,
+        heapUsed: `${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`,
+        heapTotal: `${Math.round(memUsage.heapTotal / 1024 / 1024)}MB`
+    };
+
+    // CPU usage (simplified)
+    const cpuUsage = process.cpuUsage();
+    status.checks.cpu = {
+        status: 'healthy',
+        user: `${Math.round(cpuUsage.user / 1000)}ms`,
+        system: `${Math.round(cpuUsage.system / 1000)}ms`
+    };
+
+    // Response status code based on overall health
+    const statusCode = status.status === 'healthy' ? 200 : 503;
+    
+    res.status(statusCode).json(status);
 });
 
 // Routes
@@ -111,7 +170,6 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/payment', require('./routes/paymentRoutes'));
 app.use('/api/discounts', require('./routes/discountRoutes'));
 app.use('/api/manual', require('./routes/manualRoutes'));
-app.use('/api/telegram', require('./routes/telegramRoutes'));
 app.use('/api/vk', require('./routes/vk'));
 
 // Error handling

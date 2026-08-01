@@ -2,7 +2,6 @@ const express = require('express');
 const { vkAuthMiddleware } = require('../middleware/vkAuthMiddleware');
 const { rateLimitMiddleware } = require('../middleware/rateLimitMiddleware');
 const { validateOrderAndRecomputePrice } = require('../services/orderValidation');
-const { sendOrderNotification } = require('../services/telegramNotification');
 const { AppError, asyncHandler } = require('../middleware/errorHandler');
 const db = require('../config/postgres');
 const logger = require('../utils/logger');
@@ -204,30 +203,6 @@ router.post('/orders', vkAuthMiddleware, rateLimitMiddleware, asyncHandler(async
         
         // Commit transaction
         await client.query('COMMIT');
-        
-        // Send notification to Telegram Bot (async, don't block response)
-        // Errors in notification should not fail the order creation
-        setImmediate(async () => {
-            try {
-                await sendOrderNotification({
-                    orderId,
-                    vkUser,
-                    phone,
-                    deliveryMethod: delivery_method,
-                    deliveryAddress: delivery_address,
-                    comment,
-                    items: validationResult.validatedItems,
-                    totalPrice: validationResult.actualTotal,
-                    createdAt
-                });
-            } catch (notificationError) {
-                logger.error('❌ VK Order: Failed to send Telegram notification', {
-                    order_id: orderId,
-                    error: notificationError.message
-                });
-                // Don't fail the order creation due to notification error
-            }
-        });
         
         // Return order ID and actual total price
         logger.log('✅ VK Order: Order created successfully', {

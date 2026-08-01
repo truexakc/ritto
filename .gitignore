@@ -59,6 +59,7 @@ coverage/
 # Temp
 tmp/
 temp/
+.temp/
 *.tmp
 
 # Lock files (keep package-lock.json but ignore yarn.lock if using npm)

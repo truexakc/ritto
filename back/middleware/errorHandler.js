@@ -40,7 +40,6 @@ const ERROR_CODE_MAP = {
     
     // Integration Errors
     'SABY_SERVICE_UNAVAILABLE': 503,
-    'TELEGRAM_SEND_FAILED': 500,
     'DATABASE_ERROR': 500,
     
     // Business Logic Errors
@@ -153,20 +152,6 @@ const mapSabyServiceError = (error) => {
 };
 
 /**
- * Map Telegram Bot error to application error
- * @param {Error} error - Telegram Bot error
- * @returns {AppError} Application error
- */
-const mapTelegramError = (error) => {
-    return new AppError(
-        'TELEGRAM_SEND_FAILED',
-        'Failed to send notification',
-        500,
-        process.env.NODE_ENV === 'development' ? error.message : null
-    );
-};
-
-/**
  * Format error response
  * @param {Error} error - Error object
  * @param {boolean} includeStack - Include stack trace
@@ -242,10 +227,6 @@ const errorHandler = (err, req, res, next) => {
         else if (error.message && error.message.includes('SABY')) {
             error = mapSabyServiceError(error);
         }
-        // Check if it's a Telegram error
-        else if (error.message && error.message.includes('Telegram')) {
-            error = mapTelegramError(error);
-        }
         // Generic error
         else {
             error = new AppError(
@@ -307,7 +288,6 @@ module.exports = {
     notFound,
     mapDatabaseError,
     mapSabyServiceError,
-    mapTelegramError,
     formatErrorResponse,
     logError,
     getStatusCodeFromErrorCode
