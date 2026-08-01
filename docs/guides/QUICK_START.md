@@ -26,8 +26,7 @@ docker-compose logs -f backend
 **Доступ к сервисам:**
 - Frontend: http://localhost
 - Backend API: http://localhost:5001
-- Adminer (БД): http://localhost:8080
-- Portainer: http://localhost:9000
+- Adminer (БД): http://localhost:8081
 
 ### Вариант 2: Локальная разработка
 

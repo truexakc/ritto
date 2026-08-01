@@ -94,7 +94,7 @@ if command -v docker &> /dev/null; then
         echo -e "${YELLOW}   Рассмотрите облачные варианты (UptimeRobot, Freshping)${NC}"
     elif [ "$FREE_FOR_UPTIME" -lt 300 ]; then
         echo -e "${YELLOW}⚠️  Uptime Kuma может работать, но будет tight${NC}"
-        echo -e "${YELLOW}   Рекомендуется удалить Portainer и Adminer сначала${NC}"
+        echo -e "${YELLOW}   Рекомендуется удалить Adminer сначала (экономия ~50 MB)${NC}"
     else
         echo -e "${GREEN}✅ Можно установить Uptime Kuma${NC}"
     fi
@@ -123,10 +123,10 @@ echo ""
 if [ "$AVAILABLE_MEM" -lt 300 ]; then
     echo -e "${RED}1. ❌ НЕ устанавливайте Uptime Kuma сейчас${NC}"
     echo -e "${YELLOW}2. 💡 Используйте облачный мониторинг (UptimeRobot/Freshping)${NC}"
-    echo -e "${YELLOW}3. 🗑️  Рассмотрите удаление Portainer (-150 MB) и Adminer (-50 MB)${NC}"
+    echo -e "${YELLOW}3. 🗑️  Рассмотрите удаление Adminer (-50 MB) если не используется${NC}"
 elif [ "$AVAILABLE_MEM" -lt 500 ]; then
     echo -e "${YELLOW}1. ⚠️  Uptime Kuma можно установить, но будет tight${NC}"
-    echo -e "${YELLOW}2. 🗑️  Рекомендуется удалить Portainer и Adminer сначала${NC}"
+    echo -e "${YELLOW}2. 🗑️  Рекомендуется удалить Adminer сначала (экономия ~50 MB)${NC}"
     echo -e "${GREEN}3. ✅ Или используйте облачный вариант (безопаснее)${NC}"
 else
     echo -e "${GREEN}1. ✅ Можно установить Uptime Kuma${NC}"

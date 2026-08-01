@@ -174,8 +174,8 @@ echo -e "${BLUE}  🔌 SABY Service...${NC}"
 docker compose up -d saby-service
 sleep 3
 
-echo -e "${BLUE}   Adminer & Portainer...${NC}"
-docker compose up -d adminer portainer
+echo -e "${BLUE}  🔧 Adminer...${NC}"
+docker compose up -d adminer
 sleep 2
 
 echo -e "${BLUE}  🌐 Nginx...${NC}"

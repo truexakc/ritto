@@ -178,30 +178,12 @@ services:
     security_opt:
       - no-new-privileges:true
 
-  # Portainer - мониторинг и управление Docker
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: ritto-portainer
-    ports:
-      - "9000:9000"
-      - "9443:9443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    networks:
-      - ritto-network
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-
 networks:
   ritto-network:
     driver: bridge
 
 volumes:
   postgres_data:
-    driver: local
-  portainer_data:
     driver: local
   uploads_data:
     driver: local

@@ -24,7 +24,7 @@ echo "   Доступно памяти: ${FREE_MEM} MB"
 if [ "$FREE_MEM" -lt 400 ]; then
     echo -e "${RED}❌ Недостаточно свободной памяти (< 400 MB)${NC}"
     echo -e "${YELLOW}💡 Рекомендации:${NC}"
-    echo "   1. Остановите ненужные сервисы: docker compose stop portainer adminer"
+    echo "   1. Остановите ненужные сервисы: docker compose stop adminer"
     echo "   2. Очистите кэш: docker system prune -f"
     echo "   3. Или соберите frontend локально и скопируйте dist/"
     echo ""
@@ -43,7 +43,7 @@ docker compose rm -f frontend 2>/dev/null || true
 echo ""
 echo -e "${BLUE}💾 Освобождаем ресурсы...${NC}"
 # Временно останавливаем тяжелые сервисы
-docker compose stop portainer adminer 2>/dev/null || true
+docker compose stop adminer 2>/dev/null || true
 docker system prune -f --volumes 2>/dev/null || true
 sync && echo 3 > /proc/sys/vm/drop_caches 2>/dev/null || true  # Очистка кэша (требует root)
 
@@ -104,7 +104,7 @@ fi
 
 echo ""
 echo -e "${BLUE}🔄 Восстанавливаем остановленные сервисы...${NC}"
-docker compose up -d portainer adminer 2>/dev/null || true
+docker compose up -d adminer 2>/dev/null || true
 
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
