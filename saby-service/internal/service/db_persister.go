@@ -210,12 +210,12 @@ func (p *dbPersisterImpl) persistProductBatch(ctx context.Context, products []mo
 			COALESCE($12, '{}'::jsonb), COALESCE($13, '[]'::jsonb), 
 			$14, $15, $16, $17, $18, COALESCE($19, '[]'::jsonb), $20, NOW(), NOW()
 		)
-		ON CONFLICT (external_id) DO UPDATE SET
+		ON CONFLICT (hierarchical_id) DO UPDATE SET
 			category_id = (SELECT id FROM categories WHERE hierarchical_id = EXCLUDED.hierarchical_parent LIMIT 1),
 			name = EXCLUDED.name,
 			description = EXCLUDED.description,
 			price = EXCLUDED.price,
-			hierarchical_id = EXCLUDED.hierarchical_id,
+			external_id = EXCLUDED.external_id,
 			hierarchical_parent = EXCLUDED.hierarchical_parent,
 			article = EXCLUDED.article,
 			nom_number = EXCLUDED.nom_number,
