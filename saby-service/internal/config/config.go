@@ -43,7 +43,7 @@ func LoadConfig() (*Config, error) {
 		SBISAccessToken:    os.Getenv("SBIS_ACCESS_TOKEN"),
 		SBISPointID:        getIntEnv("SBIS_POINT_ID", 0),
 		SBISPriceListID:    getIntEnv("SBIS_PRICE_LIST_ID", 0),
-		ImportPageSize:     getIntEnv("IMPORT_PAGE_SIZE", 100),
+		ImportPageSize:     1000, // Always use maximum page size to get all data in one request
 		ImportSchedule:     getStringEnv("IMPORT_SCHEDULE", "0 3 * * *"),
 		ImportTimeout:      getDurationEnv("IMPORT_TIMEOUT", 30*time.Minute),
 		MaxPaginationPages: getIntEnv("MAX_PAGINATION_PAGES", 1000),
@@ -169,10 +169,7 @@ func (c *Config) Validate() error {
 		return errors.New("DB_CONNECTION_STRING environment variable is required")
 	}
 
-	// Validate page size range (1-1000)
-	if c.ImportPageSize < 1 || c.ImportPageSize > 1000 {
-		return fmt.Errorf("IMPORT_PAGE_SIZE must be between 1 and 1000, got: %d", c.ImportPageSize)
-	}
+	// ImportPageSize is always 1000 (hardcoded), no validation needed
 
 	// Validate cron expression
 	parser := cron.NewParser(cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
