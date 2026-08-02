@@ -71,7 +71,7 @@ func (c *nomenclatureClassifierImpl) nomenclatureToCategory(nom model.SBISNomenc
 		HierarchicalID:       nom.HierarchicalID,
 		ParentHierarchicalID: nom.HierarchicalParent,
 		IsParent:             nom.IsParent,
-		IsActive:             nom.IsPublished,
+		IsActive:             true, // Categories are always active by default
 		ImageURL:             imageURL,
 	}
 }
