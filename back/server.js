@@ -171,6 +171,7 @@ app.use('/api/payment', require('./routes/paymentRoutes'));
 app.use('/api/discounts', require('./routes/discountRoutes'));
 app.use('/api/manual', require('./routes/manualRoutes'));
 app.use('/api/vk', require('./routes/vk'));
+app.use('/api', require('./routes/orderRoutes'));
 
 // Error handling
 app.use(notFound);
