@@ -78,6 +78,28 @@ const Checkout = () => {
         return phoneRegex.test(value.trim());
     };
 
+    const normalizePhone = (value: string) => {
+        // Убираем все символы кроме цифр и +
+        let cleaned = value.replace(/[^\d+]/g, '');
+        
+        // Если начинается с 8, заменяем на +7
+        if (cleaned.startsWith('8')) {
+            cleaned = '+7' + cleaned.slice(1);
+        }
+        
+        // Если начинается с 7 (без +), добавляем +
+        if (cleaned.startsWith('7') && !cleaned.startsWith('+7')) {
+            cleaned = '+' + cleaned;
+        }
+        
+        // Если не начинается с +, добавляем +7
+        if (!cleaned.startsWith('+')) {
+            cleaned = '+7' + cleaned;
+        }
+        
+        return cleaned;
+    };
+
     const validateName = (value: string) => value.trim().length >= 2;
 
     const validateAddress = (value: string) => value.trim().length >= 5;
@@ -140,7 +162,7 @@ const Checkout = () => {
                     quantity: item.quantity,
                 })),
                 shipping_address: address.trim(),
-                phone_number: phone.trim(),
+                phone_number: normalizePhone(phone),
                 total_price: totalPrice,
                 payment_method: paymentMethod,
                 delivery_method: deliveryMethod,
@@ -164,11 +186,22 @@ const Checkout = () => {
             } else {
                 throw new Error("Ошибка запроса");
             }
-        } catch (err) {
+        } catch (err: any) {
             if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
                 console.error(err);
             }
-            setError("❌ Ошибка при оформлении заказа. Попробуйте позже.");
+            
+            // Показываем конкретные ошибки валидации если они есть
+            if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+                const errorMessages = err.response.data.errors
+                    .map((e: any) => `${e.field}: ${e.message}`)
+                    .join(', ');
+                setError(`❌ Ошибка валидации: ${errorMessages}`);
+            } else if (err.response?.data?.message) {
+                setError(`❌ ${err.response.data.message}`);
+            } else {
+                setError("❌ Ошибка при оформлении заказа. Попробуйте позже.");
+            }
         } finally {
             setIsSubmitting(false);
         }
