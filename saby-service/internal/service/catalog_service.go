@@ -189,9 +189,9 @@ func (s *catalogServiceImpl) GetProducts(ctx context.Context, filter model.Produ
 
 	if filter.Search != nil && *filter.Search != "" {
 		searchPattern := "%" + *filter.Search + "%"
-		query += ` AND (p.name ILIKE $` + formatArgIndex(argIndex) + ` OR p.description ILIKE $` + formatArgIndex(argIndex) + `)`
-		args = append(args, searchPattern)
-		argIndex++
+		query += ` AND (p.name ILIKE $` + formatArgIndex(argIndex) + ` OR p.description ILIKE $` + formatArgIndex(argIndex+1) + `)`
+		args = append(args, searchPattern, searchPattern)
+		argIndex += 2
 	}
 
 	// Add sorting
@@ -227,9 +227,9 @@ func (s *catalogServiceImpl) GetProducts(ctx context.Context, filter model.Produ
 
 		if filter.Search != nil && *filter.Search != "" {
 			searchPattern := "%" + *filter.Search + "%"
-			countQuery += ` AND (p.name ILIKE $` + formatArgIndex(countArgIndex) + ` OR p.description ILIKE $` + formatArgIndex(countArgIndex) + `)`
-			countArgs = append(countArgs, searchPattern)
-			countArgIndex++
+			countQuery += ` AND (p.name ILIKE $` + formatArgIndex(countArgIndex) + ` OR p.description ILIKE $` + formatArgIndex(countArgIndex+1) + `)`
+			countArgs = append(countArgs, searchPattern, searchPattern)
+			countArgIndex += 2
 		}
 
 		var totalCount int

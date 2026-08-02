@@ -39,7 +39,7 @@ chmod +x test-certbot-webroot.sh
 
 ### Вариант 2: С www (если нужен)
 
-1. Добавьте DNS A-запись для `www.sushiritto.ru` → `89.111.152.163`
+1. Добавьте DNS A-запись для `www.sushiritto.ru` → `80.78.248.230`
 
 2. Проверьте DNS:
 ```bash

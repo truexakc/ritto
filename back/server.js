@@ -52,7 +52,7 @@ app.use(hpp());
 const allowedOrigins = [
     'http://localhost',
     'http://localhost:3000',
-    'http://89.111.152.163',
+    'http://80.78.248.230',
     'http://sushiritto.ru',
     'https://sushiritto.ru',
     process.env.FRONTEND_URL,
