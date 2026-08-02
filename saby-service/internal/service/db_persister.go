@@ -138,9 +138,9 @@ func (p *dbPersisterImpl) persistCategoryBatch(ctx context.Context, categories [
 			name, slug, external_id, hierarchical_id, parent_hierarchical_id,
 			is_parent, is_active, image_url, created_at, updated_at
 		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
-		ON CONFLICT (external_id) DO UPDATE SET
+		ON CONFLICT (hierarchical_id) DO UPDATE SET
 			name = EXCLUDED.name,
-			hierarchical_id = EXCLUDED.hierarchical_id,
+			external_id = EXCLUDED.external_id,
 			parent_hierarchical_id = EXCLUDED.parent_hierarchical_id,
 			is_parent = EXCLUDED.is_parent,
 			is_active = EXCLUDED.is_active,
