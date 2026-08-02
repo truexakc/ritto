@@ -158,10 +158,12 @@ const getProfile = async (req, res) => {
 
         const user = result.rows[0];
 
-        // Получаем статистику заказов
+        // Получаем статистику заказов из новой таблицы saby_orders
+        // Примечание: в новой схеме нет информации о user_id и сумме заказа,
+        // так как данные отправляются в Saby API напрямую
         const ordersResult = await query(
-            'SELECT COUNT(*) as total_orders, COALESCE(SUM(total_amount), 0) as total_spent FROM orders WHERE user_id = $1',
-            [req.user.id]
+            'SELECT COUNT(*) as total_orders FROM saby_orders',
+            []
         );
 
         const stats = ordersResult.rows[0];
@@ -174,12 +176,12 @@ const getProfile = async (req, res) => {
                 isAdmin: user.role === 'admin',
                 createdAt: user.created_at,
                 totalOrders: parseInt(stats.total_orders),
-                totalSpent: parseFloat(stats.total_spent)
+                totalSpent: 0 // В новой схеме нет информации о суммах заказов
             }
         });
     } catch (error) {
         logger.error('Get profile error:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 
